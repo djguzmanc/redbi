@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-sidenav',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidenavComponent implements OnInit {
 
-  constructor() { }
+  constructor( private afAuth: AngularFireAuth, private router: Router ) { }
 
-  ngOnInit() {
+  ngOnInit( ) {
+  }
+
+  logout( ) {
+    this.afAuth.auth.signOut( ).then( () => {
+      this.router.navigate( [ 'iniciar-sesion' ] )
+    })
   }
 
 }

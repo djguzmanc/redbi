@@ -1,3 +1,14 @@
+@import "../../../../sass/mixin";
+@import "../../../../sass/variables";
+
 .content {
+  @include flex();
+  @include flex-direction(column);
+  height: 100vh;
+  @include justify-content(center);
   width: 80vw;
+  .logout {
+    margin: 0 auto;
+    width: 150px;
+  }
 }
