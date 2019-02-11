@@ -16,6 +16,7 @@ export class SidenavComponent implements OnInit {
 
   logout( ) {
     this.afAuth.auth.signOut( ).then( () => {
+      localStorage.removeItem( 'login-attempt' )
       this.router.navigate( [ 'iniciar-sesion' ] )
     })
   }

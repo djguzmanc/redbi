@@ -12,11 +12,17 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginComponent } from './components/views/login/login.component';
 import { MenuWrapperComponent } from './components/utilities/menu-wrapper/menu-wrapper.component';
 import { HomeComponent } from './components/views/home/home.component';
+import { LoginAwaitComponent } from './components/views/login-await/login-await.component';
 
 const routes: Routes = [
   {
     path: 'iniciar-sesion',
     component: LoginComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'do-login',
+    component: LoginAwaitComponent,
     canActivate: [ AuthGuard ]
   },
   {

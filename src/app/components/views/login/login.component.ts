@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,26 +8,13 @@ import * as firebase from 'firebase/app';
 })
 export class LoginComponent implements OnInit {
 
-  constructor( private afAuth: AngularFireAuth ) { }
+  constructor( private router: Router ) { }
 
   ngOnInit( ) {
-    this.afAuth.user.subscribe( user => {
-      console.log( user )
-    })
   }
 
   signIn( ) {
-    this.webGoogleLogin( )
-  }
-
-  async webGoogleLogin( ): Promise<void> {
-    try {
-      const provider = new firebase.auth.GoogleAuthProvider( );
-      await this.afAuth.auth.signInWithRedirect( provider );
-    } catch( err ) {
-      console.log( err )
-    }
-  
+    this.router.navigate( [ 'do-login' ] )
   }
 
 }

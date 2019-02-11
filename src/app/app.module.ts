@@ -27,6 +27,7 @@ import { MenuWrapperComponent } from './components/utilities/menu-wrapper/menu-w
 import { HomeComponent } from './components/views/home/home.component';
 import { ToolbarComponent } from './components/shared/toolbar/toolbar.component';
 import { SidenavComponent } from './components/shared/sidenav/sidenav.component';
+import { LoginAwaitComponent } from './components/views/login-await/login-await.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SidenavComponent } from './components/shared/sidenav/sidenav.component'
     MenuWrapperComponent,
     HomeComponent,
     ToolbarComponent,
-    SidenavComponent
+    SidenavComponent,
+    LoginAwaitComponent
   ],
   imports: [
     BrowserModule,
