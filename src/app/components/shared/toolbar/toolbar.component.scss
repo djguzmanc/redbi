@@ -1,0 +1,19 @@
+mat-toolbar {
+  left: 0;
+  position: fixed;
+  top: 0;
+  .my-toolbar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    .icons {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      mat-icon {
+        margin-right: 10px;
+      }
+    }
+  }
+}

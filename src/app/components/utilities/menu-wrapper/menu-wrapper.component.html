@@ -1,0 +1,9 @@
+<mat-drawer-container class="app-container" [hasBackdrop]="true">
+    <mat-drawer #drawer mode="over">
+      <app-sidenav></app-sidenav>
+    </mat-drawer>
+    <mat-drawer-content>
+      <app-toolbar (menuClicked)="drawer.open()"></app-toolbar>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>

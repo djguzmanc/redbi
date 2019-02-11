@@ -1,0 +1,88 @@
+@mixin flex( ) {
+  display: -webkit-flex;
+   display: -webkit-box;
+   display: -ms-flexbox;
+          display: flex;
+}
+
+@mixin align-items( $arg ) {
+  -webkit-align-items: $arg;
+    -webkit-box-align: $arg;
+       -ms-flex-align: $arg;
+          align-items: $arg;
+}
+
+@mixin justify-content( $arg ) {
+  -webkit-justify-content: $arg;
+         -webkit-box-pack: $arg;
+          justify-content: $arg;
+            -ms-flex-pack: $arg;
+}
+
+@mixin border-radius( $arg ) {
+  -webkit-border-radius: $arg;
+          border-radius: $arg;
+}
+
+@mixin transition( $arg ) {
+  -webkit-transition: $arg;
+       -o-transition: $arg;
+          transition: $arg;
+}
+
+@mixin box-shadow( $arg ) {
+  -webkit-box-shadow: $arg;
+          box-shadow: $arg;
+}
+
+@mixin transform( $arg ) {
+  -webkit-transform: $arg;
+      -ms-transform: $arg;
+          transform: $arg;
+}
+
+@mixin background-size( $arg ) {
+  -webkit-background-size: $arg;
+          background-size: $arg;
+}
+
+@mixin placeholder-color( $color ) {
+  ::placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  
+  :-ms-input-placeholder {
+    color: $color;
+  }
+  
+  ::-ms-input-placeholder {
+    color: $color;
+  }
+}
+
+@mixin box-sizing( $arg ) {
+  -webkit-box-sizing: $arg;
+          box-sizing: $arg;
+}
+
+@mixin transition-timing-function( $arg ) {
+  -webkit-transition-timing-function: $arg;
+       -o-transition-timing-function: $arg;
+          transition-timing-function: $arg;
+}
+
+@mixin flex-direction( $arg ) {
+  -webkit-flex-direction: $arg;
+   -webkit-box-direction: $arg;
+      -webkit-box-orient: $arg;
+      -ms-flex-direction: $arg;
+          flex-direction: $arg;
+}
+
+@mixin background-linear-gradient( $args... ) {
+  background: -webkit-linear-gradient($args);
+       background: -o-linear-gradient($args);
+          background: linear-gradient($args);
+}
+

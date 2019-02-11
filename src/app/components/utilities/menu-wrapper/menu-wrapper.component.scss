@@ -1,0 +1,10 @@
+.app-container {
+  height: 100vh;
+  width: 100vw;
+  app-sidenav {
+    min-width: 70vw;
+  }
+  mat-drawer-content {
+    padding: 56px 0 0;
+  }
+}

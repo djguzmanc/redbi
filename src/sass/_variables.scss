@@ -1,0 +1,24 @@
+@import '~@angular/material/theming';
+
+/* Fonts */
+
+/* Fonts sizes */
+$font-size-base: 18px;
+
+/* Colors */
+$app-primary: mat-palette($mat-grey);
+$app-accent:  mat-palette($mat-indigo);
+$app-warn:    mat-palette($mat-pink);
+
+$primary: mat-color($app-primary);
+$accent: mat-color($app-accent);
+$warn: mat-color($app-warn);
+
+/* Breakpoints */
+$laptop-L-maxSize: 1920px;
+$laptop-M-maxSize: 1600px;
+$laptop-S-maxSize: 1024px;
+$tablet-L-maxSize: 768px;
+$mobile-L-maxSize: 715px;
+
+/* Common configs */
