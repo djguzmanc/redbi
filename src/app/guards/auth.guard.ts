@@ -16,6 +16,13 @@ export class AuthGuard implements CanActivate {
       if ( !data ) {
         return true
       } else {
+        if ( data.email.split( '@' )[ 1 ] !== 'unal.edu.co' ) {
+          this.router.navigate( [ 'wrong-domain' ] )
+          localStorage.removeItem( 'login-attempt' )
+          this.auth.auth.signOut( )
+          data.delete( )
+          return false
+        }
         this.router.navigate( [ 'm', 'inicio' ] )
         return false
       }

@@ -9,7 +9,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class SidenavComponent implements OnInit {
 
-  constructor( private afAuth: AngularFireAuth, private router: Router ) { }
+  userData
+
+  constructor( private afAuth: AngularFireAuth, private router: Router ) {
+    afAuth.user.subscribe( data => {
+      this.userData = data
+      console.log( this.userData )
+    })
+  }
 
   ngOnInit( ) {
   }

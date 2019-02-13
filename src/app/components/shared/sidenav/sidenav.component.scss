@@ -5,10 +5,24 @@
   @include flex();
   @include flex-direction(column);
   height: 100vh;
-  @include justify-content(center);
+  @include justify-content(space-between);
   width: 80vw;
+  .personal-info {
+    @include align-items(center);
+    @include flex();
+    @include justify-content(space-around);
+    margin: 15px 0 0;
+    width: 100%;
+    img {
+      @include border-radius(50%);
+      width: 70px;
+    }
+    span {
+
+    }
+  }
   .logout {
-    margin: 0 auto;
+    margin: 0 auto 15px;
     width: 150px;
   }
 }

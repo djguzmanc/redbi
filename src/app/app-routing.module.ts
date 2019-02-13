@@ -13,6 +13,7 @@ import { LoginComponent } from './components/views/login/login.component';
 import { MenuWrapperComponent } from './components/utilities/menu-wrapper/menu-wrapper.component';
 import { HomeComponent } from './components/views/home/home.component';
 import { LoginAwaitComponent } from './components/views/login-await/login-await.component';
+import { WrongDomainComponent } from './components/views/wrong-domain/wrong-domain.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,11 @@ const routes: Routes = [
   {
     path: 'do-login',
     component: LoginAwaitComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'wrong-domain',
+    component: WrongDomainComponent,
     canActivate: [ AuthGuard ]
   },
   {
