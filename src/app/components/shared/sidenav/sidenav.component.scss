@@ -18,7 +18,23 @@
       width: 70px;
     }
     span {
-
+      font-size: 4vw;
+    }
+  }
+  ul {
+    padding: 0;
+    li {
+      @include align-items(center);
+      @include flex();
+      height: 50px;
+      @include justify-content(flex-start);
+      padding-left: 30px;
+      .material-icons {
+        margin-right: 20px;
+      }
+      span {
+        font-size: 20px;  
+      }
     }
   }
   .logout {

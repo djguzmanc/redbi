@@ -1,0 +1,10 @@
+@import '../../../../sass/mixin';
+@import '../../../../sass/variables';
+
+.content {
+  @include align-items(center);
+  @include flex();
+  height: calc(100vh - 56px);
+  @include justify-content(center);
+  width: 100%;
+}
