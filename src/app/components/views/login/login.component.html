@@ -1,5 +1,5 @@
 <div class="content">
-  <mat-card class="login-card animated fadeInDown">
+  <mat-card class="login-card animated fadeInDown fast">
     <mat-card-header>
       <div class="login">
         LOGIN
@@ -11,7 +11,12 @@
         Bienvenido a Redbi, el lugar donde podrás organizar viajes grupales con un simple click.
       </p>
       <p class="info">
-        Para continuar debes iniciar sesión con tu cuenta UNAL.
+        <span *ngIf="!wrongDomain">
+          Para continuar debes iniciar sesión con tu cuenta UNAL.
+        </span>
+        <span *ngIf="wrongDomain" class="red-msg">
+          La cuenta con la que iniciaste sesión no pertenece al dominio UNAL.
+        </span>
       </p>
     </mat-card-content>
     <mat-card-actions>

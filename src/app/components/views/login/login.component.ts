@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,9 +8,15 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor( private router: Router ) { }
+  wrongDomain: boolean = false
+
+  constructor( private router: Router, private activatedRoute: ActivatedRoute ) { }
 
   ngOnInit( ) {
+    this.activatedRoute.queryParams.subscribe( ( params: Params ) => {
+      if ( params.wrongDomain )
+        this.wrongDomain = params.wrongDomain
+    })
   }
 
   signIn( ) {

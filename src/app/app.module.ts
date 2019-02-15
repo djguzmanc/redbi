@@ -28,7 +28,6 @@ import { HomeComponent } from './components/views/home/home.component';
 import { ToolbarComponent } from './components/shared/toolbar/toolbar.component';
 import { SidenavComponent } from './components/shared/sidenav/sidenav.component';
 import { LoginAwaitComponent } from './components/views/login-await/login-await.component';
-import { WrongDomainComponent } from './components/views/wrong-domain/wrong-domain.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +37,7 @@ import { WrongDomainComponent } from './components/views/wrong-domain/wrong-doma
     HomeComponent,
     ToolbarComponent,
     SidenavComponent,
-    LoginAwaitComponent,
-    WrongDomainComponent
+    LoginAwaitComponent
   ],
   imports: [
     BrowserModule,

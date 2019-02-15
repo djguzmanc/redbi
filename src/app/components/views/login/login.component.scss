@@ -56,6 +56,9 @@
       .info {
         font-weight: bold;
         margin: 30px 0;
+        .red-msg {
+          color: #E80000;
+        }
       }
     }
     mat-card-actions {

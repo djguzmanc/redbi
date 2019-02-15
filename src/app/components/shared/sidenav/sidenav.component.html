@@ -1,44 +1,46 @@
 <div class="content">
-  <div class="personal-info-container">
-    <div class="personal-info" *ngIf="userData">
-      <img [src]="userData.photoURL" [alt]="userData.displayName">
-      <span>{{userData.displayName}}</span>
-    </div>
-    <hr class="info-divider">
-    <div class="stats">
-      <div class="stat">
-        <i class="material-icons">person</i>
-        <span>2</span>
+  <div class="top-wrapper">
+    <div class="personal-info-container">
+      <div class="personal-info" *ngIf="userData">
+        <img [src]="userData.photoURL" [alt]="userData.displayName">
+        <span>{{userData.displayName}}</span>
       </div>
-      <div class="stat">
+      <hr class="info-divider">
+      <div class="stats">
+        <div class="stat">
+          <i class="material-icons">person</i>
+          <span>2</span>
+        </div>
+        <div class="stat">
+          <i class="material-icons">directions_bike</i>
+          <span>23</span>
+        </div>
+        <div class="stat">
+          <i class="material-icons">bubble_chart</i>
+          <span>127</span>
+        </div>
+      </div>
+      <span class="career">Ingeniería</span>
+    </div>
+    <ul>
+      <li matRipple>
+        <i class="material-icons">mood</i>
+        <span>Perfil</span>
+      </li>
+      <li matRipple>
+        <i class="material-icons">trending_up</i>
+        <span>Crear ruta</span>
+      </li>
+      <li matRipple>
         <i class="material-icons">directions_bike</i>
-        <span>23</span>
-      </div>
-      <div class="stat">
+        <span>Mis rutas</span>
+      </li>
+      <li matRipple>
         <i class="material-icons">bubble_chart</i>
-        <span>127</span>
-      </div>
-    </div>
-    <span class="career">Ingeniería de Sistemas</span>
+        <span>Logros</span>
+      </li>
+    </ul>
   </div>
-  <ul>
-    <li matRipple>
-      <i class="material-icons">mood</i>
-      <span>Perfil</span>
-    </li>
-    <li matRipple>
-      <i class="material-icons">trending_up</i>
-      <span>Crear ruta</span>
-    </li>
-    <li matRipple>
-      <i class="material-icons">directions_bike</i>
-      <span>Mis rutas</span>
-    </li>
-    <li matRipple>
-      <i class="material-icons">bubble_chart</i>
-      <span>Logros</span>
-    </li>
-  </ul>
   <div class="interactions">
     <button mat-mini-fab color="primary" (click)="logout()">
       <i class="material-icons">arrow_back</i>
