@@ -1,7 +1,25 @@
 <div class="content">
-  <div class="personal-info" *ngIf="userData">
-    <img [src]="userData.photoURL" [alt]="userData.displayName">
-    <span>{{userData.displayName}}</span>
+  <div class="personal-info-container">
+    <div class="personal-info" *ngIf="userData">
+      <img [src]="userData.photoURL" [alt]="userData.displayName">
+      <span>{{userData.displayName}}</span>
+    </div>
+    <hr class="info-divider">
+    <div class="stats">
+      <div class="stat">
+        <i class="material-icons">person</i>
+        <span>2</span>
+      </div>
+      <div class="stat">
+        <i class="material-icons">directions_bike</i>
+        <span>23</span>
+      </div>
+      <div class="stat">
+        <i class="material-icons">bubble_chart</i>
+        <span>127</span>
+      </div>
+    </div>
+    <span class="career">Ingeniería de Sistemas</span>
   </div>
   <ul>
     <li matRipple>
@@ -21,6 +39,13 @@
       <span>Logros</span>
     </li>
   </ul>
-  <button mat-raised-button color="primary" class="logout" (click)="logout()">Cerrar Sesión</button>
+  <div class="interactions">
+    <button mat-mini-fab color="primary" (click)="logout()">
+      <i class="material-icons">arrow_back</i>
+    </button>
+    <span>Redbi v1.0.0</span>
+    <button mat-mini-fab color="primary" (click)="emitClose()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
 </div>
-  

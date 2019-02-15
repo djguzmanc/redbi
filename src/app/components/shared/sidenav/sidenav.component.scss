@@ -2,23 +2,84 @@
 @import "../../../../sass/variables";
 
 .content {
+  background-color: #2F2F2F;
+  color: white;
   @include flex();
   @include flex-direction(column);
   height: 100vh;
   @include justify-content(space-between);
   width: 80vw;
-  .personal-info {
+  .personal-info-container {
     @include align-items(center);
+    background-image: url('../../../../assets/images/sidenav/cyt.jpg');
+    @include background-size(cover);
+    background-position: center;
+    color: white;
     @include flex();
-    @include justify-content(space-around);
-    margin: 15px 0 0;
-    width: 100%;
-    img {
-      @include border-radius(50%);
-      width: 70px;
+    @include flex-direction(column);
+    height: 32%;
+    @include justify-content(center);
+    padding: 15px;
+    position: relative;
+    &::before {
+      background-color: #002a61;
+      content: '';
+      height: 100%;
+      left: 0;
+      opacity: 0.5;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 0;
     }
-    span {
-      font-size: 4vw;
+    .personal-info {
+      @include align-items(center);
+      @include flex();
+      @include justify-content(center);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      img {
+        @include border-radius(50%);
+        margin-right: 15px;
+        width: 70px;
+      }
+      span {
+        font-size: 3.5vw;
+      }
+    }
+    .info-divider {
+      border: 0;
+      border-bottom: solid 1px white;
+      height: 1px;
+      margin: 0;
+      width: 48%;
+    }
+    .career {
+      margin: 10px 0;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+    .stats {
+      @include align-items(center);
+      color: white;
+      @include flex();
+      @include justify-content(center);
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+      .stat {
+        @include align-items(center);
+        border: solid 1px white;
+        @include border-radius(50%);
+        @include flex();
+        @include flex-direction(column);
+        @include justify-content(center);
+        margin: 0 5px;
+        padding: 3px 23px;
+        width: 44px;
+      }
     }
   }
   ul {
@@ -33,12 +94,15 @@
         margin-right: 20px;
       }
       span {
-        font-size: 20px;  
+        font-size: 20px;
       }
     }
   }
-  .logout {
-    margin: 0 auto 15px;
-    width: 150px;
+  .interactions {
+    @include align-items(center);
+    background-color: #333333;
+    @include flex();
+    @include justify-content(space-between);
+    padding: 10px;
   }
 }

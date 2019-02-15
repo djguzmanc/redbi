@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -10,6 +10,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class SidenavComponent implements OnInit {
 
   userData
+  @Output( ) closing = new EventEmitter( )
 
   constructor( private afAuth: AngularFireAuth, private router: Router ) {
     afAuth.user.subscribe( data => {
@@ -26,6 +27,10 @@ export class SidenavComponent implements OnInit {
       localStorage.removeItem( 'login-attempt' )
       this.router.navigate( [ 'iniciar-sesion' ] )
     })
+  }
+
+  emitClose( ) {
+    this.closing.emit( )
   }
 
 }
