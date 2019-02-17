@@ -59,7 +59,7 @@
       color: white;
       @include flex();
       @include flex-direction(column);
-      height: 32%;
+      height: 38%;
       @include justify-content(center);
       width: 42%;
       &:nth-child(1) {
