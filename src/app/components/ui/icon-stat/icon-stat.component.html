@@ -1,4 +1,4 @@
-<div class="stat" [matTooltip]="data.tooltip">
+<div class="stat" [matTooltip]="data.tooltip" [ngClass]="classLogic()">
   <i class="material-icons">{{data.icon}}</i>
   <span>{{data.number}}</span>
 </div>

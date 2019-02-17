@@ -8,10 +8,17 @@ import { Component, OnInit, Input } from '@angular/core';
 export class IconStatComponent implements OnInit {
 
   @Input( ) data
+  @Input( ) small: boolean = false
 
   constructor( ) { }
 
   ngOnInit( ) {
+  }
+
+  classLogic( ) {
+    return {
+      'small-version': this.small
+    }
   }
 
 }
