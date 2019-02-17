@@ -5,13 +5,14 @@
   @include align-items(center);
   @include flex();
   @include flex-direction(column);
-  height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
   @include justify-content(space-around);
   position: relative;
   width: 100%;
   .search-container {
+    margin: 15px 0;
     text-align: center;
-    width: 95%;
+    width: 92%;
     .title {
       color: #464646;
       margin-bottom: 0;
@@ -21,8 +22,8 @@
     }
   }
   .exits-card {
-    height: 75%;
-    width: 95%;
+    height: 75vh;
+    width: 92%;
     .title {
       margin: 0;
       text-align: center;

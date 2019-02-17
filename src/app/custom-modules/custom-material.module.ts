@@ -9,6 +9,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   exports: [
@@ -21,7 +22,8 @@ import { MatInputModule } from '@angular/material/input';
     MatRippleModule,
     MatTooltipModule,
     MatDividerModule,
-    MatInputModule
+    MatInputModule,
+    MatExpansionModule
   ]
 })
 export class CustomMaterialModule { }
