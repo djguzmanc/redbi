@@ -4,7 +4,7 @@
 .content {
   @include align-items(center);
   background-color: black;
-  background-image: url('../../../../assets/images/login/login-bg.jpg');
+  background-image: url('../../../../assets/images/sidenav/cyt.jpg');
   @include background-size(cover);
   background-position: center 55%;
   @include flex();
@@ -22,7 +22,7 @@
     width: 100vw;
   }
   .login-card {
-    max-width: 90%;
+    max-width: 80%;
     padding: 40px 30px;
     mat-card-header {
       position: relative;

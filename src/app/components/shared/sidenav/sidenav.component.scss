@@ -72,17 +72,6 @@
       margin-top: 20px;
       position: relative;
       z-index: 1;
-      .stat {
-        @include align-items(center);
-        border: solid 1px white;
-        @include border-radius(50%);
-        @include flex();
-        @include flex-direction(column);
-        @include justify-content(center);
-        margin: 0 5px;
-        padding: 3px 24px;
-        width: 44px;
-      }
     }
   }
   ul {
@@ -94,12 +83,17 @@
       height: 50px;
       @include justify-content(flex-start);
       padding-left: 30px;
+      @include transition(.2s);
       .material-icons {
         margin-right: 20px;
       }
       span {
         font-size: 20px;
       }
+    }
+    .active-link {
+      @include background-linear-gradient(#2F2F2F, #ffffff42);
+      outline: none;
     }
   }
   .interactions {

@@ -1,3 +1,49 @@
 <div class="content">
-  Aquí va un Mapa todo bonito
+  <div class="search-container">
+    <mat-card>
+      <h3 class="title">Puedes buscar una ruta</h3>
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Busca una ruta">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </mat-card>
+  </div>
+  <mat-card class="exits-card">
+    <h3 class="title">O puedes escoger una salida</h3>
+    <hr>
+    <div class="exits-container">
+      <div class="exit" matRipple>
+        <span>Por el Uriel</span>
+        <hr>
+        <div class="stats">
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:25}"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:7}"></app-icon-stat>
+        </div>
+      </div>
+      <div class="exit" matRipple>
+        <span>Por la 53</span>
+        <hr>
+        <div class="stats">
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:5}"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:2}"></app-icon-stat>
+        </div>
+      </div>
+      <div class="exit" matRipple>
+        <span>Por la 26</span>
+        <hr>
+        <div class="stats">
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:30}"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:8}"></app-icon-stat>
+        </div>
+      </div>
+      <div class="exit" matRipple>
+        <span>Por la 45</span>
+        <hr>
+        <div class="stats">
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:42}"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:15}"></app-icon-stat>
+        </div>
+      </div>
+    </div>
+  </mat-card>
 </div>

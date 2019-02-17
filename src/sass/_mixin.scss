@@ -5,6 +5,11 @@
           display: flex;
 }
 
+@mixin flex-wrap( $arg ) {
+  -ms-flex-wrap: $arg;
+      flex-wrap: $arg;
+}
+
 @mixin align-items( $arg ) {
   -webkit-align-items: $arg;
     -webkit-box-align: $arg;
@@ -51,11 +56,11 @@
     color: $color;
     opacity: 1;
   }
-  
+
   :-ms-input-placeholder {
     color: $color;
   }
-  
+
   ::-ms-input-placeholder {
     color: $color;
   }

@@ -12,6 +12,24 @@ export class SidenavComponent implements OnInit {
   userData
   @Output( ) closing = new EventEmitter( )
 
+  allStats = [
+    {
+      tooltip: 'Amigos',
+      icon: 'person',
+      number: 2
+    },
+    {
+      tooltip: 'Viajes',
+      icon: 'directions_bike',
+      number: 23
+    },
+    {
+      tooltip: 'Logros',
+      icon: 'bubble_chart',
+      number: 127
+    },
+  ]
+
   constructor( private afAuth: AngularFireAuth, private router: Router ) {
     afAuth.user.subscribe( data => {
       this.userData = data

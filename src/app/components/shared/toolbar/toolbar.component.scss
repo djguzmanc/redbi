@@ -2,6 +2,7 @@ mat-toolbar {
   left: 0;
   position: fixed;
   top: 0;
+  z-index: 1000;
   .my-toolbar {
     align-items: center;
     display: flex;

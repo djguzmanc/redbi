@@ -6,6 +6,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   exports: [
@@ -15,7 +18,10 @@ import { MatRippleModule } from '@angular/material/core';
     MatCardModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTooltipModule,
+    MatDividerModule,
+    MatInputModule
   ]
 })
 export class CustomMaterialModule { }

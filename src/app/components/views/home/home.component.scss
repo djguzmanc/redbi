@@ -4,7 +4,82 @@
 .content {
   @include align-items(center);
   @include flex();
+  @include flex-direction(column);
   height: calc(100vh - 56px);
-  @include justify-content(center);
+  @include justify-content(space-around);
+  position: relative;
   width: 100%;
+  .search-container {
+    text-align: center;
+    width: 95%;
+    .title {
+      color: #464646;
+      margin-bottom: 0;
+    }
+    .full-width {
+      width: 90%;
+    }
+  }
+  .exits-card {
+    height: 75%;
+    width: 95%;
+    .title {
+      margin: 0;
+      text-align: center;
+    }
+  }
+  .exits-container {
+    @include align-items(center);
+    @include flex();
+    @include flex-wrap(wrap);
+    height: 90%;
+    @include justify-content(space-around);
+    margin: 0 auto;
+    position: relative;
+    width: 94%;
+    hr {
+      margin: 5px 0 0;
+      width: 30%;
+    }
+    &:before {
+      background-image: url('../../../../assets/images/home/map.png');
+      @include background-size(80% auto);
+      background-position: center;
+      background-repeat: no-repeat;
+      content: '';
+      height: 100%;
+      opacity: .4;
+      position: absolute;
+      width: 100%;
+      z-index: 0;
+    }
+    .exit {
+      @include align-items(center);
+      @include border-radius(5px);
+      color: white;
+      @include flex();
+      @include flex-direction(column);
+      height: 32%;
+      @include justify-content(center);
+      width: 42%;
+      &:nth-child(1) {
+        background-color: rgba(0, 107, 61, 0.719);
+      }
+      &:nth-child(2) {
+        background-color: rgba(165, 0, 0, 0.719);
+      }
+      &:nth-child(3) {
+        background-color: rgba(49, 121, 0, 0.7);
+      }
+      &:nth-child(4) {
+        background-color: rgba(224, 142, 0, 0.74);
+      }
+      .stats {
+        @include align-items(center);
+        @include flex();
+        @include justify-content(space-around);
+        margin: 20px 0 0;
+      }
+    }
+  }
 }

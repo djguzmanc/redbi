@@ -7,35 +7,29 @@
       </div>
       <hr class="info-divider">
       <div class="stats">
-        <div class="stat">
-          <i class="material-icons">person</i>
-          <span>2</span>
-        </div>
-        <div class="stat">
-          <i class="material-icons">directions_bike</i>
-          <span>23</span>
-        </div>
-        <div class="stat">
-          <i class="material-icons">bubble_chart</i>
-          <span>127</span>
-        </div>
+        <app-icon-stat *ngFor="let stat of allStats" [data]="stat">
+        </app-icon-stat>
       </div>
       <span class="career">Ingeniería</span>
     </div>
     <ul>
-      <li matRipple>
+      <li matRipple routerLink="/m/inicio" routerLinkActive="active-link" (click)="emitClose()">
+        <i class="material-icons">dashboard</i>
+        <span>Inicio</span>
+      </li>
+      <li matRipple routerLinkActive="active-link" (click)="emitClose()">
         <i class="material-icons">mood</i>
         <span>Perfil</span>
       </li>
-      <li matRipple>
+      <li matRipple routerLinkActive="active-link" (click)="emitClose()">
         <i class="material-icons">trending_up</i>
         <span>Crear ruta</span>
       </li>
-      <li matRipple>
+      <li matRipple routerLinkActive="active-link" (click)="emitClose()">
         <i class="material-icons">directions_bike</i>
         <span>Mis rutas</span>
       </li>
-      <li matRipple>
+      <li matRipple routerLinkActive="active-link" (click)="emitClose()">
         <i class="material-icons">bubble_chart</i>
         <span>Logros</span>
       </li>
@@ -43,11 +37,11 @@
   </div>
   <div class="interactions">
     <button mat-mini-fab color="primary" (click)="logout()">
-      <i class="material-icons">arrow_back</i>
+      <i class="material-icons">cancel</i>
     </button>
     <span>Redbi v1.0.0</span>
     <button mat-mini-fab color="primary" (click)="emitClose()">
-      <i class="material-icons">close</i>
+      <i class="material-icons">arrow_back</i>
     </button>
   </div>
 </div>
