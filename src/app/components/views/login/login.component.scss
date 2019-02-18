@@ -40,6 +40,9 @@
         text-align: center;
         top: -78px;
         width: 200px;
+        img {
+          width: 54%;
+        }
       }
     }
     mat-card-content {
@@ -48,10 +51,11 @@
       .un-logo {
         display: block;
         margin: 20px auto;
-        width: 40%;
+        width: 100%;
       }
       .intro {
         font-size: 16px;
+        margin-top: 50px;
       }
       .info {
         font-weight: bold;
