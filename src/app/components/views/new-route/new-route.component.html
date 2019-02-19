@@ -1,3 +1,114 @@
 <div class="content">
-  Nueva ruta
+  <mat-accordion [multi]="true">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          ¿Cómo creo mi ruta?
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="how-to-route">
+        <ol>
+
+          <li class="item">Salida</li>
+          <p>Siempre será por defecto tu salida preferida, sin embargo, puedes cambiarla a tu gusto.</p>
+
+          <li class="item">Destino</li>
+          <p>Siempre será por defecto tu localidad de residencia, sin embargo, puedes cambiarlo a tu gusto.</p>
+
+          <li class="item">Fecha y Hora de salida</li>
+          <p>Escoge la fecha y hora de salida de tu ruta.</p>
+
+          <li class="item">Ruta</li>
+          <p>Este es el paso <b>más importante</b>, aquí le dirás a los demás qué ruta planeas seguir. Debes ser muy genérico al describir tu ruta.</p>
+          <p>Para que los demás puedan encontrar tu ruta fácilmente te recomedamos seguir la siguiente nomenclatura:</p>
+
+          <ul>
+            <li>Calle: <b>Cll</b></li>
+            <li>Carrera: <b>Cra</b></li>
+            <li>Transversal: <b>Tr</b></li>
+            <li>Diagonal: <b>Diag</b></li>
+            <li>No utilices nombres compuestos, por ejemplo:
+              <ul>
+                <li><b><i>La Caracas</i></b> en vez de <b>Caracas</b></li>
+                <li><b><i>Las Américas</i></b> en vez de <b>Américas</b></li>
+              </ul>
+            </li>
+          </ul>
+
+          <p>
+            Por ejemplo, para <b>Cll 26 y Cra 30</b> el campo de texto debería lucir así:
+            <img src="assets/images/route/example.png" class="example">
+          </p>
+        </ol>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true" class="new-route">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Nueva ruta
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="routeForm" *ngIf="routeForm">
+          <ol>
+            <li>
+              <div class="form-control">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Salida" formControlName="exit">
+                    <mat-option *ngFor="let option of sdService.exitPreference" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </li>
+            <li>
+              <div class="form-control">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Destino" formControlName="destination">
+                    <mat-option *ngFor="let option of sdService.locations" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </li>
+            <li>
+              <div class="form-control">
+                <label>Fecha y Hora de Salida</label>
+                <div class="date-time">
+                  <mat-form-field class="half-width">
+                    <input matInput [matDatepicker]="picker" placeholder="Fecha" formControlName="departure_time">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <p-calendar [timeOnly]="true" placeholder="Hora" hourFormat="12" formControlName="departure_time"></p-calendar>
+                </div>
+              </div>
+            </li>
+            <li>
+              <mat-form-field class="full-width">
+                <mat-chip-list #chipList>
+                  <mat-chip 
+                    *ngFor="let path of route; let j=index" 
+                    [selectable]="selectable"
+                    [removable]="true" 
+                    (removed)="remove(j)"
+                    color="primary">
+                    {{path}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                  <input 
+                    placeholder="(Cll 26) (Cra 30)..."
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="add($event,j)">
+                  </mat-chip-list>
+              </mat-form-field>
+            </li>
+          </ol>
+          <button mat-raised-button color="primary" (click)="createRoute()" class="full-width" [disabled]="!isFormValid()">Crear Ruta</button>
+        </form>
+      </mat-expansion-panel>
+  </mat-accordion>
 </div>

@@ -69,6 +69,13 @@ export class StaticDataService {
     'Ambas'
   ]
 
+  public exitPreference = [
+    'Por la 45',
+    'Por la 26',
+    'Por el Uriel',
+    'Por la 53'
+  ]
+
   nameRegex = /[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+/
   numberRegex = /[0-9]+/
 

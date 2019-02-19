@@ -16,7 +16,7 @@ export class AlertService {
   }
 
   showInfoSnack( msg: string, action: string ) {
-      this.mtBar.open( msg, action )
+    this.mtBar.open( msg, action )
   }
 
   showSuccessMessageSwal( title: string ) {

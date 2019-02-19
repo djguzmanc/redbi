@@ -41,6 +41,7 @@ export class UserProfileComponent implements OnInit {
               punch_out: new FormControl( this.userData.preferences.punch_out, [ Validators.required ] ),
               road_preference: new FormControl( this.userData.preferences.road_preference, [ Validators.required ] ),
               speed: new FormControl( this.userData.preferences.speed, [ Validators.required ] ),
+              exit_preference: new FormControl( this.userData.preferences.exit_preference, [ Validators.required ] ),
             })
           }
         )

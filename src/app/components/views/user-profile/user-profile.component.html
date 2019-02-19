@@ -44,6 +44,15 @@
           </div>
           <div class="form-control">
             <mat-form-field class="full-width">
+              <mat-select placeholder="¿Qué salida acostumbras a utilizar?" formControlName="exit_preference">
+                <mat-option *ngFor="let option of sdService.exitPreference" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-control">
+            <mat-form-field class="full-width">
               <mat-select placeholder="¿Qué tan rápido conduces?" formControlName="speed">
                 <mat-option *ngFor="let option of sdService.speedOptions" [value]="option.value">
                   {{option.label}}
@@ -63,15 +72,15 @@
           <div class="form-control pad">
             <label>¿Llevas contigo un kit de primeros auxilios?</label>
             <mat-radio-group class="mat-group-mb" formControlName="medkit">
-              <mat-radio-button class="mat-radio" [value]="1">Sí</mat-radio-button>
-              <mat-radio-button [value]="0">No</mat-radio-button>
+              <mat-radio-button class="mat-radio" [value]="true">Sí</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="form-control pad">
             <label>¿Sabes o puedes despinchar?</label>
             <mat-radio-group class="mat-group-mb" formControlName="punch_out">
-              <mat-radio-button class="mat-radio" [value]="1">Sí</mat-radio-button>
-              <mat-radio-button [value]="0">No</mat-radio-button>
+              <mat-radio-button class="mat-radio" [value]="true">Sí</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="form-control">

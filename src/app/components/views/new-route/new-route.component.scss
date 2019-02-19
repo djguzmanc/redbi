@@ -2,8 +2,56 @@
 @import '../../../../sass/variables';
 
 .content {
-  @include align-items(center);
-  @include flex();
-  @include justify-content(center);
   min-height: calc(100vh - 56px);
+  .how-to-route {
+    ol, ul {
+      padding-left: 20px;
+      .item {
+        font-weight: bold;
+      }
+    }
+    .blue-button {
+      background-color: $accent;
+      @include border-radius(50%);
+      color: white;
+      padding: 1px 6px;
+    }
+    .example {
+      width: 100%;
+    }
+  }
+  form {
+    width: 100%;
+    .full-width {
+      width: 100%;
+    }
+    ol {
+      padding-left: 20px;
+      button {
+        display: block;
+        margin-left: auto;
+      }
+      .form-control {
+        label {
+          display: block;
+          margin-bottom: 4px;
+        }
+        .mat-radio {
+          margin-right: 20px;
+        }
+        .date-time {
+          @include align-items(center);
+          @include flex();
+          @include justify-content(center);
+          .half-width {
+            margin-right: 15px;
+            width: 45%;
+          }
+        }
+      }
+    }
+  }
+  .new-route {
+    // min-height: 100vh;
+  }
 }

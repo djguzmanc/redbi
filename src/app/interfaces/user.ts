@@ -9,12 +9,13 @@ export interface User {
   gender: number,
   preferences: {
     edited: boolean,
-    experience: number,
+    experience: string,
     location: string,
     medkit: boolean,
     punch_out: boolean,
-    road_preference: number,
-    speed: number
+    road_preference: string,
+    speed: string,
+    exit_preference: string
   }
 }
 
@@ -29,11 +30,12 @@ export const DEFAULT_USER: User = {
   gender: null,
   preferences: {
     edited: false,
-    experience: 0,
+    experience: null,
     location: null,
-    medkit: false,
-    punch_out: false,
-    road_preference: 0,
-    speed: 0
+    medkit: null,
+    punch_out: null,
+    road_preference: null,
+    speed: null,
+    exit_preference: null
   }
 }
