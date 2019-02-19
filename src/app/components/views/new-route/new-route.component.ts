@@ -25,6 +25,8 @@ export class NewRouteComponent implements OnInit {
 
   routeForm: FormGroup
 
+  departure_time = new Date( )
+
   constructor( public sdService: StaticDataService, private afAuth: AngularFireAuth, private db: AngularFirestore,
       private alertService: AlertService, private router: Router ) { }
 
@@ -37,8 +39,7 @@ export class NewRouteComponent implements OnInit {
             this.userData = res
             this.routeForm = new FormGroup({
               exit: new FormControl( this.userData.preferences.exit_preference, [ Validators.required ] ),
-              destination: new FormControl( this.userData.preferences.location, [ Validators.required ] ),
-              departure_time: new FormControl( new Date( ), [ Validators.required ] )
+              destination: new FormControl( this.userData.preferences.location, [ Validators.required ] )
             })
           }
         )
@@ -47,7 +48,7 @@ export class NewRouteComponent implements OnInit {
   }
 
   isFormValid( ) {
-    return this.route.length > 0 && this.routeForm.valid 
+    return this.departure_time && this.route.length > 0 && this.routeForm.valid 
   }
 
   add( event: MatChipInputEvent, j: number ): void {
@@ -76,7 +77,8 @@ export class NewRouteComponent implements OnInit {
     this.db.collection( 'routes' ).add(
       Object.assign( {
         owner: userRef,
-        paths: this.route
+        paths: this.route,
+        departure_time: this.departure_time
       }, this.routeForm.value )
     ).then( res => {
       this.router.navigate( [ 'm', 'mis-rutas' ] )
