@@ -52,7 +52,7 @@ export class UserProfileComponent implements OnInit {
     if ( this.personalDataForm.valid ) {
       this.db.doc( `users/${ this.uid }` ).update( this.personalDataForm.value ).then(
         res => {
-          this.alertService.showSuccessMessageSwal( '¡Datos Actualizados!' )
+          this.alertService.showInfoSnack( '¡Datos actualizados!', 'Ok' )
         }
       )
     }
@@ -62,7 +62,7 @@ export class UserProfileComponent implements OnInit {
     if ( this.preferencesForm.valid ) {
       this.db.doc( `users/${ this.uid }` ).update( { preferences: Object.assign( this.preferencesForm.value, { edited : true } ) } ).then(
         res => {
-          this.alertService.showSuccessMessageSwal( '¡Datos Actualizados!' )
+          this.alertService.showInfoSnack( '¡Datos actualizados!', 'Ok' )
         }
       )
     }

@@ -2,13 +2,22 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import swal from 'sweetalert';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
 
-  constructor( private router: Router ) { }
+  constructor( private router: Router, private mtBar: MatSnackBar ) { }
+
+  openSimpleSnack( msg: string, action: string ) {
+    return this.mtBar.open( msg, action )
+  }
+
+  showInfoSnack( msg: string, action: string ) {
+      this.mtBar.open( msg, action )
+  }
 
   showSuccessMessageSwal( title: string ) {
     return swal({
