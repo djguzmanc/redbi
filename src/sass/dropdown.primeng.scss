@@ -1,0 +1,13 @@
+@import 'variables';
+@import 'mixin';
+
+.ui-dropdown {
+  height: 40px !important;
+  margin-top: 6px !important;
+  padding-top: 5px !important;
+  width: 100% !important;
+}
+
+.ui-dropdown-label, .ui-dropdown-item {
+  font-family: "Roboto", sans-serif !important;
+}

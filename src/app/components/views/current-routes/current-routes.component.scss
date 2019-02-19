@@ -1,0 +1,9 @@
+@import '../../../../sass/mixin';
+@import '../../../../sass/variables';
+
+.content {
+  @include align-items(center);
+  @include flex();
+  @include justify-content(center);
+  min-height: calc(100vh - 56px);
+}

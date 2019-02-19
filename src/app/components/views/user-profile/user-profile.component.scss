@@ -1,0 +1,75 @@
+@import '../../../../sass/mixin';
+@import '../../../../sass/variables';
+
+.content {
+  margin: 0 auto;
+  width: 100%;
+  .profile-header {
+    background-image: url('../../../../assets/images/sidenav/cyt.jpg');
+    @include background-size(cover);
+    background-position: center;
+    color: white;
+    margin: 0 auto;
+    text-align: center;
+    &::before {
+      background-color: #002a61;
+      content: '';
+      height: 100%;
+      left: 0;
+      opacity: 0.5;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 0;
+    }
+    .profile-pic {
+      @include border-radius(50%);
+      margin: 0 auto;
+      position: relative;
+      width: 32%;
+      z-index: 1;
+    }
+    hr {
+      position: relative;
+      z-index: 1;
+    }
+    .info {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  .tabs {
+    margin: 10px auto 0;
+    width: 100%;
+    .tab-group {
+      min-height: 50vh;
+    }
+    form {
+      margin: 20px 0;
+      width: 100%;
+      .full-width {
+        width: 100%;
+      }
+      .form-control {
+        @include box-shadow(0px 1px 8px -3px black);
+        margin: 8px 0;
+        padding: 10px 10px 0;
+        label {
+          display: block;
+          margin-bottom: 4px;
+        }
+        .mat-radio {
+          margin-right: 20px;
+        }
+      }
+      .pad {
+        padding: 8px;
+      }
+    }
+    button {
+      display: block;
+      margin-left: auto;
+      margin-top: 15px;
+    }
+  }
+}

@@ -47,7 +47,7 @@
         margin-right: 15px;
         width: 50px;
       }
-      span {
+      .name {
         font-size: 3.5vw;
       }
     }
@@ -59,7 +59,7 @@
       width: 48%;
     }
     .career {
-      margin: 10px 0;
+      margin: 16px 0 0;
       font-size: 13px;
       position: relative;
       z-index: 1;
@@ -83,6 +83,7 @@
       height: 50px;
       @include justify-content(flex-start);
       padding-left: 30px;
+      outline: none;
       @include transition(.2s);
       .material-icons {
         margin-right: 20px;

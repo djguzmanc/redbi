@@ -10,6 +10,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   exports: [
@@ -23,7 +25,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatTooltipModule,
     MatDividerModule,
     MatInputModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatRadioModule
   ]
 })
 export class CustomMaterialModule { }

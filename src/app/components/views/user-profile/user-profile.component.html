@@ -1,0 +1,35 @@
+<div class="content">
+  <mat-card class="profile-header">
+    <img [src]="userData.photoURL|nullImgUrl" [alt]="userData.fullName" class="profile-pic">
+    <hr>
+    <div class="info">
+      <div class="name">{{userData.fullName}}</div>
+      <div class="faculty">{{userData.faculty}}</div>
+      <div>UN</div> 
+    </div>
+  </mat-card>
+  <mat-card class="tabs">
+    <mat-tab-group class="tab-group">
+      <mat-tab label="Información Personal">
+        <form [formGroup]="personalDataForm" *ngIf="personalDataForm">
+          <div class="form-control pad">
+            <label>Sexo</label>
+            <mat-radio-group class="mat-group-mb" formControlName="gender">
+              <mat-radio-button class="mat-radio" [value]="0">M</mat-radio-button>
+              <mat-radio-button [value]="1">F</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="form-control">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Facultad" formControlName="faculty">
+            </mat-form-field>
+          </div>
+          <button mat-raised-button color="primary" (click)="savePersonalData()" [disabled]="!personalDataForm.valid">Guardar</button>
+        </form>
+      </mat-tab>
+      <mat-tab label="Preferencias">
+
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

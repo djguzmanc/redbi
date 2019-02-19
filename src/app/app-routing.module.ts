@@ -13,6 +13,10 @@ import { LoginComponent } from './components/views/login/login.component';
 import { MenuWrapperComponent } from './components/utilities/menu-wrapper/menu-wrapper.component';
 import { HomeComponent } from './components/views/home/home.component';
 import { LoginAwaitComponent } from './components/views/login-await/login-await.component';
+import { UserProfileComponent } from './components/views/user-profile/user-profile.component';
+import { NewRouteComponent } from './components/views/new-route/new-route.component';
+import { CurrentRoutesComponent } from './components/views/current-routes/current-routes.component';
+import { ChallengesComponent } from './components/views/challenges/challenges.component';
 
 const routes: Routes = [
   {
@@ -32,7 +36,23 @@ const routes: Routes = [
       {
         path: 'inicio',
         component: HomeComponent
-      }
+      },
+      {
+        path: 'perfil',
+        component: UserProfileComponent
+      },
+      {
+        path: 'crear-ruta',
+        component: NewRouteComponent
+      },
+      {
+        path: 'mis-rutas',
+        component: CurrentRoutesComponent
+      },
+      {
+        path: 'logros',
+        component: ChallengesComponent
+      },
     ]
   },
   {

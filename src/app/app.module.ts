@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +10,11 @@ import { AppComponent } from './app.component';
  * Material imports
  */
 import { CustomMaterialModule } from './custom-modules/custom-material.module';
+
+/**
+ * PrimeNg Imports
+ */
+import { PrimeNgModule } from './custom-modules/primeng.module';
 
 /**
  * Firebase imports
@@ -29,6 +35,12 @@ import { ToolbarComponent } from './components/shared/toolbar/toolbar.component'
 import { SidenavComponent } from './components/shared/sidenav/sidenav.component';
 import { LoginAwaitComponent } from './components/views/login-await/login-await.component';
 import { IconStatComponent } from './components/ui/icon-stat/icon-stat.component';
+import { NullImgUrlPipe } from './pipes/null-img-url.pipe';
+import { UserProfileComponent } from './components/views/user-profile/user-profile.component';
+import { NewRouteComponent } from './components/views/new-route/new-route.component';
+import { CurrentRoutesComponent } from './components/views/current-routes/current-routes.component';
+import { ChallengesComponent } from './components/views/challenges/challenges.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -39,7 +51,12 @@ import { IconStatComponent } from './components/ui/icon-stat/icon-stat.component
     ToolbarComponent,
     SidenavComponent,
     LoginAwaitComponent,
-    IconStatComponent
+    IconStatComponent,
+    NullImgUrlPipe,
+    UserProfileComponent,
+    NewRouteComponent,
+    CurrentRoutesComponent,
+    ChallengesComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +64,11 @@ import { IconStatComponent } from './components/ui/icon-stat/icon-stat.component
     AngularFireModule.initializeApp( environment.firebaseConfig ),
     AngularFirestoreModule,
     CustomMaterialModule,
-    BrowserAnimationsModule
+    PrimeNgModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
   ],
   providers: [
     AngularFireAuth,
