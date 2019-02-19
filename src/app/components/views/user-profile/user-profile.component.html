@@ -21,7 +21,12 @@
           </div>
           <div class="form-control">
             <mat-form-field class="full-width">
-              <input matInput placeholder="Facultad" formControlName="faculty">
+              <input type="text" placeholder="Facultad" aria-label="Number" matInput formControlName="faculty" [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of sdService.faculties" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
           <button mat-raised-button color="primary" (click)="savePersonalData()" [disabled]="!personalDataForm.valid">Guardar</button>
