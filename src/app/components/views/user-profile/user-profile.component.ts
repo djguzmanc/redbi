@@ -24,16 +24,18 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit( ) {
     this.afAuth.user.subscribe( data => {
-      this.uid = data.uid
-      this.db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
-        ( res: User ) => {
-          this.userData = res
-          this.personalDataForm = new FormGroup({
-            faculty: new FormControl( this.userData.faculty, [ Validators.required ] ),
-            gender: new FormControl( this.userData.gender, [ Validators.required ] ),
-          })
-        }
-      )
+      if ( data ) {
+        this.uid = data.uid
+        this.db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
+          ( res: User ) => {
+            this.userData = res
+            this.personalDataForm = new FormGroup({
+              faculty: new FormControl( this.userData.faculty, [ Validators.required ] ),
+              gender: new FormControl( this.userData.gender, [ Validators.required ] ),
+            })
+          }
+        )
+      }
     })
   }
 

@@ -21,36 +21,40 @@ export class SidenavComponent implements OnInit {
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private router: Router, private alertService: AlertService ) {
     afAuth.user.subscribe( data => {
-      db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
-        ( res: User ) => {
-          this.userData = res
-          if ( this.userData.faculty == null || this.userData.gender == null ) {
-            this.alertService.showConfirmSwal( 'Parece que no has completado tus datos de perfil', '¿Deseas completarlos? Tomará 5 minutos :p' ).then(
-              res => {
-                if ( res )
-                  router.navigate( [ 'm', 'perfil' ] )
+      if ( data ) {
+        db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
+          ( res: User ) => {
+            if ( res ) {
+              this.userData = res
+              if ( this.userData.faculty == null || this.userData.gender == null ) {
+                this.alertService.showConfirmSwal( 'Parece que no has completado tus datos de perfil', '¿Deseas completarlos? Tomará 5 minutos :p' ).then(
+                  res => {
+                    if ( res )
+                      router.navigate( [ 'm', 'perfil' ] )
+                  }
+                )
               }
-            )
+              this.allStats = [
+                {
+                  tooltip: 'Amigos',
+                  icon: 'person',
+                  number: this.userData.friends
+                },
+                {
+                  tooltip: 'Viajes',
+                  icon: 'directions_bike',
+                  number: this.userData.trips
+                },
+                {
+                  tooltip: 'Logros',
+                  icon: 'bubble_chart',
+                  number: this.userData.challenges
+                },
+              ]
+            } 
           }
-          this.allStats = [
-            {
-              tooltip: 'Amigos',
-              icon: 'person',
-              number: this.userData.friends
-            },
-            {
-              tooltip: 'Viajes',
-              icon: 'directions_bike',
-              number: this.userData.trips
-            },
-            {
-              tooltip: 'Logros',
-              icon: 'bubble_chart',
-              number: this.userData.challenges
-            },
-          ]
-        }
-      )
+        )
+      }
     })
   }
 

@@ -24,19 +24,19 @@ export class AuthGuard implements CanActivate {
           this.router.navigate( [ 'iniciar-sesion' ], { queryParams: { wrongDomain: true } } )
           return false
         } else {
-          this.db.doc( `users/${ data.uid }` ).valueChanges( ).toPromise( ).then(
+          this.db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
             res => {
-              if ( !res )
+              if ( !res ) {
                 this.db.collection( 'users' ).doc( data.uid ).set({
-                  email: data.email,
-                  fullName: data.displayName,
-                  photoURL: data.photoURL,
-                  trips: 0,
-                  challenges: 0,
-                  friends: 0,
-                  faculty: null,
-                  gender: null,
-                  preferences: {
+                    email: data.email,
+                    fullName: data.displayName,
+                    photoURL: data.photoURL,
+                    trips: 0,
+                    challenges: 0,
+                    friends: 0,
+                    faculty: null,
+                    gender: null,
+                    preferences: {
                     edited: false,
                     experience: 0,
                     location: null,
@@ -46,6 +46,7 @@ export class AuthGuard implements CanActivate {
                     speed: 0
                   }
                 })
+              }
             }
           )
           this.router.navigate( [ 'm', 'inicio' ] )
