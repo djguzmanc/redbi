@@ -26,7 +26,7 @@ export class SidenavComponent implements OnInit {
           ( res: User ) => {
             if ( res ) {
               this.userData = res
-              if ( this.userData.faculty == null || this.userData.gender == null ) {
+              if ( this.userData.faculty == null || this.userData.gender == null || !this.userData.preferences.edited ) {
                 this.alertService.showConfirmSwal( 'Parece que no has completado tus datos de perfil', '¿Deseas completarlos? Tomará 5 minutos :p' ).then(
                   res => {
                     if ( res )

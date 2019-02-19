@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   exports: [
@@ -29,7 +29,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatExpansionModule,
     MatTabsModule,
     MatRadioModule,
-    MatAutocompleteModule
+    MatSelectModule
   ]
 })
 export class CustomMaterialModule { }

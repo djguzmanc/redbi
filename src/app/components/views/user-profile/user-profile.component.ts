@@ -18,6 +18,7 @@ export class UserProfileComponent implements OnInit {
   uid: any
 
   personalDataForm: FormGroup
+  preferencesForm: FormGroup
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, 
     private router: Router, private alertService: AlertService, public sdService: StaticDataService ) {}
@@ -33,6 +34,14 @@ export class UserProfileComponent implements OnInit {
               faculty: new FormControl( this.userData.faculty, [ Validators.required ] ),
               gender: new FormControl( this.userData.gender, [ Validators.required ] ),
             })
+            this.preferencesForm = new FormGroup({
+              experience: new FormControl( this.userData.preferences.experience, [ Validators.required ] ),
+              location: new FormControl( this.userData.preferences.location, [ Validators.required ] ),
+              medkit: new FormControl( this.userData.preferences.medkit, [ Validators.required ] ),
+              punch_out: new FormControl( this.userData.preferences.punch_out, [ Validators.required ] ),
+              road_preference: new FormControl( this.userData.preferences.road_preference, [ Validators.required ] ),
+              speed: new FormControl( this.userData.preferences.speed, [ Validators.required ] ),
+            })
           }
         )
       }
@@ -42,6 +51,16 @@ export class UserProfileComponent implements OnInit {
   savePersonalData( ) {
     if ( this.personalDataForm.valid ) {
       this.db.doc( `users/${ this.uid }` ).update( this.personalDataForm.value ).then(
+        res => {
+          this.alertService.showSuccessMessageSwal( '¡Datos Actualizados!' )
+        }
+      )
+    }
+  }
+
+  savePreferences( ) {
+    if ( this.preferencesForm.valid ) {
+      this.db.doc( `users/${ this.uid }` ).update( { preferences: Object.assign( this.preferencesForm.value, { edited : true } ) } ).then(
         res => {
           this.alertService.showSuccessMessageSwal( '¡Datos Actualizados!' )
         }

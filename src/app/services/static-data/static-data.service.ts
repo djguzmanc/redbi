@@ -25,7 +25,49 @@ export class StaticDataService {
     { label: 'Odontología', value: 'Odontología' },
   ]
 
-  public allCountries = []
+  public levelXp = [
+    { label: 'Menos de 3 meses', value: 'Menos de 3 meses' },
+    { label: 'De 3 a 6 meses', value: 'De 3 a 6 meses' },
+    { label: 'De 6 a 12 meses', value: 'De 6 a 12 meses' },
+    { label: 'De 1 a 3 años', value: 'De 1 a 3 años' },
+    { label: 'Más de 3 años', value: 'Más de 3 años' },
+  ]
+
+  public speedOptions = [
+    { label: 'Lento', value: 'Lento' },
+    { label: 'Moderado', value: 'Moderado' },
+    { label: 'Rápido', value: 'Rápido' },
+    { label: 'Muy Rápido', value: 'Muy rápido' },
+  ]
+
+  public locations = [
+    'Usaquén',
+    'Chapinero',
+    'Santa Fe',
+    'San Cristóbal',
+    'Usme',
+    'Tunjuelito',
+    'Bosa',
+    'Kennedy',
+    'Fontibón',
+    'Engativá',
+    'Suba',
+    'Barrios Unidos',
+    'Teusaquillo',
+    'Los Mártires',
+    'Antonio Nariño',
+    'Puente Aranda',
+    'La Candelaria',
+    'Rafael Uribe Uribe',
+    'Ciudad Bolívar',
+    'Sumapaz',
+  ]
+  
+  public roadPreference = [
+    'Cicloruta',
+    'Calzada',
+    'Ambas'
+  ]
 
   nameRegex = /[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+/
   numberRegex = /[0-9]+/

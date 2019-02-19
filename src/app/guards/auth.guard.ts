@@ -24,28 +24,29 @@ export class AuthGuard implements CanActivate {
           this.router.navigate( [ 'iniciar-sesion' ], { queryParams: { wrongDomain: true } } )
           return false
         } else {
-          this.db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
+          let sub$ = this.db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
             res => {
               if ( !res ) {
                 this.db.collection( 'users' ).doc( data.uid ).set({
-                    email: data.email,
-                    fullName: data.displayName,
-                    photoURL: data.photoURL,
-                    trips: 0,
-                    challenges: 0,
-                    friends: 0,
-                    faculty: null,
-                    gender: null,
-                    preferences: {
+                  email: data.email,
+                  fullName: data.displayName,
+                  photoURL: data.photoURL,
+                  trips: 0,
+                  challenges: 0,
+                  friends: 0,
+                  faculty: null,
+                  gender: null,
+                  preferences: {
                     edited: false,
-                    experience: 0,
+                    experience: null,
                     location: null,
-                    medkit: false,
-                    punch_out: false,
-                    road_preference: 0,
-                    speed: 0
+                    medkit: null,
+                    punch_out: null,
+                    road_preference: null,
+                    speed: null
                   }
                 })
+                sub$.unsubscribe( )
               }
             }
           )

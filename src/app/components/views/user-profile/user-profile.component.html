@@ -21,19 +21,70 @@
           </div>
           <div class="form-control">
             <mat-form-field class="full-width">
-              <input type="text" placeholder="Facultad" aria-label="Number" matInput formControlName="faculty" [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete">
+              <mat-select placeholder="Facultad" formControlName="faculty">
                 <mat-option *ngFor="let option of sdService.faculties" [value]="option.value">
                   {{option.label}}
                 </mat-option>
-              </mat-autocomplete>
+              </mat-select>
             </mat-form-field>
           </div>
           <button mat-raised-button color="primary" (click)="savePersonalData()" [disabled]="!personalDataForm.valid">Guardar</button>
         </form>
       </mat-tab>
       <mat-tab label="Preferencias">
-
+        <form [formGroup]="preferencesForm" *ngIf="preferencesForm">
+          <div class="form-control">
+            <mat-form-field class="full-width">
+              <mat-select placeholder="¿Experiencia con tu bici?" formControlName="experience">
+                <mat-option *ngFor="let option of sdService.levelXp" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-control">
+            <mat-form-field class="full-width">
+              <mat-select placeholder="¿Qué tan rápido conduces?" formControlName="speed">
+                <mat-option *ngFor="let option of sdService.speedOptions" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-control">
+            <mat-form-field class="full-width">
+              <mat-select placeholder="¿En qué localidad vives?" formControlName="location">
+                <mat-option *ngFor="let option of sdService.locations" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-control pad">
+            <label>¿Llevas contigo un kit de primeros auxilios?</label>
+            <mat-radio-group class="mat-group-mb" formControlName="medkit">
+              <mat-radio-button class="mat-radio" [value]="1">Sí</mat-radio-button>
+              <mat-radio-button [value]="0">No</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="form-control pad">
+            <label>¿Sabes o puedes despinchar?</label>
+            <mat-radio-group class="mat-group-mb" formControlName="punch_out">
+              <mat-radio-button class="mat-radio" [value]="1">Sí</mat-radio-button>
+              <mat-radio-button [value]="0">No</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="form-control">
+            <mat-form-field class="full-width">
+              <mat-select placeholder="¿Qué prefieres?" formControlName="road_preference">
+                <mat-option *ngFor="let option of sdService.roadPreference" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <button mat-raised-button color="primary" (click)="savePreferences()" [disabled]="!preferencesForm.valid">Guardar</button>
+        </form>
       </mat-tab>
     </mat-tab-group>
   </mat-card>
