@@ -1,16 +1,16 @@
 <div class="content">
   <div class="top-wrapper">
-    <div class="personal-info-container">
-      <div class="personal-info" *ngIf="userData">
-        <img [src]="userData.photoURL|nullImgUrl" [alt]="userData.displayName">
-        <div class="name">{{userData.fullName}}</div>
+    <div class="personal-info-container" *ngIf="userData">
+      <div class="personal-info" *ngIf="userData.userData">
+        <img [src]="userData.userData.photoURL|nullImgUrl" [alt]="userData.userData.displayName">
+        <div class="name">{{userData.userData.fullName}}</div>
       </div>
       <hr class="info-divider">
       <div class="stats">
         <app-icon-stat *ngFor="let stat of allStats" [data]="stat">
         </app-icon-stat>
       </div>
-      <span class="career">{{userData.faculty||'Universidad Nacional'}}</span>
+      <span class="career">{{userData.userData.faculty||'Universidad Nacional'}}</span>
     </div>
     <ul>
       <li matRipple routerLink="/m/inicio" routerLinkActive="active-link" (click)="emitClose()">

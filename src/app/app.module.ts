@@ -41,6 +41,7 @@ import { NewRouteComponent } from './components/views/new-route/new-route.compon
 import { CurrentRoutesComponent } from './components/views/current-routes/current-routes.component';
 import { ChallengesComponent } from './components/views/challenges/challenges.component';
 import { HttpClientModule } from '@angular/common/http';
+import { RouteCardComponent } from './components/ui/route-card/route-card.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { HttpClientModule } from '@angular/common/http';
     UserProfileComponent,
     NewRouteComponent,
     CurrentRoutesComponent,
-    ChallengesComponent
+    ChallengesComponent,
+    RouteCardComponent
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,10 @@
 <div class="content">
-  <mat-card class="profile-header">
-    <img [src]="userData.photoURL|nullImgUrl" [alt]="userData.fullName" class="profile-pic">
+  <mat-card class="profile-header" *ngIf="userData">
+    <img [src]="userData.userData.photoURL|nullImgUrl" [alt]="userData.userData.fullName" class="profile-pic">
     <hr>
     <div class="info">
-      <div class="name">{{userData.fullName}}</div>
-      <div class="faculty">{{userData.faculty}}</div>
+      <div class="name">{{userData.userData.fullName}}</div>
+      <div class="faculty">{{userData.userData.faculty}}</div>
       <div>UN</div> 
     </div>
   </mat-card>

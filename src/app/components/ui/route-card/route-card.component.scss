@@ -1,0 +1,76 @@
+@import '../../../../sass/mixin';
+@import '../../../../sass/variables';
+
+.route-header {
+  @include align-items(center);
+  @include flex();
+  width: 100%;
+  .profile-pic {
+    @include border-radius(50%);
+    width: 36px;
+  }
+  .route-info {
+    @include align-items(center);
+    @include flex(); 
+    @include justify-content(space-between);
+    padding-left: 15px;
+    width: 100%;
+    .left-info {
+      font-size: 12px;
+      .from, .to {
+        span {
+          color: $accent;
+          font-weight: bold;
+        }
+      }
+      .to {
+        margin-top: 4px;
+        span {
+          color: #bd0000;
+        }
+      }
+    }
+    .people {
+      @include align-items(center);
+      @include flex(); 
+      @include justify-content(center);
+      .material-icons {
+        color: $accent;
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+.route-content {
+  .title {
+    margin-bottom: 0;
+    .material-icons {
+      vertical-align: middle;
+    }
+    small {
+      color: gray;
+      font-weight: normal;
+    }
+  }
+  .green {
+    color: #008400;
+  }
+  .yellow {
+    color: #ab8700;
+    .material-icons {
+      margin-right: 4px;
+    }
+  }
+  ol {
+    padding-left: 20px;
+  }
+}
+
+.route-actions {
+  margin-top: 10px;
+  button {
+    margin: 3px 0;
+    width: 100%;
+  }
+}

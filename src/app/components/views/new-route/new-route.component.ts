@@ -9,6 +9,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DataService } from 'src/app/services/data-service/data.service';
 
 @Component({
   selector: 'app-new-route',
@@ -20,38 +21,32 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   readonly separatorKeysCodes: number[] = [ ENTER, COMMA ];
 
   route = []
-
-  userData: User = DEFAULT_USER
-  uid: any
-
+  userData
   routeForm: FormGroup
-
   departure_time = new Date( )
-
   subscription = new Subscription( )
 
-  constructor( public sdService: StaticDataService, private afAuth: AngularFireAuth, private db: AngularFirestore,
+  constructor( public sdService: StaticDataService, private db: AngularFirestore, private dataService: DataService,
       private alertService: AlertService, private router: Router ) { }
 
   ngOnInit( ) {
+    this.userData = this.dataService.userDataValue
     this.subscription.add(
-      this.afAuth.user.subscribe( data => {
-        if ( data ) {
-          this.uid = data.uid
-          this.subscription.add(
-            this.db.doc( `users/${ data.uid }` ).valueChanges( ).subscribe(
-              ( res: User ) => {
-                this.userData = res
-                this.routeForm = new FormGroup({
-                  exit: new FormControl( this.userData.preferences.exit_preference, [ Validators.required ] ),
-                  destination: new FormControl( this.userData.preferences.location, [ Validators.required ] )
-                })
-              }
-            )
-          )
-        }
+      this.dataService.userData.asObservable( ).subscribe( newVal => {
+        this.userData = newVal
+        this.initForm( )
       })
     )
+    if ( this.userData ) {
+      this.initForm( )
+    }
+  }
+
+  initForm( ) {
+    this.routeForm = new FormGroup({
+      exit: new FormControl( this.userData.userData.preferences.exit_preference, [ Validators.required ] ),
+      destination: new FormControl( this.userData.userData.preferences.location, [ Validators.required ] )
+    })
   }
 
   isFormValid( ) {
@@ -80,12 +75,13 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   }
 
   createRoute( ) {
-    let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.uid ).ref.path ).ref
+    let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
     this.db.collection( 'routes' ).add(
       Object.assign( {
         owner: userRef,
         paths: this.route,
-        departure_time: this.departure_time
+        departure_time: this.departure_time,
+        created_at: new Date( ),
       }, this.routeForm.value )
     ).then( res => {
       this.router.navigate( [ 'm', 'mis-rutas' ] )
