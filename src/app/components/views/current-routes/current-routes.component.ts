@@ -38,26 +38,20 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
 
   retrieveRoutes( ) {
     if ( !this.routesSub$ ) {
-      this.routesSub$ = this.db.doc( `users/${ this.userData.uid }` ).valueChanges( ).subscribe(
-        ( res: User ) => {
-          let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
-          this.subscription.add(
-            this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
-              this.allRoutes =  res.map( x => {
-                return {
-                  id: x.payload.doc.id,
-                  data: x.payload.doc.data( )
-                }
-              }).sort( ( a: any, b: any ) => {
-                let a_date = new Date( a.data.created_at.seconds * 1000 )
-                let b_date = new Date( b.data.created_at.seconds * 1000 )
-                return a_date < b_date ? 1 : -1
-              })
-              console.log( this.allRoutes )
-            })
-          )
-        }
-      )
+      let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+      this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+        this.allRoutes =  res.map( x => {
+          return {
+            id: x.payload.doc.id,
+            data: x.payload.doc.data( )
+          }
+        }).sort( ( a: any, b: any ) => {
+          let a_date = new Date( a.data.created_at.seconds * 1000 )
+          let b_date = new Date( b.data.created_at.seconds * 1000 )
+          return a_date < b_date ? 1 : -1
+        })
+        console.log( this.allRoutes )
+      })
       this.subscription.add( this.routesSub$ )
     }
   }

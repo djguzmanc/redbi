@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import swal from 'sweetalert';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { text } from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,17 @@ export class AlertService {
     this.mtBar.open( msg, action )
   }
 
+  showInfoSwal( title: string, text: string ) {
+    return swal({
+      title,
+      text,
+      icon: 'info'
+    })
+  }
+
   showSuccessMessageSwal( title: string ) {
     return swal({
-      title: title,
+      title,
       icon: 'success',
       timer: 2000
     })
@@ -29,8 +38,8 @@ export class AlertService {
 
   showConfirmSwal( title: string, text: string, dangermode?: boolean ) {
     return swal({
-      title: title,
-      text: text,
+      title,
+      text,
       icon: 'info',
       closeOnClickOutside: false,
       dangerMode: dangermode,

@@ -1,6 +1,6 @@
 <div class="content">
   <mat-accordion [multi]="true">
-    <mat-expansion-panel>
+    <mat-expansion-panel #howto_ref>
       <mat-expansion-panel-header>
         <mat-panel-title>
           ¿Cómo creo mi ruta?
@@ -27,6 +27,7 @@
             <li>Carrera: <b>Cra</b></li>
             <li>Transversal: <b>Tr</b></li>
             <li>Diagonal: <b>Diag</b></li>
+            <li>Avenida: <b>Av</b></li>
             <li>No utilices nombres compuestos, por ejemplo:
               <ul>
                 <li><b><i>La Caracas</i></b> en vez de <b>Caracas</b></li>
@@ -38,6 +39,9 @@
           <p>
             Por ejemplo, para <b>Cll 26 y Cra 30</b> el campo de texto debería lucir así:
             <img src="assets/images/route/example.png" class="example">
+          </p>
+          <p>
+            ¡No olvides presionar <b>enter</b> para separar cada camino de tu ruta!
           </p>
         </ol>
       </div>

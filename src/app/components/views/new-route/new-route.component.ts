@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent, MatExpansionPanel } from '@angular/material';
 import { User, DEFAULT_USER } from 'src/app/interfaces/user';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -26,6 +26,9 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   departure_time = new Date( )
   subscription = new Subscription( )
 
+  routesSub$
+  @ViewChild( 'howto_ref' ) howto_ref: MatExpansionPanel
+
   constructor( public sdService: StaticDataService, private db: AngularFirestore, private dataService: DataService,
       private alertService: AlertService, private router: Router ) { }
 
@@ -42,11 +45,29 @@ export class NewRouteComponent implements OnInit, OnDestroy {
     }
   }
 
+  retrieveRoutes( ) {
+    if ( !this.routesSub$ ) {
+      let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+      this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+        if( res.length == 0 ) {
+          this.alertService.showInfoSwal( 
+            '¡No tienes ninguna ruta!', 
+            'Parece que es la primera vez que estás aquí. Tómate 5 minutos para leer la guía: ¿Cómo creo mi ruta?' 
+          ).then( () => {
+            this.howto_ref.open( )
+          })
+        }
+      })
+      this.subscription.add( this.routesSub$ )
+    }
+  }
+
   initForm( ) {
     this.routeForm = new FormGroup({
       exit: new FormControl( this.userData.userData.preferences.exit_preference, [ Validators.required ] ),
       destination: new FormControl( this.userData.userData.preferences.location, [ Validators.required ] )
     })
+    this.retrieveRoutes( )
   }
 
   isFormValid( ) {
