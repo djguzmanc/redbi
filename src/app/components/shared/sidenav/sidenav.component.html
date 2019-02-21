@@ -12,26 +12,30 @@
       </div>
       <span class="career">{{userData.userData.faculty||'Universidad Nacional'}}</span>
     </div>
-    <ul>
-      <li matRipple routerLink="/m/inicio" routerLinkActive="active-link" (click)="emitClose()">
+    <ul (click)="emitClose()">
+      <li matRipple routerLink="/m/inicio" routerLinkActive="active-link">
         <i class="material-icons">dashboard</i>
-        <span>Inicio</span>
+        <span>¡Rutas!</span>
       </li>
-      <li matRipple routerLink="/m/perfil" routerLinkActive="active-link" (click)="emitClose()">
+      <li matRipple routerLink="/m/perfil" routerLinkActive="active-link">
         <i class="material-icons">mood</i>
         <span>Perfil</span>
       </li>
-      <li matRipple routerLink="/m/crear-ruta" routerLinkActive="active-link" (click)="emitClose()">
+      <li matRipple routerLink="/m/crear-ruta" routerLinkActive="active-link">
         <i class="material-icons">trending_up</i>
         <span>Crear ruta</span>
       </li>
-      <li matRipple routerLink="/m/mis-rutas" routerLinkActive="active-link" (click)="emitClose()">
+      <li matRipple routerLink="/m/mis-rutas" routerLinkActive="active-link">
         <i class="material-icons">directions_bike</i>
         <span>Mis rutas</span>
       </li>
-      <li matRipple routerLink="/m/logros" routerLinkActive="active-link" (click)="emitClose()">
+      <li matRipple routerLink="/m/logros" routerLinkActive="active-link">
         <i class="material-icons">bubble_chart</i>
         <span>Logros</span>
+      </li>
+      <li matRipple routerLinkActive="active-link">
+        <i class="material-icons">question_answer</i>
+        <span>Preguntas frecuentes</span>
       </li>
     </ul>
   </div>

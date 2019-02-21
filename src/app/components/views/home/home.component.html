@@ -4,7 +4,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Busca una ruta
+            Encuentra una ruta más rápido
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-form-field class="full-width">
@@ -17,39 +17,39 @@
     </mat-card> -->
   </div>
   <mat-card class="exits-card">
-    <h3 class="title">Escoger una salida</h3>
+    <h3 class="title">¿Por dónde saldrás hoy?</h3>
     <hr>
     <div class="exits-container">
-      <div class="exit" matRipple>
+      <div class="exit" matRipple (click)="find('Por el Uriel')">
         <span>Por el Uriel</span>
         <hr>
         <div class="stats">
-          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:25}" [small]="true"></app-icon-stat>
-          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:7}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number: '-'}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number: exit1Data}" [small]="true"></app-icon-stat>
         </div>
       </div>
-      <div class="exit" matRipple>
+      <div class="exit" matRipple (click)="find('Por la 53')">
         <span>Por la 53</span>
         <hr>
         <div class="stats">
-          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:5}" [small]="true"></app-icon-stat>
-          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:2}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number: '-'}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number: exit2Data}" [small]="true"></app-icon-stat>
         </div>
       </div>
-      <div class="exit" matRipple>
+      <div class="exit" matRipple (click)="find('Por la 26')">
         <span>Por la 26</span>
         <hr>
         <div class="stats">
-          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:30}" [small]="true"></app-icon-stat>
-          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:8}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number: '-'}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number: exit3Data}" [small]="true"></app-icon-stat>
         </div>
       </div>
-      <div class="exit" matRipple>
+      <div class="exit" matRipple (click)="find('Por la 45')">
         <span>Por la 45</span>
         <hr>
         <div class="stats">
-          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number:42}" [small]="true"></app-icon-stat>
-          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number:15}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Usuarios', icon:'person', number: '-'}" [small]="true"></app-icon-stat>
+          <app-icon-stat [data]="{tooltip:'Rutas', icon:'trending_up', number: exit4Data}" [small]="true"></app-icon-stat>
         </div>
       </div>
     </div>

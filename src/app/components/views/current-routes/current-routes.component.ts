@@ -39,19 +39,15 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
   retrieveRoutes( ) {
     if ( !this.routesSub$ ) {
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
-      this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
-        this.allRoutes =  res.map( x => {
-          return {
-            id: x.payload.doc.id,
-            data: x.payload.doc.data( )
-          }
-        }).sort( ( a: any, b: any ) => {
-          let a_date = new Date( a.data.created_at.seconds * 1000 )
-          let b_date = new Date( b.data.created_at.seconds * 1000 )
-          return a_date < b_date ? 1 : -1
+      this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ).orderBy( 'created_at', 'desc' ) )
+        .snapshotChanges( ).subscribe( res => {
+          this.allRoutes =  res.map( x => {
+            return {
+              id: x.payload.doc.id,
+              data: x.payload.doc.data( )
+            }
+          })
         })
-        console.log( this.allRoutes )
-      })
       this.subscription.add( this.routesSub$ )
     }
   }

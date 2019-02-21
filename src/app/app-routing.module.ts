@@ -17,6 +17,7 @@ import { UserProfileComponent } from './components/views/user-profile/user-profi
 import { NewRouteComponent } from './components/views/new-route/new-route.component';
 import { CurrentRoutesComponent } from './components/views/current-routes/current-routes.component';
 import { ChallengesComponent } from './components/views/challenges/challenges.component';
+import { RouteFinderComponent } from './components/views/route-finder/route-finder.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
       {
         path: 'logros',
         component: ChallengesComponent
+      },
+      {
+        path: 'buscador',
+        component: RouteFinderComponent
       },
     ]
   },

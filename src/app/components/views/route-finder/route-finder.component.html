@@ -1,0 +1,10 @@
+<div class="content">
+    <mat-card class="card">
+      <div class="title">Rutas</div>
+      <mat-spinner *ngIf="allRoutes.length==0"></mat-spinner>
+      <mat-accordion class="accordion" *ngIf="allRoutes.length>0">
+        <app-route-card *ngFor="let route of allRoutes" [data]="route">
+        </app-route-card>
+      </mat-accordion>
+    </mat-card>
+  </div>  

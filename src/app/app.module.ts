@@ -42,6 +42,7 @@ import { CurrentRoutesComponent } from './components/views/current-routes/curren
 import { ChallengesComponent } from './components/views/challenges/challenges.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RouteCardComponent } from './components/ui/route-card/route-card.component';
+import { RouteFinderComponent } from './components/views/route-finder/route-finder.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { RouteCardComponent } from './components/ui/route-card/route-card.compon
     NewRouteComponent,
     CurrentRoutesComponent,
     ChallengesComponent,
-    RouteCardComponent
+    RouteCardComponent,
+    RouteFinderComponent
   ],
   imports: [
     BrowserModule,

@@ -40,7 +40,8 @@
     </mat-chip-list>
   </div>
   <div class="route-actions">
-      <button mat-raised-button color="primary">Editar</button>
-      <button mat-raised-button color="warn">Eliminar</button>
+      <button mat-raised-button color="primary" *ngIf="owner">Editar</button>
+      <button mat-raised-button color="warn" *ngIf="owner">Eliminar</button>
+      <button mat-raised-button color="primary" *ngIf="!owner">Ver</button>
   </div>
 </mat-expansion-panel>

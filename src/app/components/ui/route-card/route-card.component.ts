@@ -10,6 +10,7 @@ import { User, DEFAULT_USER } from 'src/app/interfaces/user';
 export class RouteCardComponent implements OnInit {
 
   @Input( ) data
+  @Input( ) owner: boolean = false
   userInfo: User = DEFAULT_USER
 
   constructor( private db: AngularFirestore ) { }
