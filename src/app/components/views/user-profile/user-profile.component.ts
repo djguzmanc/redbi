@@ -1,6 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User, DEFAULT_USER } from 'src/app/interfaces/user';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
@@ -8,6 +6,7 @@ import { FormGroup, FormControl, Validators, Form } from '@angular/forms';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
+import { MatTabGroup } from '@angular/material';
 
 @Component({
   selector: 'app-user-profile',
@@ -20,6 +19,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   personalDataForm: FormGroup
   preferencesForm: FormGroup
   subscription = new Subscription( )
+  @ViewChild( 'mattab_ref' ) mattab_ref: MatTabGroup
 
   constructor( private db: AngularFirestore, private dataService: DataService,
     private router: Router, private alertService: AlertService, public sdService: StaticDataService ) {}
@@ -58,6 +58,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       this.db.doc( `users/${ this.userData.uid }` ).update( this.personalDataForm.value ).then(
         res => {
           this.alertService.showInfoSnack( '¡Datos actualizados!', 'Ok' )
+          this.mattab_ref.selectedIndex = this.mattab_ref.selectedIndex + 1
         }
       )
     }

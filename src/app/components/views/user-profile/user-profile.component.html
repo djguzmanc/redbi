@@ -9,7 +9,7 @@
     </div>
   </mat-card>
   <mat-card class="tabs">
-    <mat-tab-group class="tab-group">
+    <mat-tab-group class="tab-group" #mattab_ref>
       <mat-tab label="Información Personal">
         <form [formGroup]="personalDataForm" *ngIf="personalDataForm">
           <div class="form-control pad">
