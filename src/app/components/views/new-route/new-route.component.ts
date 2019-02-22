@@ -114,7 +114,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
       this.db.collection( 'routes' ).add(
         Object.assign({
           owner: userRef,
-          paths,
+          paths: this.route.map( x => x.toLowerCase( ).normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" ) ),
           departure_time: this.departure_time,
           created_at: new Date( ),
         }, this.routeForm.value )

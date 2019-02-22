@@ -20,7 +20,7 @@ import { PrimeNgModule } from './custom-modules/primeng.module';
  * Firebase imports
  */
 import { AngularFireModule } from "@angular/fire";
-import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { AngularFirestoreModule, FirestoreSettingsToken } from "@angular/fire/firestore";
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
@@ -76,7 +76,11 @@ import { RouteFinderComponent } from './components/views/route-finder/route-find
   ],
   providers: [
     AngularFireAuth,
-    AngularFireStorage
+    AngularFireStorage,
+    {
+      provide: FirestoreSettingsToken,
+      useValue: {}
+    }
   ],
   bootstrap: [ AppComponent ]
 })

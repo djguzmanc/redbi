@@ -31,7 +31,7 @@
     <h3 class="title green"><i class="material-icons">trending_up</i> Ruta</h3>
     <mat-chip-list #chipList>
       <ol>
-        <li *ngFor="let path of getRoutes(data.data.paths); let j=index">
+        <li *ngFor="let path of data.data.paths; let j=index">
           <mat-chip color="primary"class="capitalize">
             {{path}}
           </mat-chip>    
