@@ -25,6 +25,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   routeForm: FormGroup
   departure_time = new Date( )
   subscription = new Subscription( )
+  requestSent: boolean = false
 
   routesSub$
   @ViewChild( 'howto_ref' ) howto_ref: MatExpansionPanel
@@ -71,7 +72,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   }
 
   isFormValid( ) {
-    return this.departure_time && this.route.length > 0 && this.routeForm.valid 
+    return this.validateRoute( ) === -1 && !this.requestSent && this.departure_time && this.route.length > 0 && this.routeForm.valid 
   }
 
   add( event: MatChipInputEvent, j: number ): void {
@@ -91,26 +92,40 @@ export class NewRouteComponent implements OnInit, OnDestroy {
     this.route.splice( j, 1 )
   }
 
-  removePath( i: number ) {
-    this.route.splice( i, 1 )
+  validateRoute( ) {
+    for ( let i = 0; i < this.route.length; i++ ) {
+      const path = this.route[ i ];
+      let splittedPath = path.split( ' ' )
+      if ( splittedPath.length > 2 )
+        return i
+    }
+    return -1
   }
 
   createRoute( ) {
-    let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
-    this.db.collection( 'routes' ).add(
-      Object.assign( {
-        owner: userRef,
-        paths: this.route,
-        departure_time: this.departure_time,
-        created_at: new Date( ),
-      }, this.routeForm.value )
-    ).then( res => {
-      this.router.navigate( [ 'm', 'mis-rutas' ] )
-    }).catch(
-      err => {
-        this.alertService.openSimpleSnack( 'Algo salió mal y tu ruta no fue creada :(', 'Ok' )
-      }
-    )
+    if ( this.isFormValid( ) ) {
+      this.requestSent = true
+      let paths = {}
+      this.route.forEach( ( path: string, index: number ) => {
+        let normalizedName = path.toLowerCase( ).normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" )
+        paths[ normalizedName ] = index + 1
+      });
+      let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+      this.db.collection( 'routes' ).add(
+        Object.assign({
+          owner: userRef,
+          paths,
+          departure_time: this.departure_time,
+          created_at: new Date( ),
+        }, this.routeForm.value )
+      ).then( res => {
+        this.router.navigate( [ 'm', 'mis-rutas' ] )
+      }).catch(
+        err => {
+          this.alertService.openSimpleSnack( 'Algo salió mal y tu ruta no fue creada :(', 'Ok' )
+        }
+      )
+    }
   }
 
   ngOnDestroy( ) {

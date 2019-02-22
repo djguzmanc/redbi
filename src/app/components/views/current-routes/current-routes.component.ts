@@ -16,7 +16,7 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
 
   userData
   subscription = new Subscription( )
-  allRoutes = []
+  allRoutes
 
   routesSub$
 

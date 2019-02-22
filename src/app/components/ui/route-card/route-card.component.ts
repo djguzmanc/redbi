@@ -21,4 +21,12 @@ export class RouteCardComponent implements OnInit {
     })
   }
 
+  getRoutes( object: { key: number } ) {
+    return Object.keys( object ).sort( ( a, b ) => {
+      if ( object[ a ] < object[ b ] )
+        return -1
+      return 1
+    })
+  }
+
 }

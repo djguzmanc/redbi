@@ -31,8 +31,8 @@
     <h3 class="title green"><i class="material-icons">trending_up</i> Ruta</h3>
     <mat-chip-list #chipList>
       <ol>
-        <li *ngFor="let path of data.data.paths; let j=index">
-          <mat-chip color="primary">
+        <li *ngFor="let path of getRoutes(data.data.paths); let j=index">
+          <mat-chip color="primary"class="capitalize">
             {{path}}
           </mat-chip>    
         </li>
@@ -40,8 +40,8 @@
     </mat-chip-list>
   </div>
   <div class="route-actions">
-      <button mat-raised-button color="primary" *ngIf="owner">Editar</button>
-      <button mat-raised-button color="warn" *ngIf="owner">Eliminar</button>
-      <button mat-raised-button color="primary" *ngIf="!owner">Ver</button>
+    <button mat-raised-button color="primary" *ngIf="owner">Editar</button>
+    <button mat-raised-button color="warn" *ngIf="owner">Eliminar</button>
+    <button mat-raised-button color="primary" *ngIf="!owner">Ver</button>
   </div>
 </mat-expansion-panel>

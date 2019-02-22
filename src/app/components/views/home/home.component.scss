@@ -13,12 +13,18 @@
     margin: 15px 0;
     text-align: center;
     width: 92%;
+    ol {
+      padding-left: 20px;
+    }
     .title {
       color: #464646;
       margin-bottom: 0;
     }
     .full-width {
       width: 90%;
+      .red-chip {
+        background-color: #fb4b4b;
+      }
     }
   }
   .exits-card {

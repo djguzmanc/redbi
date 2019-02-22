@@ -37,11 +37,11 @@
           </ul>
 
           <p>
-            Por ejemplo, para <b>Cll 26 y Cra 30</b> el campo de texto debería lucir así:
-            <img src="assets/images/route/example.png" class="example">
+            Por ejemplo, para los caminos <b>Cll 26 y Cra 30</b> el campo de texto debería lucir así:
+            <img src="assets/images/route/example.gif" class="example">
           </p>
           <p>
-            ¡No olvides presionar <b>enter</b> para separar cada camino de tu ruta!
+            No olvides presionar <b>enter</b> para separar cada camino de tu ruta.
           </p>
         </ol>
       </div>
@@ -97,18 +97,22 @@
                     [selectable]="selectable"
                     [removable]="true" 
                     (removed)="remove(j)"
-                    color="primary">
+                    color="primary"
+                    [class.red-chip]="validateRoute()===j">
                     {{path}}
                     <mat-icon matChipRemove>cancel</mat-icon>
                   </mat-chip>
                   <input 
-                    placeholder="Cll 26 Cra 30..."
+                    placeholder="Tu ruta"
                     [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     [matChipInputAddOnBlur]="true"
                     (matChipInputTokenEnd)="add($event,j)">
-                  </mat-chip-list>
+                </mat-chip-list>
               </mat-form-field>
+              <div class="error" *ngIf="validateRoute()!=-1">
+                Hay un error en tu ruta <span (click)="howto_ref.open()">?</span>
+              </div>
             </li>
           </ol>
           <button mat-raised-button color="primary" (click)="createRoute()" class="full-width" [disabled]="!isFormValid()">Crear Ruta</button>

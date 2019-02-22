@@ -17,6 +17,7 @@
       padding: 1px 6px;
     }
     .example {
+      margin: 10px 0 0;
       width: 100%;
     }
   }
@@ -24,6 +25,21 @@
     width: 100%;
     .full-width {
       width: 100%;
+      .red-chip {
+        background-color: #fb4b4b;
+      }
+    }
+    .error {
+      color: #fb4b4b;
+      span {
+        background-color: #fb4b4b;
+        @include border-radius(50%);
+        @include box-shadow(1px 1px 4px 0px #656565);
+        color: white;
+        font-size: 20px;
+        margin-left: 5px;
+        padding: 0 7px;
+      }
     }
     ol {
       padding-left: 20px;

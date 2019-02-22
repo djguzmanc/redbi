@@ -12,8 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class RouteFinderComponent implements OnInit, OnDestroy {
 
-  exit: string
-  allRoutes = []
+  allRoutes
   routesSub$
   userData
   subscription = new Subscription( )
@@ -23,25 +22,36 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
 
   ngOnInit( ) {
     this.acRoute.queryParams.subscribe( ( params: Params ) => {
-      if ( params.exit ) {
-        this.exit = params.exit
-        this.retrieveRoutes( )
-      }
+      this.retrieveRoutes( params.exit, params.destination, params.routes )
     })
   }
 
-  retrieveRoutes( ) {
+  retrieveRoutes( exit, destination, routes ) {
     if ( !this.routesSub$ ) {
-      this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'exit', '==', this.exit ).orderBy( 'created_at', 'desc' ) )
-        .snapshotChanges( ).subscribe( res => {
-          this.allRoutes =  res.map( x => {
-            return {
-              id: x.payload.doc.id,
-              data: x.payload.doc.data( )
+      if ( ( destination || exit ) && !routes ) {
+        this.routesSub$ = this.db.collection( 'routes', ref => {
+            if ( destination && exit ) {
+              console.log( "Por Destino y Salida!" )
+              return ref.where( 'exit', '==', exit ).where( 'destination', '==', destination ).orderBy( 'created_at', 'desc' )
             }
+            if ( destination ) {
+              console.log( "Por Destino!" )
+              return ref.where( 'destination', '==', destination ).orderBy( 'created_at', 'desc' )
+            }
+            if ( exit ) {
+              console.log( "Por Salida!" )
+              return ref.where( 'exit', '==', exit ).orderBy( 'created_at', 'desc' )
+            }
+          }).snapshotChanges( ).subscribe( res => {
+            this.allRoutes =  res.map( x => {
+              return {
+                id: x.payload.doc.id,
+                data: x.payload.doc.data( )
+              }
+            })
           })
-        })
-      this.subscription.add( this.routesSub$ )
+        this.subscription.add( this.routesSub$ )
+      }
     }
   }
 

@@ -7,10 +7,61 @@
             Encuentra una ruta más rápido
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <mat-form-field class="full-width">
-          <input type="text" matInput placeholder="Busca una ruta">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+        <form [formGroup]="routeForm" *ngIf="routeForm">
+          <ol>
+            <li>
+              <div class="form-control">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Salida" formControlName="exit">
+                    <mat-option [value]="null">
+                      Ninguna
+                    </mat-option>
+                    <mat-option *ngFor="let option of sdService.exitPreference" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </li>
+            <li>
+              <div class="form-control">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Destino" formControlName="destination">
+                    <mat-option [value]="null">
+                      Ninguna
+                    </mat-option>
+                    <mat-option *ngFor="let option of sdService.locations" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </li>
+            <li>
+              <mat-form-field class="full-width">
+                <mat-chip-list #chipList>
+                  <mat-chip 
+                    *ngFor="let path of route; let j=index" 
+                    [selectable]="selectable"
+                    [removable]="true" 
+                    (removed)="remove(j)"
+                    color="primary"
+                    [class.red-chip]="validateRoute()===j">
+                    {{path}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                  <input 
+                    placeholder="Calles que sueles tomar"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="add($event,j)">
+                </mat-chip-list>
+              </mat-form-field>
+            </li>
+          </ol>
+        </form>
+        <button mat-raised-button color="primary" class="full-width" [disabled]="!isFormValid()" (click)="searchRoutes()">Buscar</button>
       </mat-expansion-panel>
     </mat-accordion>
     <!-- <mat-card>

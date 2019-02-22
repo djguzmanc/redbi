@@ -43,6 +43,9 @@
 }
 
 .route-content {
+  .capitalize {
+    text-transform: capitalize;
+  }
   .title {
     margin-bottom: 0;
     .material-icons {
