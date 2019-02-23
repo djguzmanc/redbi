@@ -120,7 +120,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-      <button mat-raised-button color="warn" *ngIf="isOwner" class="full-width">Eliminar</button>
-      <button mat-raised-button color="primary" class="full-width" *ngIf="!isOwner">Entrar</button>
+      <button mat-raised-button color="warn" *ngIf="isOwner" class="full-width" (click)="deleteRoute()" [disabled]="requestSent">Eliminar</button>
+      <button mat-raised-button color="primary" class="full-width" *ngIf="!isOwner">Unirse</button>
   </mat-card-actions>
 </mat-card>

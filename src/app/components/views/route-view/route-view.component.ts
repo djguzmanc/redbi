@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { DEFAULT_USER } from 'src/app/interfaces/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -30,7 +30,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   route = []
 
   constructor( private dataService: DataService, private acRoute: ActivatedRoute, private db: AngularFirestore, public sdService: StaticDataService,
-      private alertService: AlertService ) { }
+      private alertService: AlertService, private router: Router ) { }
 
   ngOnInit( ) {
     this.userData = this.dataService.userDataValue
@@ -57,14 +57,16 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   retrieveRouteData( ) {
     this.subscription.add(
       this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).valueChanges( ).subscribe( res => {
-        this.routeData = res
-        this.isOwner = this.routeData.owner._key.path.segments[ this.routeData.owner._key.path.segments.length - 1 ] == this.userData.uid
-        if( this.isOwner )
-          this.initForm( )
-        if ( !this.isOwner ) {
-          this.db.doc( this.routeData.owner ).valueChanges( ).subscribe( res => {
-            this.ownerData = res 
-          })
+        if ( res ) {
+          this.routeData = res
+          this.isOwner = this.routeData.owner._key.path.segments[ this.routeData.owner._key.path.segments.length - 1 ] == this.userData.uid
+          if( this.isOwner )
+            this.initForm( )
+          if ( !this.isOwner ) {
+            this.db.doc( this.routeData.owner ).valueChanges( ).subscribe( res => {
+              this.ownerData = res 
+            })
+          }
         }
       })
     )
@@ -123,17 +125,34 @@ export class RouteViewComponent implements OnInit, OnDestroy {
       )
     }
   }
-
-  ngOnDestroy( ) {
-    this.subscription.unsubscribe( )
-  }
-
+  
   getOwnerData( ) {
     if ( this.isOwner && this.userData )
       return this.userData.userData
     if ( this.ownerData && !this.isOwner )
       return this.ownerData
     return DEFAULT_USER
+  }
+
+  deleteRoute( ) {
+    if ( !this.requestSent ) {
+      this.alertService.showConfirmSwal( '¿Estás seguro?', 'Esta acción no se puede deshacer.', true ).then( result => {
+        if ( result ) {
+          this.requestSent = true
+          this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).delete( ).then( () => {
+            this.alertService.openSimpleSnack( 'Ruta Eliminada', 'Ok' )
+            this.router.navigate( [ 'm', 'mis-rutas' ] )
+          }).catch( err => {
+            this.alertService.openSimpleSnack( 'Algo salió mal y tu ruta no fue eliminada', 'Ok' )
+            this.requestSent = false
+          })
+        }
+      })
+    }
+  }
+
+  ngOnDestroy( ) {
+    this.subscription.unsubscribe( )
   }
 
 }

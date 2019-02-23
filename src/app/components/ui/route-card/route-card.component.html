@@ -29,6 +29,6 @@
   </div>
   <div class="route-actions">
     <button mat-raised-button color="primary" [routerLink]="[ '/m', 'ruta', data.id ]">Ver</button>
-    <button mat-raised-button color="warn" *ngIf="owner">Eliminar</button>
+    <button mat-raised-button color="warn" *ngIf="owner" (click)="deleteRoute()" [disabled]="requestSent">Eliminar</button>
   </div>
 </mat-expansion-panel>
