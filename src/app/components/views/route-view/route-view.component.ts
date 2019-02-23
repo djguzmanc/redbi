@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -15,6 +16,8 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
   styleUrls: ['./route-view.component.scss']
 })
 export class RouteViewComponent implements OnInit, OnDestroy {
+
+  readonly separatorKeysCodes: number[] = [ ENTER, COMMA ];
 
   userData
   subscription = new Subscription( )
