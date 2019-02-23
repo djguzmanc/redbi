@@ -96,6 +96,9 @@
       @include background-linear-gradient(#2F2F2F, #ffffff42);
       outline: none;
     }
+    .current-route {
+      @include background-linear-gradient(#2F2F2F, #00f30040);
+    }
   }
   .interactions {
     @include align-items(center);

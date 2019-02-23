@@ -36,6 +36,26 @@
             </li>
           </ol>          
         </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Miembros ({{ membersData.length }})
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="members">
+            <ol>
+              <li *ngFor="let member of membersData; let i=index">
+                <div class="member-content">
+                  <img [src]="member.photoURL" [alt]="member.fullName" class="profile-pic">
+                  <div class="personal-data">
+                    <div class="name">{{member.fullName}}</div>
+                    <div class="faculty">{{member.faculty}}</div>
+                  </div>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </mat-expansion-panel>
       </mat-accordion>
       <div class="route-content" *ngIf="!isOwner">
         <h3 class="title blue"><b>Saliendo: </b> <span>{{routeData.exit}}</span></h3>
@@ -53,74 +73,99 @@
         </mat-chip-list>
       </div>
       <form [formGroup]="routeForm" *ngIf="routeForm && isOwner">
-          <ol>
-            <li>
-              <div class="form-control">
-                <mat-form-field class="full-width">
-                  <mat-select placeholder="Salida" formControlName="exit">
-                    <mat-option *ngFor="let option of sdService.exitPreference" [value]="option">
-                      {{option}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </li>
-            <li>
-              <div class="form-control">
-                <mat-form-field class="full-width">
-                  <mat-select placeholder="Destino" formControlName="destination">
-                    <mat-option *ngFor="let option of sdService.locations" [value]="option">
-                      {{option}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </li>
-            <li>
-              <div class="form-control">
-                <label>Fecha y Hora de Salida</label>
-                <div class="date-time">
-                  <mat-form-field class="half-width">
-                    <input matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                  <p-calendar [timeOnly]="true" placeholder="Hora" hourFormat="12" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}"></p-calendar>
-                </div>
-              </div>
-            </li>
-            <li>
+        <ol>
+          <li>
+            <div class="form-control">
               <mat-form-field class="full-width">
-                <mat-chip-list #chipList>
-                  <mat-chip 
-                    *ngFor="let path of route; let j=index" 
-                    [selectable]="selectable"
-                    [removable]="true" 
-                    (removed)="remove(j)"
-                    color="primary"
-                    [class.red-chip]="validateRoute()===j">
-                    {{path}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                  </mat-chip>
-                  <input 
-                    placeholder="Tu ruta"
-                    [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="add($event,j)">
-                </mat-chip-list>
+                <mat-select placeholder="Salida" formControlName="exit">
+                  <mat-option *ngFor="let option of sdService.exitPreference" [value]="option">
+                    {{option}}
+                  </mat-option>
+                </mat-select>
               </mat-form-field>
-              <div class="error" *ngIf="validateRoute()!=-1">
-                Hay un error en tu ruta <span (click)="howto_ref.open()">?</span>
+            </div>
+          </li>
+          <li>
+            <div class="form-control">
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Destino" formControlName="destination">
+                  <mat-option *ngFor="let option of sdService.locations" [value]="option">
+                    {{option}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </li>
+          <li>
+            <div class="form-control">
+              <label>Fecha y Hora de Salida</label>
+              <div class="date-time">
+                <mat-form-field class="half-width">
+                  <input matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <p-calendar [timeOnly]="true" placeholder="Hora" hourFormat="12" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}"></p-calendar>
               </div>
-            </li>
-          </ol>
-          <button mat-raised-button color="primary" class="full-width" [disabled]="!isFormValid()" (click)="updateRoute()">Guardar Cambios</button>
-        </form>
+            </div>
+          </li>
+          <li>
+            <mat-form-field class="full-width">
+              <mat-chip-list #chipList>
+                <mat-chip 
+                  *ngFor="let path of route; let j=index" 
+                  [selectable]="selectable"
+                  [removable]="true" 
+                  (removed)="remove(j)"
+                  color="primary"
+                  [class.red-chip]="validateRoute()===j">
+                  {{path}}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input 
+                  placeholder="Tu ruta"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="add($event,j)">
+              </mat-chip-list>
+            </mat-form-field>
+            <div class="error" *ngIf="validateRoute()!=-1">
+              Hay un error en tu ruta
+            </div>
+          </li>
+        </ol>
+        <button mat-raised-button color="primary" class="full-width" [disabled]="!isFormValid()" (click)="updateRoute()">Guardar Cambios</button>
+      </form>
+      <div class="messages">
+        <h3 class="title">Chat ({{messages.data.messages.length}} mensajes)</h3>
+        <div class="messages-container" #messages_container_ref>
+          <div class="message-container" *ngFor="let msgData of messages.data.messages" [ngClass]="{'align-right': msgData.owner.id === userData.uid}">
+            <div class="message" [ngClass]="{'mine': msgData.owner.id === userData.uid}">
+              <div class="header">
+                <img [src]="msgData.owner.photoURL" [alt]="msgData.owner.name" class="profile-pic">
+                <span class="name">{{msgData.owner.name}}</span>
+              </div>
+              <div class="msg-content">
+                {{msgData.msg}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="input-container">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Pregunta algo..." #msg_input>
+            <mat-icon matSuffix class="send-button" (click)="sendMessage(msg_input)">send</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </mat-card-content>
-  <mat-card-actions>
+  <mat-card-actions *ngIf="userData">
       <button mat-raised-button color="warn" *ngIf="isOwner" class="full-width" (click)="deleteRoute()" [disabled]="requestSent">Eliminar</button>
-      <button mat-raised-button color="primary" class="full-width" *ngIf="!isOwner">Unirse</button>
+      <button mat-raised-button [color]="subscribedToThisRoute() ? 'warn' : 'primary'" class="full-width" *ngIf="!isOwner" (click)="joinRoute()" [disabled]="requestSent">
+        <span *ngIf="!subscribedToThisRoute()">Unirse</span>
+        <span *ngIf="subscribedToThisRoute()">Abandonar</span>
+      </button>
   </mat-card-actions>
 </mat-card>

@@ -13,6 +13,10 @@
       <span class="career">{{userData.userData.faculty||'Universidad Nacional'}}</span>
     </div>
     <ul (click)="emitClose()">
+      <li *ngIf="userData && userData.userData.subscription" matRipple [routerLink]="[ '/m', 'ruta', userData.userData.subscription.id ]" class="current-route">
+        <i class="material-icons">timeline</i>
+        <span>Ruta Activa</span>
+      </li>
       <li matRipple routerLink="/m/inicio" routerLinkActive="active-link">
         <i class="material-icons">dashboard</i>
         <span>¡Rutas!</span>
@@ -33,17 +37,13 @@
         <i class="material-icons">bubble_chart</i>
         <span>Logros</span>
       </li>
-      <li matRipple routerLinkActive="active-link">
-        <i class="material-icons">question_answer</i>
-        <span>Preguntas frecuentes</span>
-      </li>
     </ul>
   </div>
   <div class="interactions">
     <button mat-mini-fab color="primary" (click)="logout()">
       <i class="material-icons">cancel</i>
     </button>
-    <span>Redbi v1.0.0</span>
+    <span>Redbi v1.0.25</span>
     <button mat-mini-fab color="primary" (click)="emitClose()">
       <i class="material-icons">arrow_back</i>
     </button>

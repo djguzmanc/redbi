@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
@@ -17,6 +17,8 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
 })
 export class RouteViewComponent implements OnInit, OnDestroy {
 
+  @ViewChild( 'messages_container_ref' ) messages_container_ref: ElementRef
+
   readonly separatorKeysCodes: number[] = [ ENTER, COMMA ];
 
   userData
@@ -28,6 +30,13 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   requestSent: boolean = false
   ownerData
   route = []
+  membersData = []
+  messages = {
+    id: -1,
+    data: {
+      messages: []
+    }
+  }
 
   constructor( private dataService: DataService, private acRoute: ActivatedRoute, private db: AngularFirestore, public sdService: StaticDataService,
       private alertService: AlertService, private router: Router ) { }
@@ -59,7 +68,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
       this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).valueChanges( ).subscribe( res => {
         if ( res ) {
           this.routeData = res
-          this.isOwner = this.routeData.owner._key.path.segments[ this.routeData.owner._key.path.segments.length - 1 ] == this.userData.uid
+          this.isOwner = this.routeData.owner.id == this.userData.uid
           if( this.isOwner )
             this.initForm( )
           if ( !this.isOwner ) {
@@ -67,6 +76,25 @@ export class RouteViewComponent implements OnInit, OnDestroy {
               this.ownerData = res 
             })
           }
+          let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
+          this.db.collection( 'users', ref => ref.where( 'subscription', '==', routeRef ) ).valueChanges( ).subscribe(
+            res => {
+              this.membersData = res
+            }
+          )
+          this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
+            ( res: any ) => {
+              if ( res.length > 0 ) {
+                this.messages = res.map( x => {
+                  return {
+                    id: x.payload.doc.id,
+                    data: x.payload.doc.data( )
+                  }
+                })[ 0 ]
+                this.messages_container_ref.nativeElement.scrollTop = this.messages_container_ref.nativeElement.scrollHeight
+              }
+            }
+          )
         }
       })
     )
@@ -118,7 +146,6 @@ export class RouteViewComponent implements OnInit, OnDestroy {
         this.requestSent = false
       }).catch(
         err => {
-          console.log( err )
           this.alertService.openSimpleSnack( 'Algo salió mal y tu ruta no fue actualizada :(', 'Ok' )
           this.requestSent = false
         }
@@ -140,13 +167,71 @@ export class RouteViewComponent implements OnInit, OnDestroy {
         if ( result ) {
           this.requestSent = true
           this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).delete( ).then( () => {
-            this.alertService.openSimpleSnack( 'Ruta Eliminada', 'Ok' )
-            this.router.navigate( [ 'm', 'mis-rutas' ] )
+            this.db.doc( `chat_rooms/${ this.messages.id }` ).delete( ).then( () => {
+              this.alertService.openSimpleSnack( 'Ruta Eliminada', 'Ok' )
+              this.router.navigate( [ 'm', 'mis-rutas' ] )
+            }).catch( err => {
+              this.alertService.openSimpleSnack( 'Algo salió mal', 'Ok' )
+              this.requestSent = false
+            })
           }).catch( err => {
             this.alertService.openSimpleSnack( 'Algo salió mal y tu ruta no fue eliminada', 'Ok' )
             this.requestSent = false
           })
         }
+      })
+    }
+  }
+
+  joinRoute( ) {
+    if ( !this.requestSent ) {
+      this.requestSent = true
+      if ( !this.subscribedToThisRoute( ) ) {
+        this.db.doc( `users/${ this.userData.uid }` ).update({
+          subscription: this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
+        }).then( res => {
+          this.alertService.openSimpleSnack( 'Te uniste a esta ruta! :)', 'Ok' )
+          this.requestSent = false
+        }).catch(
+          err => {
+            this.alertService.openSimpleSnack( 'Algo salió mal y no te pudiste unir :(', 'Ok' )
+            this.requestSent = false
+          }
+        )
+      } else {
+        this.db.doc( `users/${ this.userData.uid }` ).update({
+          subscription: null
+        }).then( res => {
+          this.alertService.openSimpleSnack( 'Abandonaste esta ruta! :)', 'Ok' )
+          this.requestSent = false
+        }).catch(
+          err => {
+            this.alertService.openSimpleSnack( 'Algo salió mal y no pudiste abandonar :(', 'Ok' )
+            this.requestSent = false
+          }
+        )
+      }
+    }
+  }
+
+  subscribedToThisRoute( ) {
+    return this.userData.userData.subscription && this.userData.userData.subscription.id === this.acRoute.snapshot.paramMap.get( 'id' )
+  }
+
+  sendMessage( msg ) {
+    if ( msg.value && msg.value != '' ) {
+      this.messages.data.messages.push({
+        owner: {
+          id: this.userData.uid,
+          photoURL: this.userData.userData.photoURL,
+          name: this.userData.userData.fullName.split( ' ', 2 ).join( ' ' )
+        },
+        msg: msg.value
+      })
+      this.db.doc( `chat_rooms/${ this.messages.id }` ).update({
+        messages: this.messages.data.messages
+      }).then( () => {
+        msg.value = ''
       })
     }
   }

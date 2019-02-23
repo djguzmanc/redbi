@@ -114,6 +114,10 @@ export class NewRouteComponent implements OnInit, OnDestroy {
           created_at: new Date( ),
         }, this.routeForm.value )
       ).then( res => {
+        this.db.collection( 'chat_rooms' ).add({
+          route: this.db.doc( this.db.collection( 'routes' ).doc( res.id ).ref.path ).ref,
+          messages: []
+        })
         this.router.navigate( [ 'm', 'mis-rutas' ] )
       }).catch(
         err => {

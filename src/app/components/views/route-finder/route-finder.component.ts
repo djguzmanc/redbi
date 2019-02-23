@@ -57,7 +57,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                 id: x.payload.doc.id,
                 data: x.payload.doc.data( )
               }
-            }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid )
+            }).filter( ( x: any ) => x.data.owner.id != this.userData.uid )
           })
         this.subscription.add( this.routesSub$ )
       } else if ( ( destination || exit ) || routes ) {
@@ -73,7 +73,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
+                }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })
@@ -88,7 +88,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
+                }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })
@@ -103,7 +103,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
+                }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })
@@ -118,7 +118,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
+                }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })

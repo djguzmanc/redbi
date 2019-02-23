@@ -72,3 +72,83 @@
     }
   }
 }
+
+.members {
+  .member-content {
+    @include align-items(center);
+    @include flex();
+    .profile-pic {
+      @include border-radius(50%);
+      margin-right: 10px;
+      width: 40px;
+    }
+    .personal-data {
+      .name {
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .faculty {
+        font-size: 11px;
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.messages {
+  .title {
+    color: $accent;
+    margin-bottom: 10px;
+  }
+  .messages-container {
+    @include box-shadow(0 0 12px -3px grey);
+    @include border-radius(10px);
+    height: 250px;
+    padding: 15px 10px;
+    overflow-y: auto;
+    .message-container {
+      @include flex();
+      width: 100%;
+      .message {
+        background-color: gray;
+        @include border-radius(20px);
+        color: white;
+        margin-bottom: 8px;
+        padding: 5px 15px 10px;
+        text-align: left;
+        max-width: 70%;
+        .header {
+          @include align-items(center);
+          @include flex();
+          margin-bottom: 5px;
+          .profile-pic {
+            @include border-radius(50%);
+            margin-right: 10px;
+            width: 20px;
+          }
+          .name {
+            font-size: 12px;
+          }
+        }
+      }
+      .mine {
+        background-color: $accent;
+        .header {
+          @include justify-content(flex-end);
+        }
+        .msg-content {
+          text-align: right;
+        }
+      }
+    }
+    .align-right {
+      @include justify-content(flex-end);
+    }
+  }
+  .input-container {
+    margin-top: 10px;
+    .send-button {
+      color: $accent;
+    }
+  }
+}

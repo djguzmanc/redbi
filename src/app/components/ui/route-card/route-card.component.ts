@@ -15,7 +15,7 @@ export class RouteCardComponent implements OnInit {
   userInfo: User = DEFAULT_USER
   requestSent: boolean = false
 
-  constructor( private db: AngularFirestore, private alertService: AlertService ) { }
+  constructor( private db: AngularFirestore ) { }
 
   ngOnInit( ) {
     this.db.doc( this.data.data.owner ).valueChanges( ).subscribe( user => {
@@ -29,22 +29,6 @@ export class RouteCardComponent implements OnInit {
         return -1
       return 1
     })
-  }
-
-  deleteRoute( ) {
-    if ( !this.requestSent ) {
-      this.alertService.showConfirmSwal( '¿Estás seguro?', 'Esta acción no se puede deshacer.', true ).then( result => {
-        if ( result ) {
-          this.requestSent = true
-          this.db.doc( `routes/${ this.data.id }` ).delete( ).then( () => {
-            this.alertService.openSimpleSnack( 'Ruta Eliminada', 'Ok' )
-          }).catch( err => {
-            this.alertService.openSimpleSnack( 'Algo salió mal y tu ruta no fue eliminada', 'Ok' )
-            this.requestSent = false
-          })
-        }
-      })
-    }
   }
 
 }
