@@ -1,0 +1,126 @@
+<mat-card>
+  <mat-card-header *ngIf="isOwner">
+    <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + userData.userData.photoURL + ')'}"></div>
+    <mat-card-title>{{userData.userData.fullName}}</mat-card-title>
+    <mat-card-subtitle>{{userData.userData.faculty}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-header *ngIf="ownerData && !isOwner">
+    <div mat-card-avatar class="header-image" [ngStyle]="{'background-image': 'url(' + ownerData.photoURL + ')'}"></div>
+    <mat-card-title>{{ownerData.fullName}}</mat-card-title>
+    <mat-card-subtitle>{{ownerData.faculty}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="content" *ngIf="routeData">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Acerca del líder
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ol>
+            <li>
+              Experiencia con bici: <b>{{getOwnerData().preferences.experience}}</b>
+            </li>
+            <li>
+              ¿Tiene kit de primeros auxilios?: <b>{{getOwnerData().preferences.medkit ? 'Sí' : 'No'}}</b>
+            </li>
+            <li>
+              ¿Sabe o puede despinchar?: <b>{{getOwnerData().preferences.punch_out ? 'Sí' : 'No'}}</b>
+            </li>
+            <li>
+              En cuento a velocidad prefiere ir: <b>{{getOwnerData().preferences.speed}}</b>
+            </li>
+            <li>
+              Entre Cicloruta y Calzada preferiere: <b>{{getOwnerData().preferences.road_preference}}</b>
+            </li>
+          </ol>          
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div class="route-content" *ngIf="!isOwner">
+        <h3 class="title blue"><b>Saliendo: </b> <span>{{routeData.exit}}</span></h3>
+        <h3 class="title red"><b>Para: </b> <span>{{routeData.destination}}</span></h3>
+        <h3 class="title yellow"><i class="material-icons">av_timer</i><small>{{routeData.departure_time.seconds * 1000 | date: 'yyyy/MM/dd h:mm a'}}</small></h3>
+        <h3 class="title green"><i class="material-icons">trending_up</i> Ruta</h3>
+        <mat-chip-list #chipList>
+          <ol>
+            <li *ngFor="let path of routeData.paths; let j=index">
+              <mat-chip color="primary"class="capitalize">
+                {{path}}
+              </mat-chip>    
+            </li>
+          </ol>
+        </mat-chip-list>
+      </div>
+      <form [formGroup]="routeForm" *ngIf="routeForm && isOwner">
+          <ol>
+            <li>
+              <div class="form-control">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Salida" formControlName="exit">
+                    <mat-option *ngFor="let option of sdService.exitPreference" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </li>
+            <li>
+              <div class="form-control">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Destino" formControlName="destination">
+                    <mat-option *ngFor="let option of sdService.locations" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </li>
+            <li>
+              <div class="form-control">
+                <label>Fecha y Hora de Salida</label>
+                <div class="date-time">
+                  <mat-form-field class="half-width">
+                    <input matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <p-calendar [timeOnly]="true" placeholder="Hora" hourFormat="12" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}"></p-calendar>
+                </div>
+              </div>
+            </li>
+            <li>
+              <mat-form-field class="full-width">
+                <mat-chip-list #chipList>
+                  <mat-chip 
+                    *ngFor="let path of route; let j=index" 
+                    [selectable]="selectable"
+                    [removable]="true" 
+                    (removed)="remove(j)"
+                    color="primary"
+                    [class.red-chip]="validateRoute()===j">
+                    {{path}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                  <input 
+                    placeholder="Tu ruta"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="add($event,j)">
+                </mat-chip-list>
+              </mat-form-field>
+              <div class="error" *ngIf="validateRoute()!=-1">
+                Hay un error en tu ruta <span (click)="howto_ref.open()">?</span>
+              </div>
+            </li>
+          </ol>
+          <button mat-raised-button color="primary" class="full-width" [disabled]="!isFormValid()" (click)="updateRoute()">Guardar Cambios</button>
+        </form>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+      <button mat-raised-button color="warn" *ngIf="isOwner" class="full-width">Eliminar</button>
+      <button mat-raised-button color="primary" class="full-width" *ngIf="!isOwner">Entrar</button>
+  </mat-card-actions>
+</mat-card>

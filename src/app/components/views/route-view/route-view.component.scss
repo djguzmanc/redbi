@@ -1,0 +1,74 @@
+@import '../../../../sass/mixin';
+@import '../../../../sass/variables';
+
+.header-image {
+  background-size: cover;
+}
+
+.content {
+  .capitalize {
+    text-transform: capitalize;
+  }
+  .title {
+    margin-bottom: 0;
+    .material-icons {
+      vertical-align: middle;
+    }
+    small {
+      color: gray;
+      font-weight: normal;
+    }
+  }
+  .green {
+    color: #008400;
+  }
+  .red {
+    color: #bd0000;
+    span {
+      color: black;
+    }
+  }
+  .blue {
+    color: $accent;
+    span {
+      color: black;
+    }
+  }
+  .yellow {
+    color: #ab8700;
+    .material-icons {
+      margin-right: 4px;
+    }
+  }
+  ol {
+    padding-left: 20px;
+  }
+  .route-content {
+    ol {
+      padding-left: 40px;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-control {
+  label {
+    display: block;
+    margin-bottom: 4px;
+  }
+  .mat-radio {
+    margin-right: 20px;
+  }
+  .date-time {
+    @include align-items(center);
+    @include flex();
+    @include justify-content(center);
+    .half-width {
+      margin-right: 15px;
+      width: 45%;
+    }
+  }
+}

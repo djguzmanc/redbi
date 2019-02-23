@@ -4,18 +4,6 @@
       <img [src]="userInfo.photoURL|nullImgUrl" [alt]="userInfo.fullName" class="profile-pic">
       <div class="route-info">
         <div class="left-info">
-          <table hidden>
-            <tbody>
-              <tr>
-                <td>Saliendo:</td>
-                <td>{{data.data.exit}}</td>
-              </tr>
-              <tr>
-                <td>Para:</td>
-                <td>{{data.data.destination}}</td>
-              </tr>
-            </tbody>
-          </table>
           <div class="from"><span>Saliendo:</span> {{data.data.exit}}</div>
           <div class="to"><span>Para:</span> {{data.data.destination}}</div>
         </div>
@@ -32,7 +20,7 @@
     <mat-chip-list #chipList>
       <ol>
         <li *ngFor="let path of data.data.paths; let j=index">
-          <mat-chip color="primary"class="capitalize">
+          <mat-chip color="primary" class="capitalize">
             {{path}}
           </mat-chip>    
         </li>
@@ -40,8 +28,7 @@
     </mat-chip-list>
   </div>
   <div class="route-actions">
-    <button mat-raised-button color="primary" *ngIf="owner">Editar</button>
+    <button mat-raised-button color="primary" [routerLink]="[ '/m', 'ruta', data.id ]">Ver</button>
     <button mat-raised-button color="warn" *ngIf="owner">Eliminar</button>
-    <button mat-raised-button color="primary" *ngIf="!owner">Ver</button>
   </div>
 </mat-expansion-panel>

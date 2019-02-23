@@ -21,9 +21,20 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
     private alertService: AlertService, private router: Router, private dataService: DataService ) { }
 
   ngOnInit( ) {
-    this.acRoute.queryParams.subscribe( ( params: Params ) => {
-      this.retrieveRoutes( params.exit, params.destination, params.routes )
-    })
+    this.userData = this.dataService.userDataValue
+    this.subscription.add(
+      this.dataService.userData.asObservable( ).subscribe( newVal => {
+        this.userData = newVal
+        this.acRoute.queryParams.subscribe( ( params: Params ) => {
+          this.retrieveRoutes( params.exit, params.destination, params.routes )
+        })
+      })
+    )
+    if ( this.userData ) {
+      this.acRoute.queryParams.subscribe( ( params: Params ) => {
+        this.retrieveRoutes( params.exit, params.destination, params.routes )
+      })
+    }
   }
 
   retrieveRoutes( exit, destination, routes ) {
@@ -46,7 +57,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                 id: x.payload.doc.id,
                 data: x.payload.doc.data( )
               }
-            })
+            }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid )
           })
         this.subscription.add( this.routesSub$ )
       } else if ( ( destination || exit ) || routes ) {
@@ -62,7 +73,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }))
+                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })
@@ -77,7 +88,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }))
+                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })
@@ -92,7 +103,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }))
+                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })
@@ -107,7 +118,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                }))
+                }).filter( ( x: any ) => x.data.owner._key.path.segments[ 6 ] != this.userData.uid ) )
                 sub.unsubscribe( )
               })
           })

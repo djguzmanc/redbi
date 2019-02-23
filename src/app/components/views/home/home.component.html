@@ -51,21 +51,24 @@
                     <mat-icon matChipRemove>cancel</mat-icon>
                   </mat-chip>
                   <input 
-                    placeholder="Calles que sueles tomar"
+                    placeholder="Calles que sueles o planeas tomar"
                     [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     [matChipInputAddOnBlur]="true"
                     (matChipInputTokenEnd)="add($event,j)">
                 </mat-chip-list>
               </mat-form-field>
+              <p>
+                Si tu búsqueda es <b>Cll 26 junto con Cra 30</b> debes tener en cuenta que encontrarás las rutas
+                que entre sus caminos tienen <b>Cll 26</b> <b style="color: red"> o </b> <b>Cra 30</b>, mas no 
+                <b>Cll 26</b> <b style="color: red"> y </b> <b>Cra 30</b>.
+              </p>
             </li>
           </ol>
         </form>
         <button mat-raised-button color="primary" class="full-width" [disabled]="!isFormValid()" (click)="searchRoutes()">Buscar</button>
       </mat-expansion-panel>
     </mat-accordion>
-    <!-- <mat-card>
-    </mat-card> -->
   </div>
   <mat-card class="exits-card">
     <h3 class="title">¿Por dónde saldrás hoy?</h3>

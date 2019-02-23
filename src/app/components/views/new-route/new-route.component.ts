@@ -105,11 +105,6 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   createRoute( ) {
     if ( this.isFormValid( ) ) {
       this.requestSent = true
-      let paths = {}
-      this.route.forEach( ( path: string, index: number ) => {
-        let normalizedName = path.toLowerCase( ).normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" )
-        paths[ normalizedName ] = index + 1
-      });
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.db.collection( 'routes' ).add(
         Object.assign({

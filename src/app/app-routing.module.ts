@@ -18,6 +18,7 @@ import { NewRouteComponent } from './components/views/new-route/new-route.compon
 import { CurrentRoutesComponent } from './components/views/current-routes/current-routes.component';
 import { ChallengesComponent } from './components/views/challenges/challenges.component';
 import { RouteFinderComponent } from './components/views/route-finder/route-finder.component';
+import { RouteViewComponent } from './components/views/route-view/route-view.component';
 
 const routes: Routes = [
   {
@@ -57,6 +58,10 @@ const routes: Routes = [
       {
         path: 'buscador',
         component: RouteFinderComponent
+      },
+      {
+        path: 'ruta/:id',
+        component: RouteViewComponent
       },
     ]
   },
