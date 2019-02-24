@@ -53,7 +53,7 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
           })
           
           if ( activeRouteIndex > -1 ) {
-            if ( ( new Date( ( <any> allRoutes[ activeRouteIndex ] ).data.departure_time.seconds * 1000 ) ).getTime( ) < ( new Date( ) ).getTime( ) ) {
+            if ( ( new Date( ( ( <any> allRoutes[ activeRouteIndex ] ).data.departure_time.seconds + 60 * 15 ) * 1000 ) ).getTime( ) < ( new Date( ) ).getTime( ) ) {
               this.db.doc( `routes/${ allRoutes[ activeRouteIndex ].id }` ).update({
                 started: true,
                 finished: true
