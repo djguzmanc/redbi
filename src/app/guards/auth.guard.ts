@@ -45,12 +45,15 @@ export class AuthGuard implements CanActivate {
                     road_preference: null,
                     speed: null
                   }
+                }).then( () => {
+                  sub$.unsubscribe( )
+                  this.router.navigate( [ 'm', 'inicio' ] )
                 })
-                sub$.unsubscribe( )
+              } else {
+                this.router.navigate( [ 'm', 'inicio' ] )
               }
             }
           )
-          this.router.navigate( [ 'm', 'inicio' ] )
           return false
         }
       }

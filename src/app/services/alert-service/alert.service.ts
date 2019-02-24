@@ -20,11 +20,13 @@ export class AlertService {
     this.mtBar.open( msg, action )
   }
 
-  showInfoSwal( title: string, text: string ) {
+  showInfoSwal( title: string, text: string, waiter?: boolean ) {
     return swal({
       title,
       text,
-      icon: 'info'
+      icon: 'info',
+      closeOnClickOutside: waiter,
+      closeOnEsc: waiter
     })
   }
 

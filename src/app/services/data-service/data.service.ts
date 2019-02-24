@@ -14,14 +14,16 @@ export class DataService {
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore ) {
     this.afAuth.user.subscribe( res => {
-      this.db.doc( `users/${ res.uid }` ).valueChanges( ).subscribe( user => {
-        let userData = {
-          userData:  <User> user,
-          uid: res.uid
-        }
-        this.userData.next( userData )
-        this.userDataValue = userData
-      })
+      if ( res ) {
+        this.db.doc( `users/${ res.uid }` ).valueChanges( ).subscribe( user => {
+          let userData = {
+            userData:  <User> user,
+            uid: res.uid
+          }
+          this.userData.next( userData )
+          this.userDataValue = userData
+        })
+      }
     })
   }
 }

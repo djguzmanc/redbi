@@ -11,6 +11,8 @@
   </mat-card-header>
   <mat-card-content>
     <div class="content" *ngIf="routeData">
+      <button mat-raised-button *ngIf="isOwner && routeData && !routeData.started" class="full-width green-button" (click)="startTrip()" [disabled]="requestSent">Iniciar Viaje</button>
+      <button mat-raised-button *ngIf="isOwner && routeData && routeData.started && !routeData.members[userData.uid].arrived" class="full-width green-button" (click)="haveArrived()" [disabled]="requestSent">He Llegado</button>
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -36,20 +38,35 @@
             </li>
           </ol>          
         </mat-expansion-panel>
-        <mat-expansion-panel>
+        <mat-expansion-panel #members_panel_ref>
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Miembros ({{ membersData.length }})
+              Miembros ({{ !routeData.started ? membersData.length : getObjectMembers().length }})
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="members">
-            <ol>
+            <ol *ngIf="!routeData.started">
               <li *ngFor="let member of membersData; let i=index">
+                <div class="member-content">
+                  <img [src]="member.data.photoURL" [alt]="member.data.fullName" class="profile-pic">
+                  <div class="personal-data">
+                    <div class="name">{{member.data.fullName}}</div>
+                    <div class="faculty">{{member.data.faculty}}</div>
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <ol *ngIf="routeData.started">
+              <li *ngFor="let member of getObjectMembers(); let i=index">
                 <div class="member-content">
                   <img [src]="member.photoURL" [alt]="member.fullName" class="profile-pic">
                   <div class="personal-data">
                     <div class="name">{{member.fullName}}</div>
-                    <div class="faculty">{{member.faculty}}</div>
+                    <div class="faculty">{{member.faculty}} <span *ngIf="member.leader">- Es el líder</span> </div>
+                    <div class="has-arrived" [ngClass]="{'arrived': member.arrived, 'non-arrived': !member.arrived}">
+                      <span *ngIf="!member.arrived">No ha llegado</span>
+                      <span *ngIf="member.arrived">Llegó</span>
+                    </div>
                   </div>
                 </div>
               </li>
@@ -135,9 +152,9 @@
             </div>
           </li>
         </ol>
-        <button mat-raised-button color="primary" class="full-width" [disabled]="!isFormValid()" (click)="updateRoute()">Guardar Cambios</button>
+        <button mat-raised-button *ngIf="!routeData.started" color="primary" class="full-width" [disabled]="!isFormValid()" (click)="updateRoute()">Guardar Cambios</button>
       </form>
-      <div class="messages">
+      <div class="messages" *ngIf="!routeData.started">
         <h3 class="title">Chat ({{messages.data.messages.length}} mensajes)</h3>
         <div class="messages-container" #messages_container_ref>
           <div class="message-container" *ngFor="let msgData of messages.data.messages" [ngClass]="{'align-right': msgData.owner.id === userData.uid}">
@@ -162,8 +179,8 @@
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="userData">
-      <button mat-raised-button color="warn" *ngIf="isOwner" class="full-width" (click)="deleteRoute()" [disabled]="requestSent">Eliminar</button>
-      <button mat-raised-button [color]="subscribedToThisRoute() ? 'warn' : 'primary'" class="full-width" *ngIf="!isOwner" (click)="joinRoute()" [disabled]="requestSent">
+      <button mat-raised-button color="warn" *ngIf="isOwner && !routeData.started" class="full-width" (click)="deleteRoute()" [disabled]="requestSent">Eliminar</button>
+      <button mat-raised-button [color]="subscribedToThisRoute() ? 'warn' : 'primary'" class="full-width" *ngIf="!isOwner && routeData && !routeData.started" (click)="joinRoute()" [disabled]="requestSent">
         <span *ngIf="!subscribedToThisRoute()">Unirse</span>
         <span *ngIf="subscribedToThisRoute()">Abandonar</span>
       </button>

@@ -7,7 +7,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { DEFAULT_USER } from 'src/app/interfaces/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent, MatExpansionPanel } from '@angular/material';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 
 @Component({
@@ -18,6 +18,7 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
 export class RouteViewComponent implements OnInit, OnDestroy {
 
   @ViewChild( 'messages_container_ref' ) messages_container_ref: ElementRef
+  @ViewChild( 'members_panel_ref' ) members_panel_ref: MatExpansionPanel
 
   readonly separatorKeysCodes: number[] = [ ENTER, COMMA ];
 
@@ -72,28 +73,40 @@ export class RouteViewComponent implements OnInit, OnDestroy {
           if( this.isOwner )
             this.initForm( )
           if ( !this.isOwner ) {
-            this.db.doc( this.routeData.owner ).valueChanges( ).subscribe( res => {
-              this.ownerData = res 
-            })
+            this.subscription.add(
+              this.db.doc( this.routeData.owner ).valueChanges( ).subscribe( res => {
+                this.ownerData = res 
+              })
+            )
           }
           let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
-          this.db.collection( 'users', ref => ref.where( 'subscription', '==', routeRef ) ).valueChanges( ).subscribe(
-            res => {
-              this.membersData = res
-            }
-          )
-          this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
-            ( res: any ) => {
-              if ( res.length > 0 ) {
-                this.messages = res.map( x => {
+          this.subscription.add(
+            this.db.collection( 'users', ref => ref.where( 'subscription', '==', routeRef ) ).snapshotChanges( ).subscribe(
+              res => {
+                this.membersData = res.map( x => {
                   return {
                     id: x.payload.doc.id,
                     data: x.payload.doc.data( )
                   }
-                })[ 0 ]
-                this.messages_container_ref.nativeElement.scrollTop = this.messages_container_ref.nativeElement.scrollHeight
+                })
               }
-            }
+            )
+          )
+          this.subscription.add(
+            this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
+              ( res: any ) => {
+                if ( res.length > 0 ) {
+                  this.messages = res.map( x => {
+                    return {
+                      id: x.payload.doc.id,
+                      data: x.payload.doc.data( )
+                    }
+                  })[ 0 ]
+                  if ( !this.routeData.started )
+                    this.messages_container_ref.nativeElement.scrollTop = this.messages_container_ref.nativeElement.scrollHeight
+                }
+              }
+            )
           )
         }
       })
@@ -232,6 +245,70 @@ export class RouteViewComponent implements OnInit, OnDestroy {
         messages: this.messages.data.messages
       }).then( () => {
         msg.value = ''
+        msg.blur( );
+      })
+    }
+  }
+
+  startTrip( ) {
+    if ( !this.requestSent ) {
+      this.alertService.showConfirmSwal( '¿Todos Listos?', '' ).then( result => {
+        if ( result ) {
+          this.requestSent = true
+          let membersArriveData = {}
+          this.membersData.forEach( member => {
+            console.log( member )
+            membersArriveData[ member.id ] = {
+              fullName: member.data.fullName,
+              photoURL: member.data.photoURL,
+              arrived: false,
+              faculty: member.data.faculty
+            }
+          })
+          membersArriveData[ this.userData.uid ] = {
+            fullName: this.userData.userData.fullName,
+            photoURL: this.userData.userData.photoURL,
+            arrived: false,
+            leader: true,
+            faculty: this.userData.userData.faculty
+          }
+          this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).update({
+            members: membersArriveData,
+            started: true
+          }).then( () => {
+            this.requestSent = false
+            this.members_panel_ref.open( )
+            this.alertService.openSimpleSnack( 'Tu viaje ha iniciado :)', 'Ok' )
+          }).catch( err => {
+            this.requestSent = false
+            this.alertService.openSimpleSnack( 'No hemos podido iniciar tu viaje :(', 'Ok' )
+          })
+        }
+      })
+    }
+  }
+
+  getObjectMembers( ) {
+    return Object.values( this.routeData.members )
+  }
+
+  haveArrived( ) {
+    if ( !this.requestSent ) {
+      this.requestSent = true
+      this.routeData.members[ this.userData.uid ].arrived = true
+      this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).update({
+        members: this.routeData.members
+      }).then( () => {
+        this.db.doc( `users/${ this.userData.uid }` ).update({
+          trips: this.userData.userData.trips + 1,
+          subscription: null
+        }).then( () => {
+          this.requestSent = false
+          this.alertService.openSimpleSnack( 'Llegada registrada', 'Ok' )
+        })
+      }).catch( err => {
+        this.requestSent = false
+        this.alertService.openSimpleSnack( 'No hemos podido registrar tu llegada :(', 'Ok' )
       })
     }
   }

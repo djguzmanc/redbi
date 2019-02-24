@@ -91,6 +91,17 @@
         font-size: 11px;
         margin-left: 10px;
       }
+      .has-arrived {
+        @include border-radius(4px);
+        color: white;
+        text-align: center;
+      }
+      .arrived {
+        background-color: #00b500;
+      }
+      .non-arrived {
+        background-color: #ff4848;
+      }
     }
   }
 }
@@ -151,4 +162,10 @@
       color: $accent;
     }
   }
+}
+
+.green-button {
+  background-color: #00b500;
+  color: white;
+  margin-bottom: 10px;
 }

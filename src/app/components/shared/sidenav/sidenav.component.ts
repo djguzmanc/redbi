@@ -18,10 +18,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   userData
   @Output( ) closing = new EventEmitter( )
-
   subscription = new Subscription( )
-
   allStats = []
+  routeSubscriptionData$
+  routeData
 
   constructor( private dataService: DataService, private db: AngularFirestore, 
     private router: Router, private alertService: AlertService, private afAuth: AngularFireAuth ) { }
@@ -40,14 +40,51 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   init( ) {
-    if ( this.userData.userData.faculty == null || this.userData.userData.gender == null || !this.userData.userData.preferences.edited ) {
+    if ( !this.routeSubscriptionData$ ) {
+      if ( this.userData.userData.subscription ) {
+        this.routeSubscriptionData$ = this.db.doc( `routes/${ this.userData.userData.subscription.id }` ).valueChanges( ).subscribe( ( res: any ) => {
+          if ( res.started ) {
+            this.routeData = res
+            this.alertService.showInfoSwal( 
+              '¿Has llegado?', 
+              'El líder de tu ruta ha iniciado el viaje, presiona "Ok" cuando hayas llegado a tu destino. Tu bienestar es importante para nosotros :)', 
+              false 
+            ).then( result => {
+              if ( result ) {
+                this.routeData.members[ this.userData.uid ].arrived = true
+                this.routeSubscriptionData$.unsubscribe( )
+                this.db.doc( `routes/${ this.userData.userData.subscription.id }` ).update({
+                  members: this.routeData.members
+                }).then( () => {
+                  this.db.doc( `users/${ this.userData.uid }` ).update({
+                    trips: this.userData.userData.trips + 1,
+                    subscription: null
+                  }).then( () => {
+                    this.alertService.openSimpleSnack( 'Llegada registrada', 'Ok' )
+                  })
+                }).catch( err => {
+                  this.alertService.openSimpleSnack( 'No hemos podido registrar tu llegada :(', 'Ok' )
+                })
+              }
+            })
+          }
+        })
+      } else {
+        if ( this.routeSubscriptionData$ )
+          this.routeSubscriptionData$.unsubscribe( )
+      }
+    }
+
+    if ( ( this.userData.userData.faculty == null || this.userData.userData.gender == null || !this.userData.userData.preferences.edited ) && this.router.url != '/m/perfil' ) {
       this.alertService.showConfirmSwal( 'Parece que no has completado tus datos de perfil', '¿Deseas completarlos? Tomará 5 minutos :p' ).then(
         res => {
-          if ( res )
+          if ( res ) {
             this.router.navigate( [ 'm', 'perfil' ] )
+          }
         }
       )
     }
+
     this.allStats = [
       {
         tooltip: 'Amigos',
