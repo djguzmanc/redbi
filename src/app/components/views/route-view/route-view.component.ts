@@ -146,6 +146,14 @@ export class RouteViewComponent implements OnInit, OnDestroy {
 
   updateRoute( ) {
     if ( this.isFormValid( ) ) {
+
+      let currentTime = new Date( )
+      let difference = currentTime.getTime( ) - this.departure_time.getTime( )
+      if ( difference > 0 ) {
+        this.alertService.showInfoSwal( 'Revisa la fecha y hora de salida', 'Parece que intentas viajar al pasado.' )
+        return
+      }
+
       this.requestSent = true
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).update(
@@ -198,32 +206,53 @@ export class RouteViewComponent implements OnInit, OnDestroy {
 
   joinRoute( ) {
     if ( !this.requestSent ) {
-      this.requestSent = true
-      if ( !this.subscribedToThisRoute( ) ) {
-        this.db.doc( `users/${ this.userData.uid }` ).update({
-          subscription: this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
-        }).then( res => {
-          this.alertService.openSimpleSnack( 'Te uniste a esta ruta! :)', 'Ok' )
-          this.requestSent = false
-        }).catch(
-          err => {
-            this.alertService.openSimpleSnack( 'Algo salió mal y no te pudiste unir :(', 'Ok' )
-            this.requestSent = false
+
+      let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+      this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+        let routes = res.map( x => {
+          return {
+            id: x.payload.doc.id,
+            data: x.payload.doc.data( )
           }
-        )
-      } else {
-        this.db.doc( `users/${ this.userData.uid }` ).update({
-          subscription: null
-        }).then( res => {
-          this.alertService.openSimpleSnack( 'Abandonaste esta ruta! :)', 'Ok' )
-          this.requestSent = false
-        }).catch(
-          err => {
-            this.alertService.openSimpleSnack( 'Algo salió mal y no pudiste abandonar :(', 'Ok' )
+        })
+        for (let i = 0; i < routes.length; i++) {
+          if ( !( <any> routes[ i ].data ).started ) {
+            this.alertService.showInfoSwal( 'No puedes unirte a esta ruta', 'En estos momentos tienes una ruta activa.' ).then( () => {
+              this.router.navigate( [ 'm', 'mis-rutas' ] )
+            })
+            return
+          }          
+        }
+
+        this.requestSent = true
+        if ( !this.subscribedToThisRoute( ) ) {
+          this.db.doc( `users/${ this.userData.uid }` ).update({
+            subscription: this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
+          }).then( res => {
+            this.alertService.openSimpleSnack( 'Te uniste a esta ruta! :)', 'Ok' )
             this.requestSent = false
-          }
-        )
-      }
+          }).catch(
+            err => {
+              this.alertService.openSimpleSnack( 'Algo salió mal y no te pudiste unir :(', 'Ok' )
+              this.requestSent = false
+            }
+          )
+        } else {
+          this.db.doc( `users/${ this.userData.uid }` ).update({
+            subscription: null
+          }).then( res => {
+            this.alertService.openSimpleSnack( 'Abandonaste esta ruta! :)', 'Ok' )
+            this.requestSent = false
+          }).catch(
+            err => {
+              this.alertService.openSimpleSnack( 'Algo salió mal y no pudiste abandonar :(', 'Ok' )
+              this.requestSent = false
+            }
+          )
+        }
+
+      })
+
     }
   }
 
@@ -252,6 +281,12 @@ export class RouteViewComponent implements OnInit, OnDestroy {
 
   startTrip( ) {
     if ( !this.requestSent ) {
+
+      if ( this.membersData.length == 0 ) {
+        this.alertService.showInfoSwal( 'No puedes iniciar tu viaje', 'Para iniciar un viaje debes tener al menos 1 compañero.' )
+        return
+      }
+
       this.alertService.showConfirmSwal( '¿Todos Listos?', '' ).then( result => {
         if ( result ) {
           this.requestSent = true
@@ -289,7 +324,9 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   }
 
   getObjectMembers( ) {
-    return Object.values( this.routeData.members )
+    if ( this.routeData.members )
+      return Object.values( this.routeData.members )
+    return []
   }
 
   haveArrived( ) {
@@ -297,7 +334,8 @@ export class RouteViewComponent implements OnInit, OnDestroy {
       this.requestSent = true
       this.routeData.members[ this.userData.uid ].arrived = true
       this.db.doc( `routes/${ this.acRoute.snapshot.paramMap.get( 'id' ) }` ).update({
-        members: this.routeData.members
+        members: this.routeData.members,
+        finished: true
       }).then( () => {
         this.db.doc( `users/${ this.userData.uid }` ).update({
           trips: this.userData.userData.trips + 1,

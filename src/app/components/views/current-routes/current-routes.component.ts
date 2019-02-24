@@ -17,7 +17,7 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
   userData
   subscription = new Subscription( )
   allRoutes
-
+  activeRoute
   routesSub$
 
   constructor( private db: AngularFirestore, private alertService: AlertService, private router: Router, 
@@ -41,12 +41,29 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ).orderBy( 'created_at', 'desc' ) )
         .snapshotChanges( ).subscribe( res => {
-          this.allRoutes =  res.map( x => {
+          let allRoutes =  res.map( x => {
             return {
               id: x.payload.doc.id,
               data: x.payload.doc.data( )
             }
           })
+
+          let activeRouteIndex = allRoutes.findIndex( ( r: any ) => {
+            return !r.data.started
+          })
+          
+          if ( activeRouteIndex > -1 ) {
+            if ( ( new Date( ( <any> allRoutes[ activeRouteIndex ] ).data.departure_time.seconds * 1000 ) ).getTime( ) < ( new Date( ) ).getTime( ) ) {
+              this.db.doc( `routes/${ allRoutes[ activeRouteIndex ].id }` ).update({
+                started: true,
+                finished: true
+              })
+            } else {
+              this.activeRoute = allRoutes[ activeRouteIndex ]
+              allRoutes.splice( activeRouteIndex, 1 )
+            }
+          }
+          this.allRoutes = allRoutes
         })
       this.subscription.add( this.routesSub$ )
     }

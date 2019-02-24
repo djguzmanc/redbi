@@ -12,7 +12,7 @@
   <mat-card-content>
     <div class="content" *ngIf="routeData">
       <button mat-raised-button *ngIf="isOwner && routeData && !routeData.started" class="full-width green-button" (click)="startTrip()" [disabled]="requestSent">Iniciar Viaje</button>
-      <button mat-raised-button *ngIf="isOwner && routeData && routeData.started && !routeData.members[userData.uid].arrived" class="full-width green-button" (click)="haveArrived()" [disabled]="requestSent">He Llegado</button>
+      <button mat-raised-button *ngIf="isOwner && routeData && routeData.started && routeData.members && !routeData.members[userData.uid].arrived" class="full-width green-button" (click)="haveArrived()" [disabled]="requestSent">He Llegado</button>
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>

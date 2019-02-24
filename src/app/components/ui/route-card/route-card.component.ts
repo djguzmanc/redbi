@@ -1,34 +1,39 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User, DEFAULT_USER } from 'src/app/interfaces/user';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-route-card',
   templateUrl: './route-card.component.html',
   styleUrls: ['./route-card.component.scss']
 })
-export class RouteCardComponent implements OnInit {
+export class RouteCardComponent implements OnInit, OnDestroy {
 
   @Input( ) data
   @Input( ) owner: boolean = false
   userInfo: User = DEFAULT_USER
   requestSent: boolean = false
+  subscription = new Subscription( )
+  subscribers: number = 0
 
   constructor( private db: AngularFirestore ) { }
 
-  ngOnInit( ) {
-    this.db.doc( this.data.data.owner ).valueChanges( ).subscribe( user => {
-      this.userInfo = <User> user
+  ngOnInit( ) { 
+    this.subscription.add(
+      this.db.doc( this.data.data.owner ).valueChanges( ).subscribe( user => {
+        this.userInfo = <User> user
+      })
+    )
+    let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( this.data.id ).ref.path ).ref
+    this.db.collection( `users`, ref => ref.where( 'subscription', '==', routeRef ) ).valueChanges( ).subscribe( res => {
+      this.subscribers = res.length
     })
   }
 
-  getRoutes( object: { key: number } ) {
-    return Object.keys( object ).sort( ( a, b ) => {
-      if ( object[ a ] < object[ b ] )
-        return -1
-      return 1
-    })
+  ngOnDestroy( ) {
+    this.subscription.unsubscribe( )
   }
 
 }

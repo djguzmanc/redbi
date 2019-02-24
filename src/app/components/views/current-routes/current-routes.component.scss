@@ -11,6 +11,14 @@
       margin-bottom: 20px;
       text-align: center;
     }
+    .active-title, .history-title {
+      color: green;
+      margin-bottom: 0;
+      text-align: left;
+    }
+    .history-title {
+      color: $accent;
+    }
     .accordion {
       width: 100%;
     }

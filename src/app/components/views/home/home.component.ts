@@ -44,31 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if ( this.userData ) {
       this.initForm( )
     }
-
-    this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por el Uriel' ) )
-        .snapshotChanges( ).subscribe( res => {
-          this.exit1Data =  res.length
-        })
-    )
-    this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 53' ) )
-        .snapshotChanges( ).subscribe( res => {
-          this.exit2Data =  res.length
-        })
-    )
-    this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 26' ) )
-        .snapshotChanges( ).subscribe( res => {
-          this.exit3Data =  res.length
-        })
-    )
-    this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 45' ) )
-        .snapshotChanges( ).subscribe( res => {
-          this.exit4Data =  res.length
-        })
-    )
   }
 
   isFormValid( ) {
@@ -82,6 +57,33 @@ export class HomeComponent implements OnInit, OnDestroy {
       exit: new FormControl( this.userData.userData.preferences.exit_preference, [] ),
       destination: new FormControl( this.userData.userData.preferences.location, [] )
     })
+
+    let currentTime = new Date( )
+
+    this.subscription.add(
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por el Uriel' ).where( 'departure_time', '>', currentTime ) )
+        .valueChanges( ).subscribe( res => {
+          this.exit1Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
+        })
+    )
+    this.subscription.add(
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 53' ).where( 'departure_time', '>', currentTime ) )
+        .valueChanges( ).subscribe( res => {
+          this.exit2Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
+        })
+    )
+    this.subscription.add(
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 26' ).where( 'departure_time', '>', currentTime ) )
+        .valueChanges( ).subscribe( res => {
+          this.exit3Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
+        })
+    )
+    this.subscription.add(
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 45' ).where( 'departure_time', '>', currentTime ) )
+        .valueChanges( ).subscribe( res => {
+          this.exit4Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
+        })
+    )
   }
 
   validateRoute( ) {

@@ -50,6 +50,21 @@ export class NewRouteComponent implements OnInit, OnDestroy {
     if ( !this.routesSub$ ) {
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+        let routes = res.map( x => {
+          return {
+            id: x.payload.doc.id,
+            data: x.payload.doc.data( )
+          }
+        })
+
+        for (let i = 0; i < routes.length; i++) {
+          if ( !( <any> routes[ i ].data ).started ) {
+            this.alertService.showInfoSwal( 'No puedes crear más rutas', 'En estos momentos tienes una ruta activa.' ).then( () => {
+              this.router.navigate( [ 'm', 'mis-rutas' ] )
+            })
+            return
+          }          
+        }
         if( res.length == 0 ) {
           this.alertService.showInfoSwal( 
             '¡No tienes ninguna ruta!', 
@@ -58,12 +73,18 @@ export class NewRouteComponent implements OnInit, OnDestroy {
             this.howto_ref.open( )
           })
         }
+        this.routesSub$.unsubscribe( )
       })
-      this.subscription.add( this.routesSub$ )
     }
   }
 
   initForm( ) {
+    if ( this.userData.userData.subscription ) {
+      this.alertService.showInfoSwal( 'No puedes crear una ruta', 'Para crear una ruta no debes tenes suscripciones activas.' ).then( () => {
+        this.router.navigate( [ 'm', 'inicio' ] )
+      })
+      return
+    }
     this.routeForm = new FormGroup({
       exit: new FormControl( this.userData.userData.preferences.exit_preference, [ Validators.required ] ),
       destination: new FormControl( this.userData.userData.preferences.location, [ Validators.required ] )
@@ -104,6 +125,20 @@ export class NewRouteComponent implements OnInit, OnDestroy {
 
   createRoute( ) {
     if ( this.isFormValid( ) ) {
+
+      let currentTime = new Date( )
+      let difference = currentTime.getTime( ) - this.departure_time.getTime( )
+      if ( difference > 0 ) {
+        this.alertService.showInfoSwal( 'Revisa la fecha y hora de salida', 'Parece que intentas viajar al pasado.' )
+        return
+      } else {
+        let hoursRemain = Math.abs( difference ) / 1000 / 3600
+        if ( hoursRemain < .98 ) {
+          this.alertService.showInfoSwal( 'Revisa la hora de salida', 'La creación de una ruta debe hacerse mínimo con una hora de anticipación a su salida.' )
+          return
+        }
+      }
+
       this.requestSent = true
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.db.collection( 'routes' ).add(

@@ -1,8 +1,15 @@
 <div class="content">
   <mat-card class="card">
     <div class="title">Mis Rutas</div>
-    <mat-spinner *ngIf="!allRoutes"></mat-spinner>
-    <div *ngIf="allRoutes && allRoutes.length==0">No se encontraron rutas</div>
+    <h2 class="active-title">Activa</h2>
+    <hr>
+    <app-route-card *ngIf="activeRoute" [data]="activeRoute" [owner]="true">
+    </app-route-card>
+    <div *ngIf="!activeRoute">No hay una ruta activa.</div>
+
+    <h2 class="history-title">Historial</h2>
+    <hr>
+    <div *ngIf="allRoutes && allRoutes.length==0">Aquí aparecerá el histórico de tus rutas.</div>
     <mat-accordion class="accordion" *ngIf="allRoutes">
       <app-route-card *ngFor="let route of allRoutes" [data]="route" [owner]="true">
       </app-route-card>
