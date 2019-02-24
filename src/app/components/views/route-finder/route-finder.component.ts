@@ -38,18 +38,19 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
   }
 
   retrieveRoutes( exit, destination, routes ) {
+    let currentTime = new Date( )
     if ( !this.routesSub$ ) {
       if ( ( destination || exit ) && !routes ) {
         this.routesSub$ = this.db.collection( 'routes', ref => {
             if ( destination && exit ) {
               console.log( "Por Destino y Salida!" )
-              return ref.where( 'exit', '==', exit ).where( 'destination', '==', destination ).orderBy( 'created_at', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'destination', '==', destination ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
             } else if ( destination ) {
               console.log( "Por Destino!" )
-              return ref.where( 'destination', '==', destination ).orderBy( 'created_at', 'desc' )
+              return ref.where( 'destination', '==', destination ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
             } else if ( exit ) {
               console.log( "Por Salida!" )
-              return ref.where( 'exit', '==', exit ).orderBy( 'created_at', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
             }
           }).snapshotChanges( ).subscribe( res => {
             this.allRoutes =  res.map( x => {
@@ -66,7 +67,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
           console.log( "Por Destino, Salida y Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'exit', '==', exit ).where( 'destination', '==', destination ).where( 'paths', 'array-contains', path ).orderBy( 'created_at', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'destination', '==', destination ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -81,7 +82,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
           console.log( "Por Destino y Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'destination', '==', destination ).where( 'paths', 'array-contains', path ).orderBy( 'created_at', 'desc' )
+              return ref.where( 'destination', '==', destination ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -96,7 +97,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
           console.log( "Por Salida y Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'exit', '==', exit ).where( 'paths', 'array-contains', path ).orderBy( 'created_at', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -108,10 +109,10 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
               })
           })
         } else if ( routes ) {
-          console.log( "Por Salida y Rutas!" )
+          console.log( "Por Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'paths', 'array-contains', path ).orderBy( 'created_at', 'desc' )
+              return ref.where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -132,7 +133,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
       if ( !this.allRoutes.find( x => x.id === routes[ i ].id ) )
         this.allRoutes.push( routes[ i ] )
     this.allRoutes.sort( ( a, b ) => {
-      if ( a.data.created_at < b.data.created_at )
+      if ( a.data.departure_time < b.data.departure_time )
         return -1
       return 1
     })
