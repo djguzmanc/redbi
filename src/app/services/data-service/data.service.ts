@@ -28,9 +28,9 @@ export class DataService {
           }
           this.userData.next( userData )
           this.userDataValue = userData
-          this.globalLoading.next( false )
         })
       }
+      this.globalLoading.next( false )
     })
 
     this.db.doc( 'version/JbcQcMKiJMaxZ9RveRYN' ).valueChanges( ).subscribe( ( version: any ) => {
