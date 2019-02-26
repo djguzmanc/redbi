@@ -20,16 +20,20 @@ export class RouteCardComponent implements OnInit, OnDestroy {
 
   constructor( private db: AngularFirestore ) { }
 
-  ngOnInit( ) { 
+  ngOnInit( ) {
+    this.requestSent = true
     this.subscription.add(
       this.db.doc( this.data.data.owner ).valueChanges( ).subscribe( user => {
         this.userInfo = <User> user
+        let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( this.data.id ).ref.path ).ref
+        this.subscription.add(
+          this.db.collection( `users`, ref => ref.where( 'subscription', '==', routeRef ) ).valueChanges( ).subscribe( res => {
+            this.requestSent = false
+            this.subscribers = res.length
+          })
+        )
       })
     )
-    let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( this.data.id ).ref.path ).ref
-    this.db.collection( `users`, ref => ref.where( 'subscription', '==', routeRef ) ).valueChanges( ).subscribe( res => {
-      this.subscribers = res.length
-    })
   }
 
   ngOnDestroy( ) {

@@ -19,6 +19,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   personalDataForm: FormGroup
   preferencesForm: FormGroup
   subscription = new Subscription( )
+  requestSent: boolean = false
   @ViewChild( 'mattab_ref' ) mattab_ref: MatTabGroup
 
   constructor( private db: AngularFirestore, private dataService: DataService,
@@ -55,8 +56,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   savePersonalData( ) {
     if ( this.personalDataForm.valid ) {
+      this.requestSent = true
       this.db.doc( `users/${ this.userData.uid }` ).update( this.personalDataForm.value ).then(
         res => {
+          this.requestSent = false
           this.alertService.showInfoSnack( '¡Datos actualizados!', 'Ok' )
           this.mattab_ref.selectedIndex = this.mattab_ref.selectedIndex + 1
         }
@@ -66,8 +69,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   savePreferences( ) {
     if ( this.preferencesForm.valid ) {
+      this.requestSent = true
       this.db.doc( `users/${ this.userData.uid }` ).update( { preferences: Object.assign( this.preferencesForm.value, { edited : true } ) } ).then(
         res => {
+          this.requestSent = false
           this.alertService.showInfoSnack( '¡Datos actualizados!', 'Ok' )
         }
       )

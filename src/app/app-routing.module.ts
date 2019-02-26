@@ -19,6 +19,7 @@ import { CurrentRoutesComponent } from './components/views/current-routes/curren
 import { ChallengesComponent } from './components/views/challenges/challenges.component';
 import { RouteFinderComponent } from './components/views/route-finder/route-finder.component';
 import { RouteViewComponent } from './components/views/route-view/route-view.component';
+import { BugReportComponent } from './components/views/bug-report/bug-report.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,10 @@ const routes: Routes = [
       {
         path: 'ruta/:id',
         component: RouteViewComponent
+      },
+      {
+        path: 'error',
+        component: BugReportComponent
       },
     ]
   },

@@ -39,6 +39,10 @@ export class RouteViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  gettingMembers: boolean = false
+  gettingMessages: boolean = false
+  sendingMessage: boolean = false
+
   constructor( private dataService: DataService, private acRoute: ActivatedRoute, private db: AngularFirestore, public sdService: StaticDataService,
       private alertService: AlertService, private router: Router ) { }
 
@@ -80,9 +84,11 @@ export class RouteViewComponent implements OnInit, OnDestroy {
             )
           }
           let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
+          this.gettingMembers = true
           this.subscription.add(
             this.db.collection( 'users', ref => ref.where( 'subscription', '==', routeRef ) ).snapshotChanges( ).subscribe(
               res => {
+                this.gettingMembers = false
                 this.membersData = res.map( x => {
                   return {
                     id: x.payload.doc.id,
@@ -92,9 +98,11 @@ export class RouteViewComponent implements OnInit, OnDestroy {
               }
             )
           )
+          this.gettingMessages = true
           this.subscription.add(
             this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
               ( res: any ) => {
+                this.gettingMessages = false
                 if ( res.length > 0 ) {
                   this.messages = res.map( x => {
                     return {
@@ -207,52 +215,53 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   joinRoute( ) {
     if ( !this.requestSent ) {
 
+      this.requestSent = true
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
-      this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
-        let routes = res.map( x => {
-          return {
-            id: x.payload.doc.id,
-            data: x.payload.doc.data( )
+      this.subscription.add(
+        this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+          let routes = res.map( x => {
+            return {
+              id: x.payload.doc.id,
+              data: x.payload.doc.data( )
+            }
+          })
+          for (let i = 0; i < routes.length; i++) {
+            if ( !( <any> routes[ i ].data ).started ) {
+              this.alertService.showInfoSwal( 'No puedes unirte a esta ruta', 'En estos momentos tienes una ruta activa.' ).then( () => {
+                this.router.navigate( [ 'm', 'mis-rutas' ] )
+              })
+              return
+            }          
           }
+  
+          if ( !this.subscribedToThisRoute( ) ) {
+            this.db.doc( `users/${ this.userData.uid }` ).update({
+              subscription: this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
+            }).then( res => {
+              this.alertService.openSimpleSnack( 'Te uniste a esta ruta! :)', 'Ok' )
+              this.requestSent = false
+            }).catch(
+              err => {
+                this.alertService.openSimpleSnack( 'Algo salió mal y no te pudiste unir :(', 'Ok' )
+                this.requestSent = false
+              }
+            )
+          } else {
+            this.db.doc( `users/${ this.userData.uid }` ).update({
+              subscription: null
+            }).then( res => {
+              this.alertService.openSimpleSnack( 'Abandonaste esta ruta! :)', 'Ok' )
+              this.requestSent = false
+            }).catch(
+              err => {
+                this.alertService.openSimpleSnack( 'Algo salió mal y no pudiste abandonar :(', 'Ok' )
+                this.requestSent = false
+              }
+            )
+          }
+  
         })
-        for (let i = 0; i < routes.length; i++) {
-          if ( !( <any> routes[ i ].data ).started ) {
-            this.alertService.showInfoSwal( 'No puedes unirte a esta ruta', 'En estos momentos tienes una ruta activa.' ).then( () => {
-              this.router.navigate( [ 'm', 'mis-rutas' ] )
-            })
-            return
-          }          
-        }
-
-        this.requestSent = true
-        if ( !this.subscribedToThisRoute( ) ) {
-          this.db.doc( `users/${ this.userData.uid }` ).update({
-            subscription: this.db.doc( this.db.collection( 'routes' ).doc( this.acRoute.snapshot.paramMap.get( 'id' ) ).ref.path ).ref
-          }).then( res => {
-            this.alertService.openSimpleSnack( 'Te uniste a esta ruta! :)', 'Ok' )
-            this.requestSent = false
-          }).catch(
-            err => {
-              this.alertService.openSimpleSnack( 'Algo salió mal y no te pudiste unir :(', 'Ok' )
-              this.requestSent = false
-            }
-          )
-        } else {
-          this.db.doc( `users/${ this.userData.uid }` ).update({
-            subscription: null
-          }).then( res => {
-            this.alertService.openSimpleSnack( 'Abandonaste esta ruta! :)', 'Ok' )
-            this.requestSent = false
-          }).catch(
-            err => {
-              this.alertService.openSimpleSnack( 'Algo salió mal y no pudiste abandonar :(', 'Ok' )
-              this.requestSent = false
-            }
-          )
-        }
-
-      })
-
+      )
     }
   }
 
@@ -270,9 +279,11 @@ export class RouteViewComponent implements OnInit, OnDestroy {
         },
         msg: msg.value
       })
+      this.sendingMessage = true
       this.db.doc( `chat_rooms/${ this.messages.id }` ).update({
         messages: this.messages.data.messages
       }).then( () => {
+        this.sendingMessage = false
         msg.value = ''
         msg.blur( );
       })

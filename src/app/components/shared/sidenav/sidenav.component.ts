@@ -23,7 +23,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   routeSubscriptionData$
   routeData
 
-  constructor( private dataService: DataService, private db: AngularFirestore, 
+  constructor( public dataService: DataService, private db: AngularFirestore, 
     private router: Router, private alertService: AlertService, private afAuth: AngularFireAuth ) { }
 
   ngOnInit( ) {

@@ -19,6 +19,7 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
   allRoutes
   activeRoute
   routesSub$
+  requestSent: boolean = false
 
   constructor( private db: AngularFirestore, private alertService: AlertService, private router: Router, 
     private dataService: DataService ) { }
@@ -39,6 +40,7 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
   retrieveRoutes( ) {
     if ( !this.routesSub$ ) {
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+      this.requestSent = true
       this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ).orderBy( 'created_at', 'desc' ) )
         .snapshotChanges( ).subscribe( res => {
           let allRoutes =  res.map( x => {
@@ -64,6 +66,7 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
             }
           }
           this.allRoutes = allRoutes
+          this.requestSent = false
         })
       this.subscription.add( this.routesSub$ )
     }

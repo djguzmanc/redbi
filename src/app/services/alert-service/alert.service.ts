@@ -68,8 +68,7 @@ export class AlertService {
     return swal({
       title: title,
       text: text,
-      icon: 'error',
-      timer: 2000
+      icon: 'error'
     })
   }
 

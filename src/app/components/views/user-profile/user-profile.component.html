@@ -28,7 +28,10 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <button mat-raised-button color="primary" (click)="savePersonalData()" [disabled]="!personalDataForm.valid">Guardar</button>
+          <button mat-raised-button color="primary" (click)="savePersonalData()" [disabled]="!personalDataForm.valid||requestSent">
+            <span *ngIf="!requestSent">Guardar</span>
+            <span *ngIf="requestSent"><app-loading-icon color="white"></app-loading-icon></span>
+          </button>
         </form>
       </mat-tab>
       <mat-tab label="Preferencias">
@@ -92,7 +95,10 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <button mat-raised-button color="primary" (click)="savePreferences()" [disabled]="!preferencesForm.valid">Guardar</button>
+          <button mat-raised-button color="primary" (click)="savePreferences()" [disabled]="!preferencesForm.valid||requestSent">
+            <span *ngIf="!requestSent">Guardar</span>
+            <span *ngIf="requestSent"><app-loading-icon color="white"></app-loading-icon></span>
+          </button>
         </form>
       </mat-tab>
     </mat-tab-group>

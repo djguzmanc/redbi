@@ -11,7 +11,10 @@
   </mat-card-header>
   <mat-card-content>
     <div class="content" *ngIf="routeData">
-      <button mat-raised-button *ngIf="isOwner && routeData && !routeData.started" class="full-width green-button" (click)="startTrip()" [disabled]="requestSent">Iniciar Viaje</button>
+      <button mat-raised-button *ngIf="isOwner && routeData && !routeData.started" class="full-width green-button" (click)="startTrip()" [disabled]="requestSent">
+        <span *ngIf="!requestSent">Iniciar Viaje</span>
+        <app-loading-icon *ngIf="requestSent" color="white"></app-loading-icon>
+      </button>
       <button mat-raised-button *ngIf="isOwner && routeData && routeData.started && routeData.members && !routeData.members[userData.uid].arrived" class="full-width green-button" (click)="haveArrived()" [disabled]="requestSent">He Llegado</button>
       <mat-accordion>
         <mat-expansion-panel>
@@ -41,7 +44,7 @@
         <mat-expansion-panel #members_panel_ref>
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Miembros ({{ !routeData.started ? membersData.length : getObjectMembers().length }})
+              Miembros ({{ !routeData.started ? membersData.length : getObjectMembers().length }}) &nbsp; <app-loading-icon *ngIf="gettingMembers" fontSize="18px"></app-loading-icon>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="members">
@@ -152,10 +155,13 @@
             </div>
           </li>
         </ol>
-        <button mat-raised-button *ngIf="!routeData.started" color="primary" class="full-width" [disabled]="!isFormValid()" (click)="updateRoute()">Guardar Cambios</button>
+        <button mat-raised-button *ngIf="!routeData.started" color="primary" class="full-width" [disabled]="!isFormValid()" (click)="updateRoute()">
+          <span *ngIf="!requestSent">Guardar Cambios</span>
+          <app-loading-icon *ngIf="requestSent" color="white"></app-loading-icon>
+        </button>
       </form>
       <div class="messages" *ngIf="!routeData.started">
-        <h3 class="title">Chat ({{messages.data.messages.length}} mensajes)</h3>
+        <h3 class="title">Chat ({{messages.data.messages.length}} mensajes) <app-loading-icon *ngIf="gettingMessages" color="#3f51b5" fontSize="18px"></app-loading-icon></h3>
         <div class="messages-container" #messages_container_ref>
           <div class="message-container" *ngFor="let msgData of messages.data.messages" [ngClass]="{'align-right': msgData.owner.id === userData.uid}">
             <div class="message" [ngClass]="{'mine': msgData.owner.id === userData.uid}">
@@ -171,18 +177,25 @@
         </div>
         <div class="input-container">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Pregunta algo..." #msg_input>
-            <mat-icon matSuffix class="send-button" (click)="sendMessage(msg_input)">send</mat-icon>
+            <input matInput placeholder="Pregunta algo..." #msg_input [readonly]="sendingMessage">
+            <mat-icon matSuffix class="send-button" (click)="sendMessage(msg_input)">
+              <span *ngIf="!sendingMessage">send</span>
+              <span *ngIf="sendingMessage"><app-loading-icon color="#3f51b5" fontSize="18px"></app-loading-icon></span>
+            </mat-icon>
           </mat-form-field>
         </div>
       </div>
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="userData">
-      <button mat-raised-button color="warn" *ngIf="isOwner && !routeData.started" class="full-width" (click)="deleteRoute()" [disabled]="requestSent">Eliminar</button>
+      <button mat-raised-button color="warn" *ngIf="isOwner && !routeData.started" class="full-width" (click)="deleteRoute()" [disabled]="requestSent">
+        <span *ngIf="!requestSent">Eliminar Ruta</span>
+        <app-loading-icon *ngIf="requestSent" color="white"></app-loading-icon>
+      </button>
       <button mat-raised-button [color]="subscribedToThisRoute() ? 'warn' : 'primary'" class="full-width" *ngIf="!isOwner && routeData && !routeData.started" (click)="joinRoute()" [disabled]="requestSent">
-        <span *ngIf="!subscribedToThisRoute()">Unirse</span>
-        <span *ngIf="subscribedToThisRoute()">Abandonar</span>
+        <span *ngIf="!subscribedToThisRoute() && !requestSent">Unirse</span>
+        <span *ngIf="subscribedToThisRoute() && !requestSent">Abandonar</span>
+        <app-loading-icon *ngIf="requestSent" color="white"></app-loading-icon>
       </button>
   </mat-card-actions>
 </mat-card>

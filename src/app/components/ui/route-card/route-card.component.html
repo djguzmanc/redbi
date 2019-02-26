@@ -8,7 +8,8 @@
           <div class="to"><span>Para:</span> {{data.data.destination}}</div>
         </div>
         <div class="people">
-          {{subscribers}}
+          <app-loading-icon *ngIf="requestSent" fontSize="18px"></app-loading-icon>
+          <span *ngIf="!requestSent">{{subscribers}}</span>
           <i class="material-icons">people</i>
         </div>
       </div>

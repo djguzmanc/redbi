@@ -1,4 +1,5 @@
 <div class="stat" [matTooltip]="data.tooltip" [ngClass]="classLogic()">
   <i class="material-icons">{{data.icon}}</i>
-  <span>{{data.number}}</span>
+  <span *ngIf="data.number>-1">{{data.number}}</span>
+  <span *ngIf="data.number<0"><app-loading-icon color="white" fontSize="12px"></app-loading-icon></span>
 </div>

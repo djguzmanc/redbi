@@ -49,6 +49,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   retrieveRoutes( ) {
     if ( !this.routesSub$ ) {
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+      this.requestSent = true
       this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
         let routes = res.map( x => {
           return {
@@ -73,6 +74,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
             this.howto_ref.open( )
           })
         }
+        this.requestSent = false
         this.routesSub$.unsubscribe( )
       })
     }
@@ -147,6 +149,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
           paths: this.route.map( x => x.toLowerCase( ).normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" ) ),
           departure_time: this.departure_time,
           created_at: new Date( ),
+          started: false,
         }, this.routeForm.value )
       ).then( res => {
         this.db.collection( 'chat_rooms' ).add({

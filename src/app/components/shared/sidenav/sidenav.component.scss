@@ -106,5 +106,13 @@
     @include flex();
     @include justify-content(space-between);
     padding: 10px;
+    .version {
+      text-align: center;
+      .beta {
+        background-color: red;
+        @include border-radius(3px);
+        color: white;
+      }
+    }
   }
 }

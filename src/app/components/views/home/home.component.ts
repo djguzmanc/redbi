@@ -20,10 +20,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   subscription = new Subscription( )
 
-  exit1Data
-  exit2Data
-  exit3Data
-  exit4Data
+  exit1Data = -1
+  exit2Data = -1
+  exit3Data = -1
+  exit4Data = -1
 
   route = []
   userData
@@ -61,25 +61,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     let currentTime = new Date( )
 
     this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por el Uriel' ).where( 'departure_time', '>', currentTime ) )
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por el Uriel' ).where( 'started', '==', false ).where( 'departure_time', '>', currentTime ) )
         .valueChanges( ).subscribe( res => {
           this.exit1Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
         })
     )
     this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 53' ).where( 'departure_time', '>', currentTime ) )
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 53' ).where( 'started', '==', false ).where( 'departure_time', '>', currentTime ) )
         .valueChanges( ).subscribe( res => {
           this.exit2Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
         })
     )
     this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 26' ).where( 'departure_time', '>', currentTime ) )
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 26' ).where( 'started', '==', false ).where( 'departure_time', '>', currentTime ) )
         .valueChanges( ).subscribe( res => {
           this.exit3Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
         })
     )
     this.subscription.add(
-      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 45' ).where( 'departure_time', '>', currentTime ) )
+      this.db.collection( 'routes', ref => ref.where( 'exit', '==', 'Por la 45' ).where( 'started', '==', false ).where( 'departure_time', '>', currentTime ) )
         .valueChanges( ).subscribe( res => {
           this.exit4Data =  res.filter( ( x: any ) => x.owner.id != this.userData.uid ).length
         })

@@ -49,7 +49,7 @@
     <mat-expansion-panel [expanded]="true" class="new-route">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Nueva ruta
+            Nueva ruta &nbsp; <app-loading-icon fontSize="14px" *ngIf="!routeForm || requestSent"></app-loading-icon>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <form [formGroup]="routeForm" *ngIf="routeForm">
@@ -115,7 +115,14 @@
               </div>
             </li>
           </ol>
-          <button mat-raised-button color="primary" (click)="createRoute()" class="full-width" [disabled]="!isFormValid()">Crear Ruta</button>
+          <button mat-raised-button color="primary" (click)="createRoute()" class="full-width" [disabled]="!isFormValid()">
+            <span *ngIf="!requestSent">
+              Crear Ruta
+            </span>
+            <span *ngIf="requestSent">
+              <app-loading-icon color="white"></app-loading-icon>
+            </span>
+          </button>
         </form>
       </mat-expansion-panel>
   </mat-accordion>

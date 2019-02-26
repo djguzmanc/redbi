@@ -1,0 +1,15 @@
+@import '../../../../sass/mixin';
+@import '../../../../sass/variables';
+
+.container {
+  @include align-items(center);
+  background-color: #ffffff54;
+  @include flex();
+  height: 100vh;
+  @include justify-content(center);
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10000;
+}

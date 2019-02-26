@@ -19,7 +19,7 @@
       </li>
       <li matRipple routerLink="/m/inicio" routerLinkActive="active-link">
         <i class="material-icons">dashboard</i>
-        <span>¡Rutas!</span>
+        <span>Únete a una ruta</span>
       </li>
       <li matRipple routerLink="/m/perfil" routerLinkActive="active-link">
         <i class="material-icons">mood</i>
@@ -33,9 +33,9 @@
         <i class="material-icons">directions_bike</i>
         <span>Mis rutas</span>
       </li>
-      <li matRipple routerLink="/m/logros" routerLinkActive="active-link">
-        <i class="material-icons">bubble_chart</i>
-        <span>Logros</span>
+      <li matRipple routerLink="/m/error" routerLinkActive="active-link">
+        <i class="material-icons">bug_report</i>
+        <span>Reportar un error</span>
       </li>
     </ul>
   </div>
@@ -43,7 +43,10 @@
     <button mat-mini-fab color="primary" (click)="logout()">
       <i class="material-icons">cancel</i>
     </button>
-    <span>Redbi v1.0.28</span>
+    <div class="version">
+      Redbi v{{dataService.version}}
+      <div class="beta">BETA</div>
+    </div>
     <button mat-mini-fab color="primary" (click)="emitClose()">
       <i class="material-icons">arrow_back</i>
     </button>

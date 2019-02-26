@@ -44,6 +44,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouteCardComponent } from './components/ui/route-card/route-card.component';
 import { RouteFinderComponent } from './components/views/route-finder/route-finder.component';
 import { RouteViewComponent } from './components/views/route-view/route-view.component';
+import { LoadingIconComponent } from './components/utilities/loading-icon/loading-icon.component';
+import { GlobalLoadingComponent } from './components/utilities/global-loading/global-loading.component';
+import { BugReportComponent } from './components/views/bug-report/bug-report.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +65,10 @@ import { RouteViewComponent } from './components/views/route-view/route-view.com
     ChallengesComponent,
     RouteCardComponent,
     RouteFinderComponent,
-    RouteViewComponent
+    RouteViewComponent,
+    LoadingIconComponent,
+    GlobalLoadingComponent,
+    BugReportComponent
   ],
   imports: [
     BrowserModule,

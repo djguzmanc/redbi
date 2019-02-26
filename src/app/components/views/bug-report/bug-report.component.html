@@ -1,0 +1,32 @@
+<mat-card>
+  <h2>¡Reporta tu <span style="color: red">error</span>!</h2>
+  <p>
+    Redbi es una aplicación que se encuentra en <b>fase de prueba</b>,
+    por lo que es posible que experimentes errores <i class="material-icons">mood_bad</i>.
+  </p>
+  <p>
+    Esperamos que no hayas sufrido ningún contratiempo a causa de este error, y si fue así,
+    por favor acepta nuestras más sinceras disculpas.
+  </p>
+  <p>
+    Con el fin de mejorar Redbi y garantizar una mejor experiencia de usuario, te invitamos
+    a describir el error que experimentaste.
+  </p>
+  <form [formGroup]="bugForm">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Título..." formControlName="title">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <textarea matInput placeholder="Estaba buscando una ruta y cuando presioné x botón..." formControlName="description">
+      </textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="sendReport()" class="full-width" [disabled]="!isFormValid()">
+      <span *ngIf="!requestSent">
+        Enviar Reporte
+      </span>
+      <span *ngIf="requestSent">
+        <app-loading-icon color="white"></app-loading-icon>
+      </span>
+    </button>
+  </form>
+</mat-card>

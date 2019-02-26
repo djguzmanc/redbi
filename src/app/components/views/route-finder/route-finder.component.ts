@@ -16,6 +16,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
   routesSub$
   userData
   subscription = new Subscription( )
+  requestSent: boolean = false
 
   constructor( private acRoute: ActivatedRoute, private db: AngularFirestore, 
     private alertService: AlertService, private router: Router, private dataService: DataService ) { }
@@ -41,16 +42,17 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
     let currentTime = new Date( )
     if ( !this.routesSub$ ) {
       if ( ( destination || exit ) && !routes ) {
+        this.requestSent = true
         this.routesSub$ = this.db.collection( 'routes', ref => {
             if ( destination && exit ) {
               console.log( "Por Destino y Salida!" )
-              return ref.where( 'exit', '==', exit ).where( 'destination', '==', destination ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'started', '==', false ).where( 'destination', '==', destination ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
             } else if ( destination ) {
               console.log( "Por Destino!" )
-              return ref.where( 'destination', '==', destination ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
+              return ref.where( 'destination', '==', destination ).where( 'started', '==', false ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
             } else if ( exit ) {
               console.log( "Por Salida!" )
-              return ref.where( 'exit', '==', exit ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'started', '==', false ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
             }
           }).snapshotChanges( ).subscribe( res => {
             this.allRoutes =  res.map( x => {
@@ -59,15 +61,17 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                 data: x.payload.doc.data( )
               }
             }).filter( ( x: any ) => x.data.owner.id != this.userData.uid )
+            this.requestSent = false
           })
         this.subscription.add( this.routesSub$ )
       } else if ( ( destination || exit ) || routes ) {
         let allPaths = ( <string> routes ).split( '_' ).map( x => x.toLocaleLowerCase( ).normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" ) )
         if ( destination && exit && routes ) {
+          this.requestSent = true
           console.log( "Por Destino, Salida y Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'exit', '==', exit ).where( 'destination', '==', destination ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'started', '==', false ).where( 'destination', '==', destination ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -76,13 +80,15 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                   }
                 }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
+                this.requestSent = false
               })
           })
         } else if ( destination && routes ) {
+          this.requestSent = true
           console.log( "Por Destino y Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'destination', '==', destination ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
+              return ref.where( 'destination', '==', destination ).where( 'started', '==', false ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -91,13 +97,15 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                   }
                 }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
+                this.requestSent = false
               })
           })
         } else if ( exit && routes ) {
+          this.requestSent = true
           console.log( "Por Salida y Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'exit', '==', exit ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
+              return ref.where( 'exit', '==', exit ).where( 'started', '==', false ).where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -106,13 +114,15 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                   }
                 }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
+                this.requestSent = false
               })
           })
         } else if ( routes ) {
+          this.requestSent = true
           console.log( "Por Rutas!" )
           allPaths.forEach( path => {
             let sub = this.db.collection( 'routes', ref => {
-              return ref.where( 'paths', 'array-contains', path ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
+              return ref.where( 'paths', 'array-contains', path ).where( 'started', '==', false ).where( 'departure_time', '>', currentTime ).orderBy( 'departure_time', 'desc' )
               }).snapshotChanges( ).subscribe( res => {
                 this.mergeResults( res.map( x => {
                   return {
@@ -121,6 +131,7 @@ export class RouteFinderComponent implements OnInit, OnDestroy {
                   }
                 }).filter( ( x: any ) => x.data.owner.id != this.userData.uid ) )
                 sub.unsubscribe( )
+                this.requestSent = false
               })
           })
         }
