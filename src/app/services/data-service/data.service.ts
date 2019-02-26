@@ -15,7 +15,7 @@ export class DataService {
 
   globalLoading = new Subject<any>( )
 
-  version: string = '1.0.30'
+  version: string = '1.0.31'
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
     this.globalLoading.next( true )
@@ -37,7 +37,7 @@ export class DataService {
       if ( version.version != this.version )
         this.alertService.showErrorMessageSwal( 
           'Versión desactualizada', 
-          'En este momento tienes una versión desactualizada de Redbi, vamos a recargar la página para actualizarla.' 
+          `En este momento tienes una versión desactualizada de Redbi (v${ this.version }), vamos a recargar la página para actualizarla (v${ version.version }).` 
         ).then( () => {
           location.reload( )
         })
