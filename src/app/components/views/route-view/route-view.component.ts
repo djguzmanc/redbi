@@ -141,7 +141,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   }
 
   isFormValid( ) {
-    return this.validateRoute( ) === -1 && !this.requestSent && this.dateControl.value && this.route.length > 0 && this.routeForm.valid 
+    return this.validateRoute( ) === -1 && !this.requestSent && this.dateControl.value && this.timeControl.value && this.route.length > 0 && this.routeForm.valid 
   }
 
   add( event: MatChipInputEvent, j: number ): void {
