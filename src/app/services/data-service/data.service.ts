@@ -15,7 +15,7 @@ export class DataService {
 
   globalLoading = new Subject<any>( )
 
-  version: string = '1.1.2'
+  version: string = '1.1.3'
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
     this.globalLoading.next( true )
