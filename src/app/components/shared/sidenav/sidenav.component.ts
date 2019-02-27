@@ -2,13 +2,9 @@ import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/cor
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-
-import swal from 'sweetalert';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
-import { User, DEFAULT_USER } from 'src/app/interfaces/user';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
-import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
 
 @Component({
   selector: 'app-sidenav',
@@ -24,8 +20,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   routeSubscriptionData$
   routeData
   gettingMessages = false
+  gettingMembers = false
+  membersCount = 0
 
-  constructor( public dataService: DataService, private db: AngularFirestore, private _pushNotificationService: PushNotificationService,
+  constructor( public dataService: DataService, private db: AngularFirestore,
     private router: Router, private alertService: AlertService, private afAuth: AngularFireAuth ) { }
 
   ngOnInit( ) {
@@ -116,8 +114,32 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
       for (let i = 0; i < routes.length; i++) {
         if ( !( <any> routes[ i ].data ).started ) {
-          this.gettingMessages = true
           let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( routes[ i ].id ).ref.path ).ref
+          this.gettingMembers = true
+          this.subscription.add(
+            this.db.collection( 'users', ref => ref.where( 'subscription', '==', routeRef ) ).snapshotChanges( ).subscribe(
+              res => {
+
+                if ( this.gettingMembers ) {
+                  this.membersCount = res.length
+                } else if ( this.membersCount != res.length ) {
+                  
+                  const title = 'Redbi'
+                  let options: any = {}
+                  options.body = 'La lista de miembros para tu ruta activa ha sido actualizada.'
+                  options.silent = false
+                  options.icon = 'assets/images/icon.png'
+
+                  let nt = new Notification( title, options )
+                  this.membersCount = res.length
+                }
+
+                this.gettingMembers = false
+              }
+            )
+          )
+
+          this.gettingMessages = true
           this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
             ( res: any ) => {
               if ( res.length > 0 ) {
@@ -128,25 +150,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
                   }
                 })[ 0 ]
 
-                if ( !this.gettingMessages && messages.data.messages[ messages.data.messages.length - 1 ].owner.id != this.userData.uid ) {
-                  const title = 'Redbi';
-                  const options = new PushNotificationOptions( );
-                  options.body = 'Revisa tu ruta activa, podrías tener nuevos mensajes.';
+                if ( !this.gettingMessages && messages.data.messages[ messages.data.messages.length - 1 ].owner.id != this.userData.uid &&
+                    this.router.url.split( '/' )[ 2 ] != 'ruta' ) {
+
+                  const title = 'Redbi'
+                  let options: any = {}
+                  options.body = 'Revisa tu ruta activa, podrías tener nuevos mensajes.'
                   options.silent = false
                   options.icon = 'assets/images/icon.png'
-                  
-                  this._pushNotificationService.create( title, options ).subscribe( notif => {
-                    if ( notif.event.type === 'show' ) {
-                    }
-                    if ( notif.event.type === 'click' ) {
-                      notif.notification.close( );
-                    }
-                    if ( notif.event.type === 'close' ) {
-                    }
-                  },
-                  err => {
-                    console.log( err );
-                  });
+
+                  let nt = new Notification( title, options )
                 }
 
                 this.gettingMessages = false

@@ -7,11 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 /**
- * PushNotification imports
- */
-import { PushNotificationService } from 'ngx-push-notifications';
-
-/**
  * Material imports
  */
 import { CustomMaterialModule } from './custom-modules/custom-material.module';
@@ -90,7 +85,6 @@ import { BugReportComponent } from './components/views/bug-report/bug-report.com
   providers: [
     AngularFireAuth,
     AngularFireStorage,
-    PushNotificationService,
     {
       provide: FirestoreSettingsToken,
       useValue: {}

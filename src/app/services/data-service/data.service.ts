@@ -4,7 +4,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { AlertService } from '../alert-service/alert.service';
-import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +15,9 @@ export class DataService {
 
   globalLoading = new Subject<any>( )
 
-  version: string = '1.1.6'
+  version: string = '1.1.5'
 
-  constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService,
-    private _pushNotificationService: PushNotificationService ) {
+  constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
     this.globalLoading.next( true )
     this.afAuth.user.subscribe( res => {
       if ( res ) {
@@ -31,9 +29,14 @@ export class DataService {
           this.userData.next( userData )
           this.userDataValue = userData
 
-          _pushNotificationService.requestPermission( )
-          if( this.userDataValue.userData.firstTime )
+          if( Notification.permission != 'granted' )
+            Notification.requestPermission( ).then( permission => {
+              if ( permission == 'granted' )
+                this.showWelcomeNotification( )
+            })
+          else
             this.showWelcomeNotification( )
+
         })
       }
       this.globalLoading.next( false )
@@ -59,26 +62,18 @@ export class DataService {
   }
 
   showWelcomeNotification( ) {
-    const title = 'Redbi';
-    const options = new PushNotificationOptions( );
-    options.body = '¡Bienvenido a Redbi!';
-    options.silent = false
-    options.icon = 'assets/images/icon.png'
- 
-    this._pushNotificationService.create( title, options ).subscribe( notif => {
-      if ( notif.event.type === 'show' ) {
+    if( this.userDataValue.userData.firstTime || this.userDataValue.userData.firstTime == null || this.userDataValue.userData.firstTime == undefined ) {
+      const title = 'Redbi'
+      let options: any = {}
+      options.body = '¡Bienvenido a Redbi!'
+      options.silent = false
+      options.icon = 'assets/images/icon.png'
+
+      let nt = new Notification( title, options ).onshow = () => {
         this.db.doc( `users/${ this.userDataValue.uid }` ).update({
           firstTime: false
         })
       }
-      if ( notif.event.type === 'click' ) {
-        notif.notification.close( );
-      }
-      if ( notif.event.type === 'close' ) {
-      }
-    },
-    err => {
-         console.log( err );
-    });
-}
+    }
+  }
 }

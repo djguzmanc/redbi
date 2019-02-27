@@ -8,7 +8,6 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
-import { AmazingTimePickerService } from 'amazing-time-picker';
 
 @Component({
   selector: 'app-new-route',

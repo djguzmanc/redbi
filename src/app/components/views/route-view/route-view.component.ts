@@ -9,7 +9,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
 import { MatChipInputEvent, MatExpansionPanel } from '@angular/material';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
-import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
 
 @Component({
   selector: 'app-route-view',
@@ -47,7 +46,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   sendingMessage: boolean = false
 
   constructor( private dataService: DataService, private acRoute: ActivatedRoute, private db: AngularFirestore, public sdService: StaticDataService,
-      private alertService: AlertService, private router: Router, private _pushNotificationService: PushNotificationService ) { }
+      private alertService: AlertService, private router: Router ) { }
 
   ngOnInit( ) {
     this.userData = this.dataService.userDataValue
