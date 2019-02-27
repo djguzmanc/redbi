@@ -15,7 +15,7 @@ export class DataService {
 
   globalLoading = new Subject<any>( )
 
-  version: string = '1.1.6'
+  version: string = '1.1.7'
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
     this.globalLoading.next( true )
@@ -30,8 +30,9 @@ export class DataService {
           this.userDataValue = userData
 
           Notification.requestPermission( ).then( permission => {
-            if ( permission == 'granted' )
+            if ( permission == 'granted' ) {
               this.showWelcomeNotification( )
+            }
           })
         })
       }

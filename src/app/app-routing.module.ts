@@ -20,6 +20,7 @@ import { ChallengesComponent } from './components/views/challenges/challenges.co
 import { RouteFinderComponent } from './components/views/route-finder/route-finder.component';
 import { RouteViewComponent } from './components/views/route-view/route-view.component';
 import { BugReportComponent } from './components/views/bug-report/bug-report.component';
+import { ReverseAuthGuard } from './guards/reverse-auth.guard';
 
 const routes: Routes = [
   {
@@ -35,6 +36,7 @@ const routes: Routes = [
   {
     path: 'm',
     component: MenuWrapperComponent,
+    canActivate: [ ReverseAuthGuard ],
     children: [
       {
         path: 'inicio',
