@@ -29,14 +29,10 @@ export class DataService {
           this.userData.next( userData )
           this.userDataValue = userData
 
-          if( Notification.permission != 'granted' )
-            Notification.requestPermission( ).then( permission => {
-              if ( permission == 'granted' )
-                this.showWelcomeNotification( )
-            })
-          else
-            this.showWelcomeNotification( )
-
+          Notification.requestPermission( ).then( permission => {
+            if ( permission == 'granted' )
+              this.showWelcomeNotification( )
+          })
         })
       }
       this.globalLoading.next( false )
