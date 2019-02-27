@@ -55,6 +55,7 @@
     }
     color: white;
     @include flex(); 
+    font-size: 12px;
     height: 100%;
     @include justify-content(center);
     position: absolute;
