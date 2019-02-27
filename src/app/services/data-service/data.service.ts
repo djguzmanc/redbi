@@ -15,7 +15,7 @@ export class DataService {
 
   globalLoading = new Subject<any>( )
 
-  version: string = '1.0.33'
+  version: string = '1.0.34'
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
     this.globalLoading.next( true )
@@ -32,6 +32,13 @@ export class DataService {
       }
       this.globalLoading.next( false )
     })
+
+    if ( window.innerWidth > 375 ) {
+      this.alertService.showInfoSwal( 
+        'Recomendación', 
+        'Recuerda que Redbi es una página web dirigida a dispositivos móviles, en un computador seguramente no se verá muy bien y la experiencia no sea la mejor, te invitamos a visitar la página desde cualquier navegador de tu teléfono móvil!' 
+      )
+    }
 
     this.db.doc( 'version/JbcQcMKiJMaxZ9RveRYN' ).valueChanges( ).subscribe( ( version: any ) => {
       if ( version.version != this.version )
