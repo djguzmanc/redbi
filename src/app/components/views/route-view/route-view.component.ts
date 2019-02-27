@@ -71,8 +71,10 @@ export class RouteViewComponent implements OnInit, OnDestroy {
     this.timeControl = new FormControl( `${ h < 10 ? '0' + h : h }:${ m < 10 ? '0' + m : m }`, [ Validators.required ] )
     
     this.timeControl.valueChanges.subscribe( val => {
-      let [ h, m ] = val.split( ':' )
-      this.dateControl.value.setHours( Number( h ), Number( m ) )
+      if ( val && val != '' ) {
+        let [ h, m ] = val.split( ':' )
+        this.dateControl.value.setHours( Number( h ), Number( m ) )
+      }
     })
     this.dateControl.valueChanges.subscribe( val => {
       let [ h, m ] = this.timeControl.value.split( ':' )

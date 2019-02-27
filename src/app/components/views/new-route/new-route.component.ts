@@ -101,8 +101,10 @@ export class NewRouteComponent implements OnInit, OnDestroy {
     this.retrieveRoutes( )
 
     this.timeControl.valueChanges.subscribe( val => {
-      let [ h, m ] = val.split( ':' )
-      this.dateControl.value.setHours( Number( h ), Number( m ) )
+      if ( val && val != '' ) {
+        let [ h, m ] = val.split( ':' )
+        this.dateControl.value.setHours( Number( h ), Number( m ) )
+      }
     })
     this.dateControl.valueChanges.subscribe( val => {
       let [ h, m ] = this.timeControl.value.split( ':' )
