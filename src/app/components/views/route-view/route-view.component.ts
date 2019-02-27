@@ -27,7 +27,6 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   routeData
   routeForm: FormGroup
   isOwner: boolean
-  departure_time: Date
   requestSent: boolean = false
   ownerData
   route = []
@@ -38,6 +37,9 @@ export class RouteViewComponent implements OnInit, OnDestroy {
       messages: []
     }
   }
+
+  dateControl: FormControl
+  timeControl: FormControl
 
   gettingMembers: boolean = false
   gettingMessages: boolean = false
@@ -60,12 +62,29 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   }
 
   initForm( ) {
+    this.route = this.routeData.paths
+
+    this.dateControl = new FormControl( new Date( this.routeData.departure_time.seconds * 1000 ), [ Validators.required ] )
+    
+    let h = this.dateControl.value.getHours( )
+    let m = this.dateControl.value.getMinutes( )
+    this.timeControl = new FormControl( `${ h < 10 ? '0' + h : h }:${ m < 10 ? '0' + m : m }`, [ Validators.required ] )
+    
+    this.timeControl.valueChanges.subscribe( val => {
+      let [ h, m ] = val.split( ':' )
+      this.dateControl.value.setHours( Number( h ), Number( m ) )
+    })
+    this.dateControl.valueChanges.subscribe( val => {
+      let [ h, m ] = this.timeControl.value.split( ':' )
+      let d = new Date( val )
+      d.setHours( Number( h ), Number( m ) )
+      this.dateControl.setValue( d, { emitEvent: false } )
+    })
+
     this.routeForm = new FormGroup({
       exit: new FormControl( this.routeData.exit, [ Validators.required ] ),
       destination: new FormControl( this.routeData.destination, [ Validators.required ] )
     })
-    this.departure_time = new Date( this.routeData.departure_time.seconds * 1000 )
-    this.route = this.routeData.paths
   }
 
   retrieveRouteData( ) {
@@ -122,7 +141,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   }
 
   isFormValid( ) {
-    return this.validateRoute( ) === -1 && !this.requestSent && this.departure_time && this.route.length > 0 && this.routeForm.valid 
+    return this.validateRoute( ) === -1 && !this.requestSent && this.dateControl.value && this.route.length > 0 && this.routeForm.valid 
   }
 
   add( event: MatChipInputEvent, j: number ): void {
@@ -156,7 +175,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
     if ( this.isFormValid( ) ) {
 
       let currentTime = new Date( )
-      let difference = currentTime.getTime( ) - this.departure_time.getTime( )
+      let difference = currentTime.getTime( ) - this.dateControl.value.getTime( )
       if ( difference > 0 ) {
         this.alertService.showInfoSwal( 'Revisa la fecha y hora de salida', 'Parece que intentas viajar al pasado.' )
         return
@@ -168,7 +187,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
         Object.assign({
           owner: userRef,
           paths: this.route.map( x => x.toLowerCase( ).normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" ) ),
-          departure_time: this.departure_time,
+          departure_time: this.dateControl.value,
         }, this.routeForm.value )
       ).then( res => {
         this.alertService.openSimpleSnack( 'Ruta actualizada', 'Ok' )

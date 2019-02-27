@@ -2,14 +2,13 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
 import { MatChipInputEvent, MatExpansionPanel } from '@angular/material';
-import { User, DEFAULT_USER } from 'src/app/interfaces/user';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
+import { AmazingTimePickerService } from 'amazing-time-picker';
 
 @Component({
   selector: 'app-new-route',
@@ -23,17 +22,23 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   route = []
   userData
   routeForm: FormGroup
-  departure_time = new Date( )
   subscription = new Subscription( )
   requestSent: boolean = false
+
+  dateControl: FormControl = new FormControl( new Date( ( new Date( ) ).getTime( ) + 65 * 60 * 1000 ), [ Validators.required ] )
+  timeControl: FormControl = new FormControl( `${ this.dateControl.value.getHours( ) }:${ this.dateControl.value.getMinutes( ) }`, [ Validators.required ] )
 
   routesSub$
   @ViewChild( 'howto_ref' ) howto_ref: MatExpansionPanel
 
   constructor( public sdService: StaticDataService, private db: AngularFirestore, private dataService: DataService,
-      private alertService: AlertService, private router: Router ) { }
+      private alertService: AlertService, private router: Router, private amtp: AmazingTimePickerService ) { }
 
   ngOnInit( ) {
+    let h = this.dateControl.value.getHours( )
+    let m = this.dateControl.value.getMinutes( )
+    this.timeControl = new FormControl( `${ h < 10 ? '0' + h : h }:${ m < 10 ? '0' + m : m }`, [ Validators.required ] )
+
     this.userData = this.dataService.userDataValue
     this.subscription.add(
       this.dataService.userData.asObservable( ).subscribe( newVal => {
@@ -87,15 +92,28 @@ export class NewRouteComponent implements OnInit, OnDestroy {
       })
       return
     }
+
     this.routeForm = new FormGroup({
       exit: new FormControl( this.userData.userData.preferences.exit_preference, [ Validators.required ] ),
       destination: new FormControl( this.userData.userData.preferences.location, [ Validators.required ] )
     })
+
     this.retrieveRoutes( )
+
+    this.timeControl.valueChanges.subscribe( val => {
+      let [ h, m ] = val.split( ':' )
+      this.dateControl.value.setHours( Number( h ), Number( m ) )
+    })
+    this.dateControl.valueChanges.subscribe( val => {
+      let [ h, m ] = this.timeControl.value.split( ':' )
+      let d = new Date( val )
+      d.setHours( Number( h ), Number( m ) )
+      this.dateControl.setValue( d, { emitEvent: false } )
+    })
   }
 
   isFormValid( ) {
-    return this.validateRoute( ) === -1 && !this.requestSent && this.departure_time && this.route.length > 0 && this.routeForm.valid 
+    return this.validateRoute( ) === -1 && !this.requestSent && this.dateControl.value && this.route.length > 0 && this.routeForm.valid 
   }
 
   add( event: MatChipInputEvent, j: number ): void {
@@ -129,7 +147,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
     if ( this.isFormValid( ) ) {
 
       let currentTime = new Date( )
-      let difference = currentTime.getTime( ) - this.departure_time.getTime( )
+      let difference = currentTime.getTime( ) - this.dateControl.value.getTime( )
       if ( difference > 0 ) {
         this.alertService.showInfoSwal( 'Revisa la fecha y hora de salida', 'Parece que intentas viajar al pasado.' )
         return
@@ -147,7 +165,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
         Object.assign({
           owner: userRef,
           paths: this.route.map( x => x.toLowerCase( ).normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" ) ),
-          departure_time: this.departure_time,
+          departure_time: this.dateControl.value,
           created_at: new Date( ),
           started: false,
         }, this.routeForm.value )

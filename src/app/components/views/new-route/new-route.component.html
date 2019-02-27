@@ -81,11 +81,14 @@
                 <label>Fecha y Hora de Salida</label>
                 <div class="date-time">
                   <mat-form-field class="half-width">
-                    <input matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}">
+                    <input matInput [matDatepicker]="picker" placeholder="Fecha" [formControl]="dateControl">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
-                  <p-calendar [timeOnly]="true" placeholder="Hora" hourFormat="12" [(ngModel)]="departure_time" [ngModelOptions]="{standalone: true}"></p-calendar>
+                  <mat-form-field class="half-width">
+                    <input type="time" matInput placeholder="Hora" atp-time-picker [formControl]="timeControl">
+                    <mat-icon matSuffix>av_timer</mat-icon>
+                  </mat-form-field>
                 </div>
               </div>
             </li>
