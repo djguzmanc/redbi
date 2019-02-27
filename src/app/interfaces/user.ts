@@ -7,6 +7,7 @@ export interface User {
   friends: number,
   faculty: string,
   gender: number,
+  firstTime: boolean,
   preferences: {
     edited: boolean,
     experience: string,
@@ -28,6 +29,7 @@ export const DEFAULT_USER: User = {
   friends: 0,
   faculty: null,
   gender: null,
+  firstTime: null,
   preferences: {
     edited: false,
     experience: null,

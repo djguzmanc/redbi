@@ -39,6 +39,10 @@
           </li>
         </ol>
       </mat-chip-list>
+      <p *ngIf="remainTimeText().time.charAt(0) != '-' && userInfo.fullName" class="width-fix">
+        Da click en <b>Ver</b> para ingresar a la ruta y chatear con <b>{{userInfo.fullName.split(' ')[0]}}</b>.
+        Podrías sugerir una ruta alternativa o simplemente decirle que te espere! ;)
+      </p>
     </div>
     <div class="route-actions" [class.make-full-width]="remainTimeText().time.charAt(0) == '-'">
       <button mat-raised-button color="primary" [routerLink]="[ '/m', 'ruta', data.id ]">Ver</button>

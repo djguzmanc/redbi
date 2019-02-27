@@ -8,6 +8,7 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { User, DEFAULT_USER } from 'src/app/interfaces/user';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
+import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
 
 @Component({
   selector: 'app-sidenav',
@@ -22,8 +23,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
   allStats = []
   routeSubscriptionData$
   routeData
+  gettingMessages = false
 
-  constructor( public dataService: DataService, private db: AngularFirestore, 
+  constructor( public dataService: DataService, private db: AngularFirestore, private _pushNotificationService: PushNotificationService,
     private router: Router, private alertService: AlertService, private afAuth: AngularFireAuth ) { }
 
   ngOnInit( ) {
@@ -102,6 +104,59 @@ export class SidenavComponent implements OnInit, OnDestroy {
         number: this.userData.userData.challenges
       },
     ]
+
+    let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+    this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+      let routes = res.map( x => {
+        return {
+          id: x.payload.doc.id,
+          data: x.payload.doc.data( )
+        }
+      })
+
+      for (let i = 0; i < routes.length; i++) {
+        if ( !( <any> routes[ i ].data ).started ) {
+          this.gettingMessages = true
+          let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( routes[ i ].id ).ref.path ).ref
+          this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
+            ( res: any ) => {
+              if ( res.length > 0 ) {
+                let messages = res.map( x => {
+                  return {
+                    id: x.payload.doc.id,
+                    data: x.payload.doc.data( )
+                  }
+                })[ 0 ]
+
+                if ( !this.gettingMessages && messages.data.messages[ messages.data.messages.length - 1 ].owner.id != this.userData.uid ) {
+                  const title = 'Redbi';
+                  const options = new PushNotificationOptions( );
+                  options.body = 'Revisa tu ruta activa, podrías tener nuevos mensajes.';
+                  options.silent = false
+                  options.icon = 'assets/images/icon.png'
+                  
+                  this._pushNotificationService.create( title, options ).subscribe( notif => {
+                    if ( notif.event.type === 'show' ) {
+                    }
+                    if ( notif.event.type === 'click' ) {
+                      notif.notification.close( );
+                    }
+                    if ( notif.event.type === 'close' ) {
+                    }
+                  },
+                  err => {
+                    console.log( err );
+                  });
+                }
+
+                this.gettingMessages = false
+              }
+            }
+          )
+          return
+        }          
+      }
+    })
   }
 
   logout( ) {

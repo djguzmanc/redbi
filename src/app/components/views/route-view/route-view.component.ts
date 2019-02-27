@@ -9,6 +9,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
 import { MatChipInputEvent, MatExpansionPanel } from '@angular/material';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
+import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
 
 @Component({
   selector: 'app-route-view',
@@ -46,7 +47,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
   sendingMessage: boolean = false
 
   constructor( private dataService: DataService, private acRoute: ActivatedRoute, private db: AngularFirestore, public sdService: StaticDataService,
-      private alertService: AlertService, private router: Router ) { }
+      private alertService: AlertService, private router: Router, private _pushNotificationService: PushNotificationService ) { }
 
   ngOnInit( ) {
     this.userData = this.dataService.userDataValue
@@ -123,14 +124,16 @@ export class RouteViewComponent implements OnInit, OnDestroy {
           this.subscription.add(
             this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
               ( res: any ) => {
-                this.gettingMessages = false
                 if ( res.length > 0 ) {
                   this.messages = res.map( x => {
                     return {
                       id: x.payload.doc.id,
                       data: x.payload.doc.data( )
                     }
-                  })[ 0 ]
+                  })[ 0 ]                  
+
+                  this.gettingMessages = false
+
                   if ( !this.routeData.started )
                     this.messages_container_ref.nativeElement.scrollTop = this.messages_container_ref.nativeElement.scrollHeight
                 }

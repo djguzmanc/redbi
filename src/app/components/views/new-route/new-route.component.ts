@@ -32,7 +32,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
   @ViewChild( 'howto_ref' ) howto_ref: MatExpansionPanel
 
   constructor( public sdService: StaticDataService, private db: AngularFirestore, private dataService: DataService,
-      private alertService: AlertService, private router: Router, private amtp: AmazingTimePickerService ) { }
+      private alertService: AlertService, private router: Router ) { }
 
   ngOnInit( ) {
     let h = this.dateControl.value.getHours( )

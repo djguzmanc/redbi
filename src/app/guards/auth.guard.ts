@@ -36,6 +36,7 @@ export class AuthGuard implements CanActivate {
                   friends: 0,
                   faculty: null,
                   gender: null,
+                  firstTime: true,
                   preferences: {
                     edited: false,
                     experience: null,

@@ -7,9 +7,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 /**
- * AmazingTimePicker imports
+ * PushNotification imports
  */
-import { AmazingTimePickerModule } from 'amazing-time-picker';
+import { PushNotificationService } from 'ngx-push-notifications';
 
 /**
  * Material imports
@@ -86,11 +86,11 @@ import { BugReportComponent } from './components/views/bug-report/bug-report.com
     ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AmazingTimePickerModule,
   ],
   providers: [
     AngularFireAuth,
     AngularFireStorage,
+    PushNotificationService,
     {
       provide: FirestoreSettingsToken,
       useValue: {}

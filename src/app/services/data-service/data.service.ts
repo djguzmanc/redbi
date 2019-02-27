@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { AlertService } from '../alert-service/alert.service';
+import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,10 @@ export class DataService {
 
   globalLoading = new Subject<any>( )
 
-  version: string = '1.1.5'
+  version: string = '1.1.6'
 
-  constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
+  constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService,
+    private _pushNotificationService: PushNotificationService ) {
     this.globalLoading.next( true )
     this.afAuth.user.subscribe( res => {
       if ( res ) {
@@ -28,10 +30,15 @@ export class DataService {
           }
           this.userData.next( userData )
           this.userDataValue = userData
+
+          _pushNotificationService.requestPermission( )
+          if( this.userDataValue.userData.firstTime )
+            this.showWelcomeNotification( )
         })
       }
       this.globalLoading.next( false )
     })
+
 
     if ( window.innerWidth > 375 ) {
       this.alertService.showInfoSwal( 
@@ -50,4 +57,28 @@ export class DataService {
         })
     })
   }
+
+  showWelcomeNotification( ) {
+    const title = 'Redbi';
+    const options = new PushNotificationOptions( );
+    options.body = '¡Bienvenido a Redbi!';
+    options.silent = false
+    options.icon = 'assets/images/icon.png'
+ 
+    this._pushNotificationService.create( title, options ).subscribe( notif => {
+      if ( notif.event.type === 'show' ) {
+        this.db.doc( `users/${ this.userDataValue.uid }` ).update({
+          firstTime: false
+        })
+      }
+      if ( notif.event.type === 'click' ) {
+        notif.notification.close( );
+      }
+      if ( notif.event.type === 'close' ) {
+      }
+    },
+    err => {
+         console.log( err );
+    });
+}
 }
