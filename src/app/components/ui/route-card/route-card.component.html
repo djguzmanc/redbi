@@ -13,7 +13,7 @@
           </div>
           <div class="people">
             <app-loading-icon *ngIf="requestSent" fontSize="18px"></app-loading-icon>
-            <span *ngIf="!requestSent">{{subscribers}}</span>
+            <span *ngIf="!requestSent">{{subscribers + 1}}</span>
             <i class="material-icons">people</i>
           </div>
         </div>
