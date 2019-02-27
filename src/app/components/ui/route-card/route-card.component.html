@@ -1,34 +1,47 @@
-<mat-expansion-panel [hideToggle]="true">
-  <mat-expansion-panel-header>
-    <div class="route-header">
-      <img [src]="userInfo.photoURL|nullImgUrl" [alt]="userInfo.fullName" class="profile-pic">
-      <div class="route-info">
-        <div class="left-info">
-          <div class="from"><span>Saliendo:</span> {{data.data.exit}}</div>
-          <div class="to"><span>Para:</span> {{data.data.destination}}</div>
-        </div>
-        <div class="people">
-          <app-loading-icon *ngIf="requestSent" fontSize="18px"></app-loading-icon>
-          <span *ngIf="!requestSent">{{subscribers}}</span>
-          <i class="material-icons">people</i>
+<div class="expansion-container">
+  <div class="time-remain" *ngIf="remainTimeText().time.charAt(0) != '-'">
+    {{remainTimeText().time}}
+  </div>
+  <mat-expansion-panel [hideToggle]="true">
+    <mat-expansion-panel-header>
+      <div class="route-header" [class.remove-right-padding]="remainTimeText().time.charAt(0) == '-'">
+        <img [src]="userInfo.photoURL|nullImgUrl" [alt]="userInfo.fullName" class="profile-pic">
+        <div class="route-info">
+          <div class="left-info">
+            <div class="from"><span>Saliendo:</span> {{data.data.exit}}</div>
+            <div class="to"><span>Para:</span> {{data.data.destination}}</div>
+          </div>
+          <div class="people">
+            <app-loading-icon *ngIf="requestSent" fontSize="18px"></app-loading-icon>
+            <span *ngIf="!requestSent">{{subscribers}}</span>
+            <i class="material-icons">people</i>
+          </div>
         </div>
       </div>
+    </mat-expansion-panel-header>
+    <div class="route-content">
+      <h3 class="title yellow">
+        <i class="material-icons">av_timer</i>
+        <small *ngIf="remainTimeText().time.charAt(0) != '-'">
+          {{remainTimeText().day || (data.data.departure_time.seconds * 1000 | date: 'yyyy/MM/dd')}} - {{data.data.departure_time.seconds * 1000 | date: 'h:mm a'}}
+        </small>
+        <small *ngIf="remainTimeText().time.charAt(0) == '-'">
+          {{data.data.departure_time.seconds * 1000 | date: 'yyyy/MM/dd h:mm a'}}
+        </small>
+      </h3>
+      <h3 class="title green"><i class="material-icons">trending_up</i> Ruta</h3>
+      <mat-chip-list #chipList>
+        <ol>
+          <li *ngFor="let path of data.data.paths; let j=index">
+            <mat-chip color="primary" class="capitalize">
+              {{path}}
+            </mat-chip>    
+          </li>
+        </ol>
+      </mat-chip-list>
     </div>
-  </mat-expansion-panel-header>
-  <div class="route-content">
-    <h3 class="title yellow"><i class="material-icons">av_timer</i><small>{{data.data.departure_time.seconds * 1000 | date: 'yyyy/MM/dd h:mm a'}}</small></h3>
-    <h3 class="title green"><i class="material-icons">trending_up</i> Ruta</h3>
-    <mat-chip-list #chipList>
-      <ol>
-        <li *ngFor="let path of data.data.paths; let j=index">
-          <mat-chip color="primary" class="capitalize">
-            {{path}}
-          </mat-chip>    
-        </li>
-      </ol>
-    </mat-chip-list>
-  </div>
-  <div class="route-actions">
-    <button mat-raised-button color="primary" [routerLink]="[ '/m', 'ruta', data.id ]">Ver</button>
-  </div>
-</mat-expansion-panel>
+    <div class="route-actions" [class.make-full-width]="remainTimeText().time.charAt(0) == '-'">
+      <button mat-raised-button color="primary" [routerLink]="[ '/m', 'ruta', data.id ]">Ver</button>
+    </div>
+  </mat-expansion-panel>
+</div>

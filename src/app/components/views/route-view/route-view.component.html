@@ -80,7 +80,15 @@
       <div class="route-content" *ngIf="!isOwner">
         <h3 class="title blue"><b>Saliendo: </b> <span>{{routeData.exit}}</span></h3>
         <h3 class="title red"><b>Para: </b> <span>{{routeData.destination}}</span></h3>
-        <h3 class="title yellow"><i class="material-icons">av_timer</i><small>{{routeData.departure_time.seconds * 1000 | date: 'yyyy/MM/dd h:mm a'}}</small></h3>
+        <h3 class="title yellow">
+          <i class="material-icons">av_timer</i>
+          <small *ngIf="remainTimeText().time.charAt(0) != '-'">
+            {{remainTimeText().day || (routeData.departure_time.seconds * 1000 | date: 'yyyy/MM/dd')}} {{routeData.departure_time.seconds * 1000 | date: 'h:mm a'}} - Faltan {{remainTimeText().time}}
+          </small>
+          <small *ngIf="remainTimeText().time.charAt(0) == '-'">
+            {{routeData.departure_time.seconds * 1000 | date: 'yyyy/MM/dd h:mm a'}}
+          </small>
+        </h3>
         <h3 class="title green"><i class="material-icons">trending_up</i> Ruta</h3>
         <mat-chip-list #chipList>
           <ol>

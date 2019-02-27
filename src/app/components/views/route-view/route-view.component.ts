@@ -362,6 +362,41 @@ export class RouteViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  remainTimeText( ) {
+    if ( this.routeData && this.routeData.departure_time ) {
+      let secondsNow = ( new Date( ) ).getTime( ) / 1000
+      let secondsDeparture = this.routeData.departure_time.seconds
+  
+      let difference = ( secondsDeparture - secondsNow ) / 60
+
+      let time, day
+      let today = new Date( )
+      let departure = new Date( this.routeData.departure_time.seconds * 1000 )
+
+      if ( today.getDate( ) == departure.getDate( ) && today.getMonth( ) == departure.getMonth( ) && today.getFullYear( ) == departure.getFullYear( ) )
+        day = 'Hoy'
+      else
+        day = null
+  
+      if ( difference < 60 ) {
+        time = Math.floor( difference ) + 'min'
+      } else {
+        difference = difference / 60
+        time = Math.floor( difference ) + 'h'
+      }
+
+      return {
+        day,
+        time
+      }
+    }
+
+    return {
+      day: '-',
+      time: '-'
+    }
+  }
+
   ngOnDestroy( ) {
     this.subscription.unsubscribe( )
   }

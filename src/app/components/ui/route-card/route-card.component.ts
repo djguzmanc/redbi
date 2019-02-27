@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User, DEFAULT_USER } from 'src/app/interfaces/user';
-import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -34,6 +33,41 @@ export class RouteCardComponent implements OnInit, OnDestroy {
         )
       })
     )
+  }
+
+  remainTimeText( ) {
+    if ( this.data && this.data.data.departure_time ) {
+      let secondsNow = ( new Date( ) ).getTime( ) / 1000
+      let secondsDeparture = this.data.data.departure_time.seconds
+  
+      let difference = ( secondsDeparture - secondsNow ) / 60
+
+      let time, day
+      let today = new Date( )
+      let departure = new Date( this.data.data.departure_time.seconds * 1000 )
+
+      if ( today.getDate( ) == departure.getDate( ) && today.getMonth( ) == departure.getMonth( ) && today.getFullYear( ) == departure.getFullYear( ) )
+        day = 'Hoy'
+      else
+        day = null
+  
+      if ( difference < 60 ) {
+        time = Math.floor( difference ) + 'min'
+      } else {
+        difference = difference / 60
+        time = Math.floor( difference ) + 'h'
+      }
+
+      return {
+        day,
+        time
+      }
+    }
+
+    return {
+      day: '-',
+      time: '-'
+    }
   }
 
   ngOnDestroy( ) {
