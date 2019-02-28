@@ -183,6 +183,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.closing.emit( )
   }
 
+  showVideotutorial( ) {
+    this.dataService.videotutorial.next( true )
+  }
+
   ngOnDestroy( ) {
     this.subscription.unsubscribe( )
   }

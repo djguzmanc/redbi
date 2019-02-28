@@ -55,11 +55,11 @@
       }
       .intro {
         font-size: 16px;
-        margin-top: 50px;
+        margin-top: 20px;
       }
       .info {
         font-weight: bold;
-        margin: 30px 0;
+        margin: 30px 0 0;
         .red-msg {
           color: #E80000;
         }
@@ -69,4 +69,29 @@
       text-align: center;
     }
   }
+}
+
+.fb {
+  text-align: center;
+  img {
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 40px;
+  }
+}
+
+.full-width {
+  margin: 0 !important;
+  width: 100%;
+  img {
+    vertical-align: middle;
+    width: 30px;
+  }
+}
+
+.yt {
+  background-color: #cf3427;
+  color: white;
+  font-weight: 400;
+  margin-bottom: 10px !important;
 }

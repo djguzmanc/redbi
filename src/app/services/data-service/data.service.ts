@@ -14,11 +14,13 @@ export class DataService {
   userDataValue: { userData: User, uid: string }
 
   globalLoading = new Subject<any>( )
+  videotutorial = new Subject<any>( )
 
   version: string = '1.1.7'
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
     this.globalLoading.next( true )
+    this.globalLoading.next( false )
     this.afAuth.user.subscribe( res => {
       if ( res ) {
         this.db.doc( `users/${ res.uid }` ).valueChanges( ).subscribe( user => {
@@ -39,8 +41,7 @@ export class DataService {
       this.globalLoading.next( false )
     })
 
-
-    if ( window.innerWidth > 375 ) {
+    if ( window.innerWidth > 525 ) {
       this.alertService.showInfoSwal( 
         'Recomendación', 
         'Recuerda que Redbi es una página web dirigida a dispositivos móviles, en un computador seguramente no se verá muy bien y la experiencia no sea la mejor, te invitamos a visitar la página desde cualquier navegador de tu teléfono móvil!' 

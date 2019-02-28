@@ -47,6 +47,7 @@ import { RouteViewComponent } from './components/views/route-view/route-view.com
 import { LoadingIconComponent } from './components/utilities/loading-icon/loading-icon.component';
 import { GlobalLoadingComponent } from './components/utilities/global-loading/global-loading.component';
 import { BugReportComponent } from './components/views/bug-report/bug-report.component';
+import { VideoTutorialComponent } from './components/utilities/video-tutorial/video-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { BugReportComponent } from './components/views/bug-report/bug-report.com
     RouteViewComponent,
     LoadingIconComponent,
     GlobalLoadingComponent,
-    BugReportComponent
+    BugReportComponent,
+    VideoTutorialComponent
   ],
   imports: [
     BrowserModule,

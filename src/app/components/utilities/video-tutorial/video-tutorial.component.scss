@@ -1,0 +1,20 @@
+@import '../../../../sass/mixin';
+@import '../../../../sass/variables';
+
+.video-container {
+  @include align-items(center);
+  background-color: #000000d4;
+  @include flex();
+  @include flex-direction(column);
+  @include justify-content(space-around);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 100;
+}
+
+.full-width {
+  width: 100%;
+}

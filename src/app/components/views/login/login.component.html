@@ -19,7 +19,11 @@
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="signIn()" #signin_ref>ENTRAR</button>
+      <button mat-raised-button class="full-width yt" (click)="showVideo()"><img src="assets/images/login/yticon.png" alt="¿Cómo funciona?"> ¿CÓMO FUNCIONA?</button>
+      <button mat-raised-button color="primary" (click)="signIn()" class="full-width">ENTRAR</button>
     </mat-card-actions>
+    <div class="fb">
+      <a href="https://fb.me/redbiapp" target="_blank"><img src="assets/images/login/fbicon.png" alt="Redbi"> Síguenos</a>
+    </div>
   </mat-card>
 </div>

@@ -17,7 +17,8 @@ export class AuthGuard implements CanActivate {
       if ( !data ) {
         return true
       } else {
-        if ( data.email.split( '@' )[ 1 ] !== 'unal.edu.co' ) {
+        let allowOtherDomains = false
+        if ( data.email.split( '@' )[ 1 ] !== 'unal.edu.co' && allowOtherDomains ) {
           localStorage.removeItem( 'login-attempt' )
           this.auth.auth.signOut( )
           data.delete( )
