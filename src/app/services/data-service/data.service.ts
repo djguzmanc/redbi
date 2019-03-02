@@ -17,7 +17,7 @@ export class DataService {
   globalLoading = new Subject<any>( )
   videotutorial = new Subject<any>( )
 
-  version: string = '1.2.0'
+  version: string = '1.2.1'
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService,
     private router: Router ) {
