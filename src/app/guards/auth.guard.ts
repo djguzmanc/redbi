@@ -4,22 +4,24 @@ import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { DataService } from '../services/data-service/data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor( private auth: AngularFireAuth, private router: Router, private db: AngularFirestore ) {}
+  constructor( private auth: AngularFireAuth, private router: Router, private db: AngularFirestore, private dataService: DataService ) {}
 
   canActivate( ): Observable<boolean> | boolean {
     this.auth.authState.subscribe( data => {
       if ( !data ) {
+        this.dataService.logout( )
         return true
       } else {
         let allowOtherDomains = false
         if ( data.email.split( '@' )[ 1 ] !== 'unal.edu.co' ) {
-          localStorage.removeItem( 'login-attempt' )
+          localStorage.clear( )
           this.auth.auth.signOut( )
           data.delete( )
           this.router.navigate( [ 'iniciar-sesion' ], { queryParams: { wrongDomain: true } } )

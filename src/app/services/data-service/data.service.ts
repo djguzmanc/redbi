@@ -17,7 +17,7 @@ export class DataService {
   globalLoading = new Subject<any>( )
   videotutorial = new Subject<any>( )
 
-  version: string = '1.2.0'
+  version: string = '1.2.1'
 
   constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService,
     private router: Router ) {
@@ -51,13 +51,15 @@ export class DataService {
     }
 
     this.db.doc( 'version/JbcQcMKiJMaxZ9RveRYN' ).valueChanges( ).subscribe( ( version: any ) => {
-      if ( version.version != this.version )
+      if ( version.version != this.version ) {
+        localStorage.clear( )
         this.alertService.showErrorMessageSwal( 
           'Versión desactualizada', 
           `En este momento tienes una versión desactualizada de Redbi (v${ this.version }), vamos a recargar la página para actualizarla (v${ version.version }).` 
         ).then( () => {
           location.reload( )
         })
+      }
     })
   }
 
@@ -79,7 +81,7 @@ export class DataService {
 
   logout( ) {
     this.afAuth.auth.signOut( ).then( () => {
-      localStorage.removeItem( 'login-attempt' )
+      localStorage.clear( )
       this.router.navigate( [ 'iniciar-sesion' ] ).then( () => {
         this.userData.next( null )
         this.userDataValue = null
