@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
@@ -10,7 +10,9 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
   templateUrl: './login-await.component.html',
   styleUrls: ['./login-await.component.scss']
 })
-export class LoginAwaitComponent implements OnInit {
+export class LoginAwaitComponent implements OnInit, OnDestroy {
+
+  timeout
 
   constructor( private afAuth: AngularFireAuth, private router: Router, private dataService: DataService, private alertService: AlertService ) { }
 
@@ -18,7 +20,7 @@ export class LoginAwaitComponent implements OnInit {
     if( !localStorage.getItem( 'login-attempt' ) )
       this.webGoogleLogin( )
     else {
-      setTimeout( () => {
+      this.timeout = setTimeout( () => {
         this.alertService.showErrorMessageSwal( 'Algo salió mal', 'Se ha esperado demasiado tiempo para iniciar sesión. Revisa tu conexión.' ).then( () => {
           this.dataService.logout( )
         })
@@ -34,6 +36,10 @@ export class LoginAwaitComponent implements OnInit {
     } catch( err ) {
       console.log( err )
     }
+  }
+
+  ngOnDestroy( ) {
+    window.clearTimeout( this.timeout )
   }
 
 }
