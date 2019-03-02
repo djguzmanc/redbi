@@ -16,7 +16,6 @@ export class AuthGuard implements CanActivate {
   canActivate( ): Observable<boolean> | boolean {
     this.auth.authState.subscribe( data => {
       if ( !data ) {
-        this.dataService.logout( )
         return true
       } else {
         let allowOtherDomains = false
