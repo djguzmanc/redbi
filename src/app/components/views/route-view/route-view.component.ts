@@ -169,7 +169,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
     for ( let i = 0; i < this.route.length; i++ ) {
       const path = this.route[ i ];
       let splittedPath = path.split( ' ' )
-      if ( splittedPath.length > 2 )
+      if ( splittedPath.length > 3 )
         return i
     }
     return -1

@@ -8,7 +8,10 @@
   width: 100%;
   .profile-pic {
     @include border-radius(50%);
-    width: 36px;
+    @include background-size(cover);
+    background-position: center;
+    height: 36px;
+    min-width: 36px;
   }
   .route-info {
     @include align-items(center);

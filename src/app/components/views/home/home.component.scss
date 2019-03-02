@@ -93,3 +93,64 @@
     }
   }
 }
+
+.invitations {
+  .invitation {
+    margin-bottom: 10px;
+    .header {
+      @include align-items(center);
+      @include flex();
+      .profile-pic {
+        @include border-radius(50%);
+        @include background-size(cover);
+        background-position: center;
+        height: 50px;
+        margin-right: 15px;
+        width: 50px;
+      }
+    }
+    .route-content {
+      text-align: left;
+      .capitalize {
+        text-transform: capitalize;
+      }
+      .title {
+        margin-bottom: 0;
+        .material-icons {
+          vertical-align: middle;
+        }
+        small {
+          color: gray;
+          font-weight: normal;
+        }
+      }
+      .green {
+        color: #008400;
+      }
+      .red {
+        color: #bd0000;
+        span {
+          color: black;
+        }
+      }
+      .blue {
+        color: $accent;
+        span {
+          color: black;
+        }
+      }
+      .yellow {
+        color: #ab8700;
+        .material-icons {
+          margin-right: 4px;
+        }
+      }
+    }
+    .actions {
+      text-align: right;
+      button {
+        margin-left: 10px;
+      }
+    }
+  }
+}

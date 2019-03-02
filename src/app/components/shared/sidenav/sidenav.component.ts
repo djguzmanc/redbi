@@ -22,6 +22,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   gettingMessages = false
   gettingMembers = false
   membersCount = 0
+  invitationsPending = 0
 
   constructor( public dataService: DataService, private db: AngularFirestore,
     private router: Router, private alertService: AlertService, private afAuth: AngularFireAuth ) { }
@@ -83,7 +84,18 @@ export class SidenavComponent implements OnInit, OnDestroy {
           }
         }
       )
+    } else if ( this.userData.userData.versionRead != this.dataService.version ) {
+      this.router.navigate( [ 'm', 'notas-actualizacion' ] ).then( () => {
+        this.db.doc( `users/${ this.userData.uid }` ).update({
+          versionRead: this.dataService.version
+        })
+      })
+      return
     }
+
+    this.db.doc( `users/${ this.userData.uid }` ).collection( 'invitations' ).snapshotChanges( ).subscribe( res => {
+      this.invitationsPending = res.map( x => x.payload.doc.data( ) ).filter( x => x.read == false ).length
+    })
 
     this.allStats = [
       {
@@ -173,10 +185,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   logout( ) {
-    this.afAuth.auth.signOut( ).then( () => {
-      localStorage.removeItem( 'login-attempt' )
-      this.router.navigate( [ 'iniciar-sesion' ] )
-    })
+    this.dataService.logout( )
   }
 
   emitClose( ) {

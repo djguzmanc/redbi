@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { AlertService } from '../alert-service/alert.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,10 @@ export class DataService {
   globalLoading = new Subject<any>( )
   videotutorial = new Subject<any>( )
 
-  version: string = '1.1.9'
+  version: string = '1.2.0'
 
-  constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService ) {
+  constructor( private afAuth: AngularFireAuth, private db: AngularFirestore, private alertService: AlertService,
+    private router: Router ) {
     this.globalLoading.next( true )
     this.globalLoading.next( false )
     this.afAuth.user.subscribe( res => {
@@ -73,5 +75,15 @@ export class DataService {
         })
       }
     }
+  }
+
+  logout( ) {
+    this.afAuth.auth.signOut( ).then( () => {
+      localStorage.removeItem( 'login-attempt' )
+      this.router.navigate( [ 'iniciar-sesion' ] ).then( () => {
+        this.userData.next( null )
+        this.userDataValue = null
+      })
+    })
   }
 }

@@ -79,6 +79,9 @@
     @include flex();
     .profile-pic {
       @include border-radius(50%);
+      @include background-size(cover);
+      background-position: center;
+      height: 40px;
       margin-right: 10px;
       width: 40px;
     }
@@ -134,6 +137,9 @@
           margin-bottom: 5px;
           .profile-pic {
             @include border-radius(50%);
+            @include background-size(cover);
+            background-position: center;
+            height: 20px;
             margin-right: 10px;
             width: 20px;
           }

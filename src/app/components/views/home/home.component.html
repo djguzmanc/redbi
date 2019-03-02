@@ -1,7 +1,7 @@
 <div class="content">
-  <div class="search-container animated tada delay-1s">
+  <div class="search-container">
     <mat-accordion>
-      <mat-expansion-panel>
+      <mat-expansion-panel class="animated tada delay-1s">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Encuentra una ruta más rápido
@@ -68,6 +68,63 @@
         </form>
         <button mat-raised-button color="primary" class="full-width" [disabled]="!isFormValid()" (click)="searchRoutes()">Buscar</button>
       </mat-expansion-panel>
+      <mat-expansion-panel *ngIf="invitations.length > 0" class="animated bounceIn">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Invitaciones ({{invitations.length}})
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="invitations">
+            <div class="invitation" *ngFor="let inv of invitations; let i=index">
+              <div class="header" *ngIf="inv.userData">
+                <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':inv.userData.photoURL|imgUrl}"></div>
+                <span class="name"><b>{{inv.userData.fullName.split(' ',2).join(' ')}}</b> te invita su ruta!</span>
+              </div>
+              <div class="route-content" *ngIf="inv.routeData">
+                <h3 class="title blue"><b>Saliendo: </b> <span>{{inv.routeData.exit}}</span></h3>
+                <h3 class="title red"><b>Para: </b> <span>{{inv.routeData.destination}}</span></h3>
+                <h3 class="title yellow">
+                  <i class="material-icons">av_timer</i>
+                  <small *ngIf="remainTimeText(inv.routeData).time.charAt(0) != '-'">
+                    {{remainTimeText(inv.routeData).day || (inv.routeData.departure_time.seconds * 1000 | date: 'yyyy/MM/dd')}} {{inv.routeData.departure_time.seconds * 1000 | date: 'h:mm a'}} - Faltan {{remainTimeText(inv.routeData).time}}
+                  </small>
+                  <small *ngIf="remainTimeText(inv.routeData).time.charAt(0) == '-'">
+                    {{inv.routeData.departure_time.seconds * 1000 | date: 'yyyy/MM/dd h:mm a'}}
+                  </small>
+                </h3>
+                <h3 class="title green"><i class="material-icons">trending_up</i> Ruta</h3>
+                <mat-chip-list #chipList>
+                  <ol>
+                    <li *ngFor="let path of inv.routeData.paths; let j=index">
+                      <mat-chip color="primary" class="capitalize">
+                        {{path}}
+                      </mat-chip>    
+                    </li>
+                  </ol>
+                </mat-chip-list>
+              </div>
+              <div class="actions">
+                <button mat-button color="primary" [disabled]="invitationRequest" (click)="goToRoute(i)">
+                  <span *ngIf="!invitationRequest">
+                    Ir a la ruta
+                  </span>
+                  <span *ngIf="invitationRequest">
+                    <app-loading-icon color="white"></app-loading-icon>
+                  </span>
+                </button>
+                <button mat-button color="warn" [disabled]="invitationRequest" (click)="dismissInvitation(i)">
+                  <span *ngIf="!invitationRequest">
+                    Ignorar
+                  </span>
+                  <span *ngIf="invitationRequest">
+                    <app-loading-icon color="white"></app-loading-icon>
+                  </span>
+                </button>
+              </div>
+              <hr>
+            </div>
+          </div>
+        </mat-expansion-panel>
     </mat-accordion>
   </div>
   <mat-card class="exits-card">

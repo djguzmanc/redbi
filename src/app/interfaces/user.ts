@@ -8,6 +8,9 @@ export interface User {
   faculty: string,
   gender: number,
   firstTime: boolean,
+  customPhoto: {
+    filePath: string
+  }
   preferences: {
     edited: boolean,
     experience: string,
@@ -30,6 +33,9 @@ export const DEFAULT_USER: User = {
   faculty: null,
   gender: null,
   firstTime: null,
+  customPhoto: {
+    filePath: null
+  },
   preferences: {
     edited: false,
     experience: null,

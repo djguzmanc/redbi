@@ -22,12 +22,28 @@
       width: 100%;
       z-index: 0;
     }
-    .profile-pic {
-      @include border-radius(50%);
-      margin: 0 auto;
+    .profile-img-container {
       position: relative;
-      width: 32%;
       z-index: 1;
+      .profile-pic {
+        @include border-radius(50%);
+        @include background-size(cover);
+        background-position: center;
+        height: 125px;
+        margin: 0 auto;
+        width: 125px;
+      }
+      .icon-container {
+        background-color: #2bbb2b;
+        @include border-radius(50%);
+        bottom: 5%;
+        color: white;
+        position: absolute;
+        right: 35%;
+        .material-icons {
+          vertical-align: middle;
+        }
+      }
     }
     hr {
       position: relative;
@@ -54,6 +70,9 @@
         @include box-shadow(0px 1px 8px -3px black);
         margin: 8px 0;
         padding: 10px 10px 0;
+        img {
+          width: 100%;
+        }
         label {
           display: block;
           margin-bottom: 4px;
@@ -72,4 +91,21 @@
       margin-top: 15px;
     }
   }
+}
+
+.error {
+  color: #fb4b4b;
+  span {
+    background-color: #fb4b4b;
+    @include border-radius(50%);
+    @include box-shadow(1px 1px 4px 0px #656565);
+    color: white;
+    font-size: 20px;
+    margin-left: 5px;
+    padding: 0 7px;
+  }
+}
+
+.red-chip {
+  background-color: #fb4b4b;
 }

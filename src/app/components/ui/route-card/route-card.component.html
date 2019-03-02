@@ -5,7 +5,7 @@
   <mat-expansion-panel [hideToggle]="true">
     <mat-expansion-panel-header>
       <div class="route-header" [class.remove-right-padding]="remainTimeText().time.charAt(0) == '-'">
-        <img [src]="userInfo.photoURL|nullImgUrl" [alt]="userInfo.fullName" class="profile-pic">
+        <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':userInfo.photoURL|nullImgUrl|imgUrl}"></div>
         <div class="route-info">
           <div class="left-info">
             <div class="from"><span>Saliendo:</span> {{data.data.exit}}</div>

@@ -8,11 +8,15 @@ import { Subscription } from 'rxjs';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material';
+import { APPEARING_NO_DELAY } from 'src/app/animations/animations';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  animations: [
+    APPEARING_NO_DELAY
+  ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
@@ -28,6 +32,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   route = []
   userData
   routeForm: FormGroup
+  invitations = []
+
+  invitationRequest: boolean = false
 
   constructor( private db: AngularFirestore, private alertService: AlertService, 
     private router: Router, private dataService: DataService, public sdService: StaticDataService ) { }
@@ -57,6 +64,27 @@ export class HomeComponent implements OnInit, OnDestroy {
       exit: new FormControl( this.userData.userData.preferences.exit_preference, [] ),
       destination: new FormControl( this.userData.userData.preferences.location, [] )
     })
+
+    this.db.doc( `users/${ this.userData.uid }` ).collection( 'invitations' ).snapshotChanges( ).subscribe( res => {
+      this.invitations = res.map( x => {
+        return {
+          id: x.payload.doc.id,
+          data: x.payload.doc.data( ),
+          userData: null,
+          routeData: null
+        }
+      }).filter( x => x.data.read == false )
+      this.invitations.forEach( ( inv, index ) => {
+        this.db.doc( `users/${ inv.data.userRef.id }` ).valueChanges( ).subscribe( res => {
+          this.invitations[ index ].userData = res
+        })
+        this.db.doc( `routes/${ inv.data.routeRef.id }` ).valueChanges( ).subscribe( res => {
+          this.invitations[ index ].routeData = res
+        })
+      })
+    })
+
+    this.route = this.userData.userData.preferences.paths || []
 
     let currentTime = new Date( )
 
@@ -126,6 +154,59 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
     routes = routes.length > 0 ? routes.slice( 0, routes.length - 1 ) : undefined
     this.router.navigate( [ 'm', 'buscador' ], { queryParams: { exit, destination, routes } } )
+  }
+
+  remainTimeText( routeData ) {
+    if ( routeData && routeData.departure_time ) {
+      let secondsNow = ( new Date( ) ).getTime( ) / 1000
+      let secondsDeparture = routeData.departure_time.seconds
+  
+      let difference = ( secondsDeparture - secondsNow ) / 60
+
+      let time, day
+      let today = new Date( )
+      let departure = new Date( routeData.departure_time.seconds * 1000 )
+
+      if ( today.getDate( ) == departure.getDate( ) && today.getMonth( ) == departure.getMonth( ) && today.getFullYear( ) == departure.getFullYear( ) )
+        day = 'Hoy'
+      else
+        day = null
+  
+      if ( difference < 60 ) {
+        time = Math.floor( difference ) + 'min'
+      } else {
+        difference = difference / 60
+        time = Math.floor( difference ) + 'h'
+      }
+
+      return {
+        day,
+        time
+      }
+    }
+  }
+
+  goToRoute( index: number ) {
+    if( !this.invitationRequest ) {
+      this.invitationRequest = true
+      let routeUid = this.invitations[ index ].data.routeRef.id
+      this.db.doc( `users/${ this.userData.uid }` ).collection( 'invitations' ).doc( this.invitations[ index ].id ).update({
+        read: true
+      }).then( () => {
+        this.router.navigate( [ 'm', 'ruta', routeUid ] )
+      })
+    }
+  }
+
+  dismissInvitation( index: number ) {
+    if( !this.invitationRequest ) {
+      this.invitationRequest = true
+      this.db.doc( `users/${ this.userData.uid }` ).collection( 'invitations' ).doc( this.invitations[ index ].id ).update({
+        read: true
+      }).then( () => {
+        this.invitationRequest = false
+      })
+    }
   }
 
   ngOnDestroy( ) {

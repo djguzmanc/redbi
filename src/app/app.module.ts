@@ -48,6 +48,9 @@ import { LoadingIconComponent } from './components/utilities/loading-icon/loadin
 import { GlobalLoadingComponent } from './components/utilities/global-loading/global-loading.component';
 import { BugReportComponent } from './components/views/bug-report/bug-report.component';
 import { VideoTutorialComponent } from './components/utilities/video-tutorial/video-tutorial.component';
+import { ImgUrlPipe } from './pipes/img-url.pipe';
+import { PartnerFinderComponent } from './components/views/partner-finder/partner-finder.component';
+import { VersionNotesComponent } from './components/views/version-notes/version-notes.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +73,10 @@ import { VideoTutorialComponent } from './components/utilities/video-tutorial/vi
     LoadingIconComponent,
     GlobalLoadingComponent,
     BugReportComponent,
-    VideoTutorialComponent
+    VideoTutorialComponent,
+    ImgUrlPipe,
+    PartnerFinderComponent,
+    VersionNotesComponent
   ],
   imports: [
     BrowserModule,

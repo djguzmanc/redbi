@@ -21,6 +21,8 @@ import { RouteFinderComponent } from './components/views/route-finder/route-find
 import { RouteViewComponent } from './components/views/route-view/route-view.component';
 import { BugReportComponent } from './components/views/bug-report/bug-report.component';
 import { ReverseAuthGuard } from './guards/reverse-auth.guard';
+import { PartnerFinderComponent } from './components/views/partner-finder/partner-finder.component';
+import { VersionNotesComponent } from './components/views/version-notes/version-notes.component';
 
 const routes: Routes = [
   {
@@ -69,6 +71,14 @@ const routes: Routes = [
       {
         path: 'error',
         component: BugReportComponent
+      },
+      {
+        path: 'invita',
+        component: PartnerFinderComponent
+      },
+      {
+        path: 'notas-actualizacion',
+        component: VersionNotesComponent
       },
     ]
   },

@@ -4,4 +4,7 @@
 </div> -->
 <app-video-tutorial></app-video-tutorial>
 <app-global-loading></app-global-loading>
+<div class="find-partner" matRipple *ngIf="dataService.userDataValue && router.url != '/m/invita'" routerLink="/m/invita" [@appearingAnimNoDelay]>
+  <i class="material-icons">group_add</i>
+</div>
 <router-outlet></router-outlet>

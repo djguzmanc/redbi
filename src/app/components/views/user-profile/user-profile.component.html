@@ -1,6 +1,12 @@
 <div class="content">
   <mat-card class="profile-header" *ngIf="userData">
-    <img [src]="userData.userData.photoURL|nullImgUrl" [alt]="userData.userData.fullName" class="profile-pic">
+    <div class="profile-img-container" (click)="openInputCatcher(photo_input)">
+      <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':userData.userData.photoURL|imgUrl}"></div>
+      <div class="icon-container">
+        <i class="material-icons" *ngIf="!profilePicRequestSent">add</i>
+        <app-loading-icon *ngIf="profilePicRequestSent" color="white"></app-loading-icon>
+      </div>
+    </div>
     <hr>
     <div class="info">
       <div class="name">{{userData.userData.fullName}}</div>
@@ -38,9 +44,9 @@
         <form [formGroup]="preferencesForm" *ngIf="preferencesForm">
           <div class="form-control">
             <mat-form-field class="full-width">
-              <mat-select placeholder="¿Experiencia con tu bici?" formControlName="experience">
-                <mat-option *ngFor="let option of sdService.levelXp" [value]="option.value">
-                  {{option.label}}
+              <mat-select placeholder="¿En qué localidad vives?" formControlName="location">
+                <mat-option *ngFor="let option of sdService.locations" [value]="option">
+                  {{option}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -56,18 +62,54 @@
           </div>
           <div class="form-control">
             <mat-form-field class="full-width">
-              <mat-select placeholder="¿Qué tan rápido conduces?" formControlName="speed">
-                <mat-option *ngFor="let option of sdService.speedOptions" [value]="option.value">
-                  {{option.label}}
+              <mat-select placeholder="¿En qué horarios acostumbras a salir?" formControlName="hour_preference" multiple>
+                <mat-option *ngFor="let option of sdService.hourPreference" [value]="option">
+                  {{option}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
           <div class="form-control">
             <mat-form-field class="full-width">
-              <mat-select placeholder="¿En qué localidad vives?" formControlName="location">
-                <mat-option *ngFor="let option of sdService.locations" [value]="option">
-                  {{option}}
+              <mat-chip-list #chipList>
+                <mat-chip 
+                *ngFor="let path of route; let j=index" 
+                [selectable]="selectable"
+                [removable]="true" 
+                (removed)="remove(j)"
+                color="primary"
+                [class.red-chip]="validateRoute()===j">
+                {{path}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input 
+              placeholder="¿Qué carreras o calles sueles tomar?"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="add($event,j)">
+            </mat-chip-list>
+          </mat-form-field>
+          <div class="error" *ngIf="validateRoute()!=-1">
+            Hay un error en tu ruta
+          </div>
+          <label style="margin-bottom: 10px">Ejemplo: </label>
+          <img src="assets/images/route/example.gif" class="example">
+        </div>
+        <div class="form-control">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="¿Experiencia con tu bici?" formControlName="experience">
+              <mat-option *ngFor="let option of sdService.levelXp" [value]="option.value">
+                {{option.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+          <div class="form-control">
+            <mat-form-field class="full-width">
+              <mat-select placeholder="¿Qué tan rápido conduces?" formControlName="speed">
+                <mat-option *ngFor="let option of sdService.speedOptions" [value]="option.value">
+                  {{option.label}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -95,7 +137,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <button mat-raised-button color="primary" (click)="savePreferences()" [disabled]="!preferencesForm.valid||requestSent">
+          <button mat-raised-button color="primary" (click)="savePreferences()" [disabled]="!isPreferencesFormValid()">
             <span *ngIf="!requestSent">Guardar</span>
             <span *ngIf="requestSent"><app-loading-icon color="white"></app-loading-icon></span>
           </button>
@@ -104,3 +146,7 @@
     </mat-tab-group>
   </mat-card>
 </div>
+
+
+<input style="display: none" #photo_input type="file" (change)="catchPhoto($event)"
+    accept="image/*" hidden/>

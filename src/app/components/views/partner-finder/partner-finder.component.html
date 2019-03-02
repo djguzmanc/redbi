@@ -1,0 +1,69 @@
+<mat-card class="card">
+  <div class="search-container animated tada delay-1s">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Fitra por destino
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="routeForm" *ngIf="routeForm">
+          <div class="form-control">
+            <mat-form-field class="full-width">
+              <mat-select placeholder="Destino" formControlName="destination">
+                <mat-option [value]="null">
+                  Todos
+                </mat-option>
+                <mat-option *ngFor="let option of sdService.locations" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="users-container">
+    <div *ngFor="let user of allUsers; let i=index" class="user">
+      <div class="header">
+        <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':user.data.photoURL|imgUrl}"></div>
+        <div class="right-info">
+          <b class="name">{{user.data.fullName}}</b>
+          <span class="location">{{user.data.preferences.location}}</span>
+        </div>
+      </div>
+      <div class="info">
+        <ol>
+          <li *ngIf="user.data.preferences.exit_preference">Salida preferida: <span class="chip">{{user.data.preferences.exit_preference}}</span></li>
+          <hr *ngIf="user.data.preferences.exit_preference">
+          <li *ngIf="user.data.preferences.hour_preference && user.data.preferences.hour_preference.length > 0">
+            Acostumbra a salir a las:
+            <ul>
+              <li *ngFor="let hour of user.data.preferences.hour_preference">
+                <span class="chip blue-chip">{{hour}}</span>
+              </li>
+            </ul>
+          </li>
+          <hr *ngIf="user.data.preferences.hour_preference && user.data.preferences.hour_preference.length > 0">
+          <li *ngIf="user.data.preferences.paths && user.data.preferences.paths.length > 0">
+            Suele transitar por:
+            <ul>
+              <li *ngFor="let path of user.data.preferences.paths">
+                <span class="chip orange-chip">{{path}}</span>
+              </li>
+            </ul>
+          </li>
+          <hr *ngIf="user.data.preferences.paths && user.data.preferences.paths.length > 0">
+          <li>Experiencia con bici: <b>{{user.data.preferences.experience}}</b></li>
+          <li>¿Sabe despinchar?: <b>{{user.data.preferences.punch_out ? 'Sí' : 'No'}}</b></li>
+          <li>Entre calzada y cicloruta prefiere: <b>{{user.data.preferences.road_preference}}</b></li>
+          <li>¿Tiene kit de primeros auxilios?: <b>{{user.data.preferences.medkit ? 'Sí' : 'No'}}</b></li>
+        </ol>
+      </div>
+      <button mat-mini-fab color="primary" class="invite-action" (click)="sendInvitation(i)" [disabled]="invitationRequest">
+        <i class="material-icons">person_add</i>
+      </button>
+    </div>
+  </div>
+</mat-card>

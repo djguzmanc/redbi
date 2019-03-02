@@ -61,6 +61,7 @@ export class StaticDataService {
     'Rafael Uribe Uribe',
     'Ciudad Bolívar',
     'Sumapaz',
+    'Soacha',
   ]
   
   public roadPreference = [
@@ -74,6 +75,26 @@ export class StaticDataService {
     'Por la 26',
     'Por el Uriel',
     'Por la 53'
+  ]
+
+  public hourPreference = [
+    '7:00 A.M.',
+    '8:00 A.M.',
+    '9:00 A.M.',
+    '10:00 A.M.',
+    '11:00 A.M.',
+    '12:00 P.M.',
+    '1:00 P.M.',
+    '2:00 P.M.',
+    '3:00 P.M.',
+    '4:00 P.M.',
+    '5:00 P.M.',
+    '6:00 P.M.',
+    '7:00 P.M.',
+    '8:00 P.M.',
+    '9:00 P.M.',
+    '10:00 P.M.',
+    '11:00 P.M.',
   ]
 
   nameRegex = /[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+/

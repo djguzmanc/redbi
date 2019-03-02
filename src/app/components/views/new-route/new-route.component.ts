@@ -97,6 +97,8 @@ export class NewRouteComponent implements OnInit, OnDestroy {
       destination: new FormControl( this.userData.userData.preferences.location, [ Validators.required ] )
     })
 
+    this.route = this.userData.userData.preferences.paths || []
+
     this.retrieveRoutes( )
 
     this.timeControl.valueChanges.subscribe( val => {
@@ -138,7 +140,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
     for ( let i = 0; i < this.route.length; i++ ) {
       const path = this.route[ i ];
       let splittedPath = path.split( ' ' )
-      if ( splittedPath.length > 2 )
+      if ( splittedPath.length > 3 )
         return i
     }
     return -1

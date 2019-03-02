@@ -51,7 +51,7 @@
             <ol *ngIf="!routeData.started">
               <li *ngFor="let member of membersData; let i=index">
                 <div class="member-content">
-                  <img [src]="member.data.photoURL" [alt]="member.data.fullName" class="profile-pic">
+                  <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':member.photoURL|imgUrl}"></div>
                   <div class="personal-data">
                     <div class="name">{{member.data.fullName}}</div>
                     <div class="faculty">{{member.data.faculty}}</div>
@@ -62,7 +62,7 @@
             <ol *ngIf="routeData.started">
               <li *ngFor="let member of getObjectMembers(); let i=index">
                 <div class="member-content">
-                  <img [src]="member.photoURL" [alt]="member.fullName" class="profile-pic">
+                  <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':member.photoURL|imgUrl}"></div>
                   <div class="personal-data">
                     <div class="name">{{member.fullName}}</div>
                     <div class="faculty">{{member.faculty}} <span *ngIf="member.leader">- Es el líder</span> </div>
@@ -177,7 +177,7 @@
           <div class="message-container" *ngFor="let msgData of messages.data.messages" [ngClass]="{'align-right': msgData.owner.id === userData.uid}">
             <div class="message" [ngClass]="{'mine': msgData.owner.id === userData.uid}">
               <div class="header">
-                <img [src]="msgData.owner.photoURL" [alt]="msgData.owner.name" class="profile-pic">
+                <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':msgData.owner.photoURL|imgUrl}"></div>
                 <span class="name">{{msgData.owner.name}}</span>
               </div>
               <div class="msg-content">

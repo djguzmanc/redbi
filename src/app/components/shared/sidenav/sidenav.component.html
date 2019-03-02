@@ -2,7 +2,7 @@
   <div class="top-wrapper">
     <div class="personal-info-container" *ngIf="userData">
       <div class="personal-info" *ngIf="userData.userData">
-        <img [src]="userData.userData.photoURL|nullImgUrl" [alt]="userData.userData.displayName">
+        <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':userData.userData.photoURL|imgUrl}"></div>
         <div class="name">{{userData.userData.fullName}}</div>
       </div>
       <hr class="info-divider">
@@ -20,6 +20,7 @@
       <li matRipple routerLink="/m/inicio" routerLinkActive="active-link">
         <i class="material-icons">dashboard</i>
         <span>Únete a una ruta</span>
+        <span class="invitations" *ngIf="invitationsPending > 0">{{invitationsPending}}</span>
       </li>
       <li matRipple routerLink="/m/perfil" routerLinkActive="active-link">
         <i class="material-icons">mood</i>
@@ -43,7 +44,7 @@
     <button mat-mini-fab color="primary" (click)="logout()">
       <i class="material-icons">cancel</i>
     </button>
-    <div class="version">
+    <div class="version" routerLink="/m/notas-actualizacion" (click)="emitClose()">
       Redbi v{{dataService.version}}
       <div class="beta">BETA</div>
     </div>
