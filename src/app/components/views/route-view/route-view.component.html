@@ -51,7 +51,7 @@
             <ol *ngIf="!routeData.started">
               <li *ngFor="let member of membersData; let i=index">
                 <div class="member-content">
-                  <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':member.photoURL|imgUrl}"></div>
+                  <div class="profile-pic" class="profile-pic" [ngStyle]="{'background-image':member.data.photoURL|imgUrl}"></div>
                   <div class="personal-data">
                     <div class="name">{{member.data.fullName}}</div>
                     <div class="faculty">{{member.data.faculty}}</div>

@@ -5,6 +5,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidenav',
@@ -115,73 +116,73 @@ export class SidenavComponent implements OnInit, OnDestroy {
       },
     ]
 
-    let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
-    this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
-      let routes = res.map( x => {
-        return {
-          id: x.payload.doc.id,
-          data: x.payload.doc.data( )
-        }
-      })
+    // let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
+    // this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+    //   let routes = res.map( x => {
+    //     return {
+    //       id: x.payload.doc.id,
+    //       data: x.payload.doc.data( )
+    //     }
+    //   })
 
-      for (let i = 0; i < routes.length; i++) {
-        if ( !( <any> routes[ i ].data ).started ) {
-          let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( routes[ i ].id ).ref.path ).ref
-          this.gettingMembers = true
-          this.subscription.add(
-            this.db.collection( 'users', ref => ref.where( 'subscription', '==', routeRef ) ).snapshotChanges( ).subscribe(
-              res => {
+    //   for (let i = 0; i < routes.length; i++) {
+    //     if ( !( <any> routes[ i ].data ).started ) {
+    //       let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( routes[ i ].id ).ref.path ).ref
+    //       this.gettingMembers = true
+    //       this.subscription.add(
+    //         this.db.collection( 'users', ref => ref.where( 'subscription', '==', routeRef ) ).snapshotChanges( ).subscribe(
+    //           res => {
 
-                if ( this.gettingMembers ) {
-                  this.membersCount = res.length
-                } else if ( this.membersCount != res.length ) {
+    //             if ( this.gettingMembers ) {
+    //               this.membersCount = res.length
+    //             } else if ( this.membersCount != res.length ) {
                   
-                  const title = 'Redbi'
-                  let options: any = {}
-                  options.body = 'La lista de miembros para tu ruta activa ha sido actualizada.'
-                  options.silent = false
-                  options.icon = 'assets/images/icon.png'
+    //               const title = 'Redbi'
+    //               let options: any = {}
+    //               options.body = 'La lista de miembros para tu ruta activa ha sido actualizada.'
+    //               options.silent = false
+    //               options.icon = 'assets/images/icon.png'
 
-                  let nt = new Notification( title, options )
-                  this.membersCount = res.length
-                }
+    //               let nt = new Notification( title, options )
+    //               this.membersCount = res.length
+    //             }
 
-                this.gettingMembers = false
-              }
-            )
-          )
+    //             this.gettingMembers = false
+    //           }
+    //         )
+    //       )
 
-          this.gettingMessages = true
-          this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
-            ( res: any ) => {
-              if ( res.length > 0 ) {
-                let messages = res.map( x => {
-                  return {
-                    id: x.payload.doc.id,
-                    data: x.payload.doc.data( )
-                  }
-                })[ 0 ]
+    //       this.gettingMessages = true
+    //       this.db.collection( 'chat_rooms', ref => ref.where( 'route', '==', routeRef ) ).snapshotChanges( ).subscribe(
+    //         ( res: any ) => {
+    //           if ( res.length > 0 ) {
+    //             let messages = res.map( x => {
+    //               return {
+    //                 id: x.payload.doc.id,
+    //                 data: x.payload.doc.data( )
+    //               }
+    //             })[ 0 ]
 
-                if ( !this.gettingMessages && messages.data.messages[ messages.data.messages.length - 1 ].owner.id != this.userData.uid &&
-                    this.router.url.split( '/' )[ 2 ] != 'ruta' ) {
+    //             if ( !this.gettingMessages && messages.data.messages[ messages.data.messages.length - 1 ].owner.id != this.userData.uid &&
+    //                 this.router.url.split( '/' )[ 2 ] != 'ruta' ) {
 
-                  const title = 'Redbi'
-                  let options: any = {}
-                  options.body = 'Revisa tu ruta activa, podrías tener nuevos mensajes.'
-                  options.silent = false
-                  options.icon = 'assets/images/icon.png'
+    //               const title = 'Redbi'
+    //               let options: any = {}
+    //               options.body = 'Revisa tu ruta activa, podrías tener nuevos mensajes.'
+    //               options.silent = false
+    //               options.icon = 'assets/images/icon.png'
 
-                  let nt = new Notification( title, options )
-                }
+    //               let nt = new Notification( title, options )
+    //             }
 
-                this.gettingMessages = false
-              }
-            }
-          )
-          return
-        }          
-      }
-    })
+    //             this.gettingMessages = false
+    //           }
+    //         }
+    //       )
+    //       return
+    //     }          
+    //   }
+    // })
   }
 
   logout( ) {

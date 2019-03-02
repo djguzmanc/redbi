@@ -9,6 +9,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StaticDataService } from 'src/app/services/static-data/static-data.service';
 import { MatChipInputEvent, MatExpansionPanel } from '@angular/material';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-route-view',
@@ -241,7 +242,7 @@ export class RouteViewComponent implements OnInit, OnDestroy {
       this.requestSent = true
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.subscription.add(
-        this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+        this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).pipe( take( 1 ) ).subscribe( res => {
           let routes = res.map( x => {
             return {
               id: x.payload.doc.id,

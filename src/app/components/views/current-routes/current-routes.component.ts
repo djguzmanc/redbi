@@ -6,6 +6,7 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { Router } from '@angular/router';
 import { Subscription, Timestamp } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-current-routes',
@@ -42,7 +43,7 @@ export class CurrentRoutesComponent implements OnInit, OnDestroy {
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.requestSent = true
       this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ).orderBy( 'created_at', 'desc' ) )
-        .snapshotChanges( ).subscribe( res => {
+        .snapshotChanges( ).pipe( take( 1 ) ).subscribe( res => {
           let allRoutes =  res.map( x => {
             return {
               id: x.payload.doc.id,

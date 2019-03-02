@@ -9,6 +9,7 @@ import { StaticDataService } from 'src/app/services/static-data/static-data.serv
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material';
 import { APPEARING_NO_DELAY } from 'src/app/animations/animations';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -75,10 +76,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       }).filter( x => x.data.read == false )
       this.invitations.forEach( ( inv, index ) => {
-        this.db.doc( `users/${ inv.data.userRef.id }` ).valueChanges( ).subscribe( res => {
+        this.db.doc( `users/${ inv.data.userRef.id }` ).valueChanges( ).pipe( take( 1 ) ).subscribe( res => {
           this.invitations[ index ].userData = res
         })
-        this.db.doc( `routes/${ inv.data.routeRef.id }` ).valueChanges( ).subscribe( res => {
+        this.db.doc( `routes/${ inv.data.routeRef.id }` ).valueChanges( ).pipe( take( 1 ) ).subscribe( res => {
           this.invitations[ index ].routeData = res
         })
       })

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User, DEFAULT_USER } from 'src/app/interfaces/user';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-route-card',
@@ -22,13 +23,18 @@ export class RouteCardComponent implements OnInit, OnDestroy {
   ngOnInit( ) {
     this.requestSent = true
     this.subscription.add(
-      this.db.doc( this.data.data.owner ).valueChanges( ).subscribe( user => {
+      this.db.doc( this.data.data.owner ).valueChanges( ).pipe( take( 1 ) ).subscribe( user => {
         this.userInfo = <User> user
         let routeRef = this.db.doc( this.db.collection( 'routes' ).doc( this.data.id ).ref.path ).ref
         this.subscription.add(
           this.db.collection( `users`, ref => ref.where( 'subscription', '==', routeRef ) ).valueChanges( ).subscribe( res => {
             this.requestSent = false
-            this.subscribers = res.length
+            if ( !this.data.data.started )
+              this.subscribers = res.length
+            else if ( this.data.data.members )
+              this.subscribers = Object.keys( this.data.data.members ).length
+            else
+              this.subscribers = 0
           })
         )
       })

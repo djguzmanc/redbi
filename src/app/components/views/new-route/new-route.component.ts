@@ -8,6 +8,7 @@ import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data-service/data.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-route',
@@ -54,7 +55,7 @@ export class NewRouteComponent implements OnInit, OnDestroy {
     if ( !this.routesSub$ ) {
       let userRef = this.db.doc( this.db.collection( 'users' ).doc( this.userData.uid ).ref.path ).ref
       this.requestSent = true
-      this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).subscribe( res => {
+      this.routesSub$ = this.db.collection( 'routes', ref => ref.where( 'owner', '==', userRef ) ).snapshotChanges( ).pipe( take( 1 ) ).subscribe( res => {
         let routes = res.map( x => {
           return {
             id: x.payload.doc.id,
